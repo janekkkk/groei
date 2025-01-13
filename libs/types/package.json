@@ -5,11 +5,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "main": "./dist/src/index.js",
-  "module": "./dist/src/index.mjs",
-  "types": "./dist/src/index.d.ts",
+  "type": "module",
+  "module": "dist",
+  "main": "dist",
+  "types": "dist",
   "files": [
-    "dist/**"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build": "tsc --build tsconfig.lib.json",

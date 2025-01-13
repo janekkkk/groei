@@ -20,6 +20,12 @@ importers:
       '@bladwijzer/types':
         specifier: '*'
         version: link:../../libs/types
+      '@hono/hono':
+        specifier: npm:@jsr/hono__hono@^4.6.1
+        version: /@jsr/hono__hono@4.6.16
+      hono:
+        specifier: ^4.6.16
+        version: 4.6.16
 
   apps/frontend:
     dependencies:
@@ -38,11 +44,20 @@ importers:
 
 packages:
 
+  /@jsr/hono__hono@4.6.16:
+    resolution: {integrity: sha512-xGhwr6cNqtKb0NWOdNq0oCv14smS1fwAO0SXsXUVCFiiJzLDg/6aZUKeFZqFz45d2F5QBKHyPGtf7L6W1X4CnA==, tarball: https://npm.jsr.io/~/11/@jsr/hono__hono/4.6.16.tgz}
+    dev: false
+
   /@types/node@22.10.5:
     resolution: {integrity: sha512-F8Q+SeGimwOo86fiovQh8qiXfFEh2/ocYv7tU5pJ3EXMSSxk1Joj5wefpFK2fHTf/N6HKGSxIDBT9f3gCxXPkQ==}
     dependencies:
       undici-types: 6.20.0
     dev: true
+
+  /hono@4.6.16:
+    resolution: {integrity: sha512-iE6xOPwDYlfnZFwk6BfIMMIH4WZm3pPhz6rc1uJM/OPew0pjG5K6p8WTLaMBY1/szF/T0TaEjprMpwn16BA0NQ==}
+    engines: {node: '>=16.9.0'}
+    dev: false
 
   /tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}

@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
-    "@bladwijzer/types": "*"
+    "@bladwijzer/types": "*",
+    "@hono/hono": "npm:@jsr/hono__hono@^4.6.1",
+    "hono": "^4.6.16"
   },
+  "scripts": {
+    "test": "ENV=test deno test --allow-env",
+    "dev": "deno run --allow-net --allow-env --watch index.ts"
+  },
+
   "keywords": [],
   "author": "",
   "license": "ISC"
