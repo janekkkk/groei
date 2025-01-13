@@ -30,7 +30,7 @@
     "strict": true,
     "target": "es2022",
     "paths": {
-      "@bladwijzer/types/*": ["libs/types/src/*"]
+      "@bladwijzer/types/*": ["./libs/types/src/*"]
     }
   }
 }

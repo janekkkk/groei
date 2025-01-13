@@ -3,6 +3,6 @@ import { Seed } from "@bladwijzer/types/src/models/seed.model.ts"
 
 const router = new Hono()
 
-router.get('/', ({ json }) => json(['😀', '😳', '🙄'] as Seed))
+router.get('/', ({ json }) => json(['😀', '😳', '🙄'] as unknown as Seed))
 
 export default router
