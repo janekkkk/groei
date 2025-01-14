@@ -1,3 +1,3 @@
 export interface Seed {
-  example: string
+    example: string
 }

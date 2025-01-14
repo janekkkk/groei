@@ -2,15 +2,22 @@
   "name": "@bladwijzer/monorepo",
   "version": "1.0.0",
   "description": "",
+  "author": {
+    "name": "Janek Ozga",
+    "email": "iam@janekozga.nl",
+    "url": "https://github.com/janekkkk"
+  },
   "devDependencies": {
     "tslib": "^2.8.1",
     "typescript": "5.7.3"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "engines": {
     "node": ">=20.11.1",
     "pnpm": ">=8.14.0"
+  },
+  "scripts": {
+    "common": "pnpm --filter @bladwijzer/common",
+    "frontend": "pnpm --filter @bladwijzer/frontend",
+    "backend": "pnpm --filter @bladwijzer/backend"
   }
 }

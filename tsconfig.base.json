@@ -22,15 +22,12 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "pretty": true,
-    "removeComments": false,
+    "removeComments": true,
     "resolveJsonModule": false,
     "skipDefaultLibCheck": false,
     "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
-    "target": "es2022",
-    "paths": {
-      "@bladwijzer/types/*": ["./libs/types/src/*"]
-    }
+    "target": "es2022"
   }
 }
