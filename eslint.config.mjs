@@ -10,7 +10,7 @@ import react from "eslint-plugin-react";
 export default [
   { files: ["**/*.{js,mjs,cjs,ts}"] },
   {
-    languageOptions: { ecmaVersion: 2020, globals: globals.browser },
+    languageOptions: { ecmaVersion: 2020 },
   },
   {
     // Note: there should be no other properties in this object
@@ -23,13 +23,13 @@ export default [
     ],
   },
   {
-    files: ["apps/web-app/**/*.{ts,tsx}"],
+    files: ["apps/frontend/**/*.{ts,tsx}"],
     settings: { react: { version: "18.3" } },
     languageOptions: {
-      // other options...
+      globals: globals.browser,
       parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: "./apps/web-app",
+        project: ["./tsconfig.json"],
+        tsconfigRootDir: "./apps/frontend",
       },
     },
     plugins: {
