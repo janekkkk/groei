@@ -1,7 +1,9 @@
 {
   "name": "@bladwijzer/backend",
-  "version": "1.0.0",
   "description": "",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
   "dependencies": {
     "@bladwijzer/common": "*",
     "@hono/hono": "npm:@jsr/hono__hono@^4.6.1",

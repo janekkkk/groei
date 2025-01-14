@@ -4,11 +4,6 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "author": {
-    "name": "Janek Ozga",
-    "email": "iam@janekozga.nl",
-    "url": "https://github.com/janekkkk"
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

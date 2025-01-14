@@ -2,6 +2,7 @@
   "name": "@bladwijzer/monorepo",
   "version": "1.0.0",
   "description": "",
+  "license": "apache-2.0",
   "author": {
     "name": "Janek Ozga",
     "email": "iam@janekozga.nl",
