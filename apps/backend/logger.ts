@@ -1,6 +1,5 @@
-
 export function customLogger(message: string): void {
-    const time = new Date().toLocaleString()
+  const time = new Date().toLocaleString();
 
-    console.log(`[${time}] ${message} [customLogger]`)
+  console.log(`[${time}] ${message} [customLogger]`);
 }
