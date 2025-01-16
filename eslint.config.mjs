@@ -5,6 +5,10 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import react from "eslint-plugin-react";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -22,8 +26,7 @@ export default [
       "**/dist",
       "pnpm-lock.yaml",
       "pnpm-workspace.yaml",
-      "apps/frontend/src/shadcdn",
-      "src/shadcdn",
+      "**/shadcdn",
     ],
   },
   {
@@ -32,8 +35,8 @@ export default [
     languageOptions: {
       globals: globals.browser,
       parserOptions: {
-        project: ["./tsconfig.json"],
-        // tsconfigRootDir: "./apps/frontend",
+        project: ["apps/frontend/tsconfig.json"],
+        tsconfigRootDir: __dirname,
       },
     },
     plugins: {
@@ -41,6 +44,7 @@ export default [
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
     },
+    ignores: ["**/shadcdn"],
     rules: {
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
