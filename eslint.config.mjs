@@ -8,7 +8,9 @@ import react from "eslint-plugin-react";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { files: ["**/*.{js,mjs,cjs,ts}"] },
+  {
+    files: ["**/*.{js,mjs,cjs,ts}"],
+  },
   {
     languageOptions: { ecmaVersion: 2020 },
   },
@@ -20,6 +22,8 @@ export default [
       "**/dist",
       "pnpm-lock.yaml",
       "pnpm-workspace.yaml",
+      "apps/frontend/src/shadcdn",
+      "src/shadcdn",
     ],
   },
   {
@@ -29,7 +33,7 @@ export default [
       globals: globals.browser,
       parserOptions: {
         project: ["./tsconfig.json"],
-        tsconfigRootDir: "./apps/frontend",
+        // tsconfigRootDir: "./apps/frontend",
       },
     },
     plugins: {

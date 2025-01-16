@@ -1,11 +1,11 @@
-import { create } from 'zustand'
-import { persist, createJSONStorage, devtools } from 'zustand/middleware'
-import { indexedDbStorage } from '@/core/store/indexedDbStorage'
-import { Seed } from '@/features/Seeds/seeds.model'
+import { create } from "zustand";
+import { persist, createJSONStorage, devtools } from "zustand/middleware";
+import { indexedDbStorage } from "@/core/store/indexedDbStorage";
+import { Seed } from "@/features/Seeds/seeds.model";
 
 interface SeedState {
-  seeds: Seed[]
-  addSeed: (seed: Seed) => void
+  seeds: Seed[];
+  addSeed: (seed: Seed) => void;
 }
 
 export const useSeedStore = create<SeedState>()(
@@ -13,9 +13,9 @@ export const useSeedStore = create<SeedState>()(
     persist(
       (set) => ({
         seeds: [],
-        addSeed: (seed) => set((state) => ({ seeds: [...state.seeds, seed] }))
+        addSeed: (seed) => set((state) => ({ seeds: [...state.seeds, seed] })),
       }),
-      { name: 'seedStore', storage: createJSONStorage(() => indexedDbStorage) }
-    )
-  )
-)
+      { name: "seedStore", storage: createJSONStorage(() => indexedDbStorage) },
+    ),
+  ),
+);

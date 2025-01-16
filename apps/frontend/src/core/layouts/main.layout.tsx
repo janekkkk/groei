@@ -1,7 +1,7 @@
-import { ReactNode } from 'react'
+import { ReactNode } from "react";
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export const MainLayout = ({ children }: Props) => {
@@ -13,5 +13,5 @@ export const MainLayout = ({ children }: Props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

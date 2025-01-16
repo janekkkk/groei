@@ -9,45 +9,44 @@ import {
   SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,
-  SidebarMenuItem
-} from '@/components/ui/sidebar'
-import { Home, LucideIcon, MoreHorizontal, Sprout } from 'lucide-react'
-import React from 'react'
-import { Link } from '@tanstack/react-router'
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { Home, LucideIcon, MoreHorizontal, Sprout } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { ThemeToggle } from '@/core/Theme/ThemeToggle'
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "@/core/Theme/ThemeToggle";
 
 interface NavigationItem {
-  title: string
-  routeTo: string
-  icon?: LucideIcon
-  subItems?: NavigationItem[]
+  title: string;
+  routeTo: string;
+  icon?: LucideIcon;
+  subItems?: NavigationItem[];
 }
 
 export function AppSidebar() {
   const items: NavigationItem[] = [
     {
-      title: 'Home',
-      routeTo: '/',
-      icon: Home
+      title: "Home",
+      routeTo: "/",
+      icon: Home,
     },
     {
-      title: 'Seeds',
-      routeTo: '/seeds',
+      title: "Seeds",
+      routeTo: "/seeds",
       icon: Sprout,
       subItems: [
         {
-          title: 'Add seeds',
-          routeTo: '/seeds/add'
-        }
-      ]
-    }
-  ]
+          title: "Add seeds",
+          routeTo: "/seeds/add",
+        },
+      ],
+    },
+  ];
 
   return (
     <Sidebar variant="sidebar">
@@ -98,5 +97,5 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>
-  )
+  );
 }

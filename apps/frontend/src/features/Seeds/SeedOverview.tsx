@@ -1,5 +1,4 @@
-import React from 'react'
-import { useSeedStore } from '@/features/Seeds/seeds.store'
+import { useSeedStore } from "@/features/Seeds/seeds.store";
 import {
   Table,
   TableBody,
@@ -7,11 +6,11 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
-} from '@/components/ui/table'
+  TableRow,
+} from "@/components/ui/table";
 
 export const SeedOverview = () => {
-  const { seeds } = useSeedStore((state) => state)
+  const { seeds } = useSeedStore((state) => state);
 
   return (
     <Table>
@@ -39,5 +38,5 @@ export const SeedOverview = () => {
         ))}
       </TableBody>
     </Table>
-  )
-}
+  );
+};

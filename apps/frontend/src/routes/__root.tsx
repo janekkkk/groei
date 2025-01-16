@@ -1,9 +1,9 @@
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { AppSidebar } from '@/core/Sidebar/AppSidebar'
-import { MainLayout } from '@/core/layouts/main.layout'
-import { ThemeProvider } from '@/core/Theme/ThemeProvider'
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { AppSidebar } from "@/core/Sidebar/AppSidebar";
+import { MainLayout } from "@/core/layouts/main.layout";
+import { ThemeProvider } from "@/core/Theme/ThemeProvider";
 
 export const Route = createRootRoute({
   component: () => (
@@ -22,5 +22,5 @@ export const Route = createRootRoute({
 
       <TanStackRouterDevtools />
     </>
-  )
-})
+  ),
+});
