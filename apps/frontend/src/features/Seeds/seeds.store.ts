@@ -3,12 +3,12 @@ import { persist, createJSONStorage, devtools } from "zustand/middleware";
 import { indexedDbStorage } from "@/core/store/indexedDbStorage";
 import { Seed } from "@/features/Seeds/seeds.model";
 
-interface SeedState {
+interface BedStore {
   seeds: Seed[];
   addSeed: (seed: Seed) => void;
 }
 
-export const useSeedStore = create<SeedState>()(
+export const useSeedStore = create<BedStore>()(
   devtools(
     persist(
       (set) => ({

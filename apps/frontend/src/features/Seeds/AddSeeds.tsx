@@ -1,10 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEventHandler, useRef, useState } from "react";
 import { Input } from "@/shadcdn/components/ui/input";
 import {
   Select,
@@ -19,7 +13,6 @@ import { Button } from "@/shadcdn/components/ui/button";
 import { Month, PlantHeight, Seed } from "@/features/Seeds/seeds.model";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
-import { HTMLInputElement } from "happy-dom";
 
 const emptySeed = {
   name: "",
@@ -45,26 +38,19 @@ export const AddSeeds = () => {
   const { addSeed } = useSeedStore((state) => state);
   const [seed, setSeed] = useState<Seed>(emptySeed);
   const [newTag, setNewTag] = useState("");
-  const nameInputRef = useRef<HTMLInputElement>();
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   type SelectChange = { name: string; value: string };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChange,
-  ) => {
-    if ((e as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target) {
-      // input
-      const { name, value } = (
-        e as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ).target;
-      setSeed({ ...seed, [name]: value });
-    } else {
-      // select
-      setSeed({
-        ...seed,
-        [(e as SelectChange).name]: (e as SelectChange).value,
-      });
-    }
+  const handleInputChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (e) => {
+    const { name, value } = e.target;
+    setSeed({ ...seed, [name]: value });
+  };
+
+  const handleSelectChange = (e: SelectChange) => {
+    setSeed({ ...seed, [e.name]: e.value });
   };
 
   const handleTagAdd = () => {
@@ -81,13 +67,13 @@ export const AddSeeds = () => {
       setSeed({ ...seed, photo: e.target.files[0] as unknown as File });
     }
   };
+
   const handleSubmit = () => {
     addSeed(seed);
     setSeed(emptySeed);
     nameInputRef?.current?.focus();
   };
 
-  // @ts-ignore
   return (
     <div>
       <h1 className="mb-4">Add Seeds</h1>
@@ -105,10 +91,8 @@ export const AddSeeds = () => {
             type="text"
             name="name"
             value={seed.name}
-            // @ts-ignore
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
-            // @ts-ignore
             ref={nameInputRef}
           />
         </div>
@@ -118,8 +102,7 @@ export const AddSeeds = () => {
             type="text"
             name="variety"
             value={seed.variety}
-            // @ts-ignore
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div className="flex flex-col gap-2 md:flex-row">
@@ -129,7 +112,7 @@ export const AddSeeds = () => {
               name="sowFrom"
               value={seed.sowFrom}
               onValueChange={(value) =>
-                handleChange({ name: "sowFrom", value: value })
+                handleSelectChange({ name: "sowFrom", value: value })
               }
             >
               <SelectTrigger className="w-full">
@@ -152,7 +135,7 @@ export const AddSeeds = () => {
               name="sowTill"
               value={seed.sowTill}
               onValueChange={(value) =>
-                handleChange({ name: "sowTill", value: value })
+                handleSelectChange({ name: "sowTill", value: value })
               }
             >
               <SelectTrigger className="w-full">
@@ -178,7 +161,7 @@ export const AddSeeds = () => {
               name="plantFrom"
               value={seed.plantFrom}
               onValueChange={(value) =>
-                handleChange({ name: "plantFrom", value: value })
+                handleSelectChange({ name: "plantFrom", value: value })
               }
             >
               <SelectTrigger className="w-full">
@@ -201,7 +184,7 @@ export const AddSeeds = () => {
               name="plantTill"
               value={seed.plantTill}
               onValueChange={(value) =>
-                handleChange({ name: "plantTill", value: value })
+                handleSelectChange({ name: "plantTill", value: value })
               }
             >
               <SelectTrigger className="w-full">
@@ -227,7 +210,7 @@ export const AddSeeds = () => {
               name="harvestFrom"
               value={seed.harvestFrom}
               onValueChange={(value) =>
-                handleChange({ name: "harvestFrom", value: value })
+                handleSelectChange({ name: "harvestFrom", value: value })
               }
             >
               <SelectTrigger className="w-full">
@@ -250,7 +233,7 @@ export const AddSeeds = () => {
               name="harvestTill"
               value={seed.harvestTill}
               onValueChange={(value) =>
-                handleChange({ name: "harvestTill", value: value })
+                handleSelectChange({ name: "harvestTill", value: value })
               }
             >
               <SelectTrigger className="w-full">
@@ -275,8 +258,7 @@ export const AddSeeds = () => {
             type="number"
             name="daysToMaturity"
             value={seed.daysToMaturity || ""}
-            // @ts-ignore
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -285,8 +267,7 @@ export const AddSeeds = () => {
             type="number"
             name="plantDistance"
             value={seed.plantDistance || ""}
-            // @ts-ignore
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -295,7 +276,7 @@ export const AddSeeds = () => {
             name="plantHeight"
             value={seed.plantHeight}
             onValueChange={(value) =>
-              handleChange({ name: "plantHeight", value: value })
+              handleSelectChange({ name: "plantHeight", value: value })
             }
           >
             <SelectTrigger className="w-full">
@@ -317,8 +298,7 @@ export const AddSeeds = () => {
             type="number"
             name="quantity"
             value={seed.quantity || ""}
-            // @ts-ignore
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -327,8 +307,7 @@ export const AddSeeds = () => {
             type="date"
             name="experationDate"
             value={seed.expirationDate}
-            // @ts-ignore
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -337,13 +316,16 @@ export const AddSeeds = () => {
             type="url"
             name="url"
             value={seed.url}
-            // @ts-ignore
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
           <Label htmlFor="notes">Notes:</Label>
-          <Textarea name="notes" value={seed.notes} onChange={handleChange} />
+          <Textarea
+            name="notes"
+            value={seed.notes}
+            onChange={handleInputChange}
+          />
         </div>
         <div>
           <Label htmlFor="tag">Tags:</Label>
@@ -352,7 +334,6 @@ export const AddSeeds = () => {
               type="text"
               name="tag"
               value={newTag}
-              // @ts-ignore
               onChange={handleTagChange}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -376,7 +357,6 @@ export const AddSeeds = () => {
           <Label>Photo:</Label>
           <Input
             type="file"
-            // @ts-ignore
             onChange={handleFileChange as ChangeEventHandler<HTMLInputElement>}
           />
         </div>
