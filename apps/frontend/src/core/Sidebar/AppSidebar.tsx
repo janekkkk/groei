@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shadcdn/components/ui/sidebar";
-import { Home, LucideIcon, MoreHorizontal, Sprout } from "lucide-react";
+import { Home, LucideIcon, MoreHorizontal, Sprout, Leaf } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
   DropdownMenu,
@@ -43,6 +43,17 @@ export function AppSidebar() {
         {
           title: "Add seeds",
           routeTo: "/seeds/add",
+        },
+      ],
+    },
+    {
+      title: "Beds",
+      routeTo: "/beds",
+      icon: Leaf,
+      subItems: [
+        {
+          title: "Add beds",
+          routeTo: "/beds/add",
         },
       ],
     },

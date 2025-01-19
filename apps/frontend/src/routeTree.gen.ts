@@ -18,7 +18,9 @@ import { Route as rootRoute } from './routes/__root'
 
 const IndexLazyImport = createFileRoute('/')()
 const SeedsIndexLazyImport = createFileRoute('/seeds/')()
+const BedsIndexLazyImport = createFileRoute('/beds/')()
 const SeedsAddLazyImport = createFileRoute('/seeds/add')()
+const BedsAddLazyImport = createFileRoute('/beds/add')()
 
 // Create/Update Routes
 
@@ -34,11 +36,23 @@ const SeedsIndexLazyRoute = SeedsIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/seeds/index.lazy').then((d) => d.Route))
 
+const BedsIndexLazyRoute = BedsIndexLazyImport.update({
+  id: '/beds/',
+  path: '/beds/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/beds/index.lazy').then((d) => d.Route))
+
 const SeedsAddLazyRoute = SeedsAddLazyImport.update({
   id: '/seeds/add',
   path: '/seeds/add',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/seeds/add.lazy').then((d) => d.Route))
+
+const BedsAddLazyRoute = BedsAddLazyImport.update({
+  id: '/beds/add',
+  path: '/beds/add',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/beds/add.lazy').then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -51,11 +65,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/beds/add': {
+      id: '/beds/add'
+      path: '/beds/add'
+      fullPath: '/beds/add'
+      preLoaderRoute: typeof BedsAddLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/seeds/add': {
       id: '/seeds/add'
       path: '/seeds/add'
       fullPath: '/seeds/add'
       preLoaderRoute: typeof SeedsAddLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/beds/': {
+      id: '/beds/'
+      path: '/beds'
+      fullPath: '/beds'
+      preLoaderRoute: typeof BedsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/seeds/': {
@@ -72,41 +100,51 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/beds/add': typeof BedsAddLazyRoute
   '/seeds/add': typeof SeedsAddLazyRoute
+  '/beds': typeof BedsIndexLazyRoute
   '/seeds': typeof SeedsIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/beds/add': typeof BedsAddLazyRoute
   '/seeds/add': typeof SeedsAddLazyRoute
+  '/beds': typeof BedsIndexLazyRoute
   '/seeds': typeof SeedsIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/beds/add': typeof BedsAddLazyRoute
   '/seeds/add': typeof SeedsAddLazyRoute
+  '/beds/': typeof BedsIndexLazyRoute
   '/seeds/': typeof SeedsIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/seeds/add' | '/seeds'
+  fullPaths: '/' | '/beds/add' | '/seeds/add' | '/beds' | '/seeds'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/seeds/add' | '/seeds'
-  id: '__root__' | '/' | '/seeds/add' | '/seeds/'
+  to: '/' | '/beds/add' | '/seeds/add' | '/beds' | '/seeds'
+  id: '__root__' | '/' | '/beds/add' | '/seeds/add' | '/beds/' | '/seeds/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  BedsAddLazyRoute: typeof BedsAddLazyRoute
   SeedsAddLazyRoute: typeof SeedsAddLazyRoute
+  BedsIndexLazyRoute: typeof BedsIndexLazyRoute
   SeedsIndexLazyRoute: typeof SeedsIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  BedsAddLazyRoute: BedsAddLazyRoute,
   SeedsAddLazyRoute: SeedsAddLazyRoute,
+  BedsIndexLazyRoute: BedsIndexLazyRoute,
   SeedsIndexLazyRoute: SeedsIndexLazyRoute,
 }
 
@@ -121,15 +159,23 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/beds/add",
         "/seeds/add",
+        "/beds/",
         "/seeds/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/beds/add": {
+      "filePath": "beds/add.lazy.tsx"
+    },
     "/seeds/add": {
       "filePath": "seeds/add.lazy.tsx"
+    },
+    "/beds/": {
+      "filePath": "beds/index.lazy.tsx"
     },
     "/seeds/": {
       "filePath": "seeds/index.lazy.tsx"
