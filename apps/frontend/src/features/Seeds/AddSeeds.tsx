@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shadcdn/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -13,11 +13,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+} from "@/shadcdn/components/ui/select";
+import { Label } from "@/shadcdn/components/ui/label";
+import { Button } from "@/shadcdn/components/ui/button";
 import { Month, PlantHeight, Seed } from "@/features/Seeds/seeds.model";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { HTMLInputElement } from "happy-dom";
 

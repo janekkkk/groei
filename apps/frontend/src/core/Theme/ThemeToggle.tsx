@@ -1,11 +1,11 @@
 import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shadcdn/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/shadcdn/components/ui/dropdown-menu";
 import { useTheme } from "@/core/Theme/ThemeProvider";
 
 export function ThemeToggle() {

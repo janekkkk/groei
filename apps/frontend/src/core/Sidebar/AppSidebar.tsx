@@ -10,7 +10,7 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "@/shadcdn/components/ui/sidebar";
 import { Home, LucideIcon, MoreHorizontal, Sprout } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
@@ -18,7 +18,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/shadcdn/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/core/Theme/ThemeToggle";
 
 interface NavigationItem {

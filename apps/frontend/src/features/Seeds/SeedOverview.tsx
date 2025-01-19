@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shadcdn/components/ui/table";
 
 export const SeedOverview = () => {
   const { seeds } = useSeedStore((state) => state);

@@ -6,9 +6,7 @@
   "main": "./dist/common.js",
   "types": "./dist/main.d.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build"
   },
   "devDependencies": {
     "typescript": "~5.6.2",
