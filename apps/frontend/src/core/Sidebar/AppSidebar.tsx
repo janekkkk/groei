@@ -10,6 +10,8 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
 } from "@/shadcdn/components/ui/sidebar";
 import {
   Home,
@@ -26,6 +28,12 @@ import {
   DropdownMenuTrigger,
 } from "@/shadcdn/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/core/Theme/ThemeToggle";
+import React from "react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/shadcdn/components/ui/collapsible";
 
 interface NavigationItem {
   title: string;
@@ -47,7 +55,11 @@ export function AppSidebar() {
       icon: Sprout,
       subItems: [
         {
-          title: "Add seeds",
+          title: "Overview",
+          routeTo: "/seeds",
+        },
+        {
+          title: "Add",
           routeTo: "/seeds/add",
         },
       ],
@@ -58,7 +70,11 @@ export function AppSidebar() {
       icon: Grid2x2,
       subItems: [
         {
-          title: "Add beds",
+          title: "Overview",
+          routeTo: "/beds",
+        },
+        {
+          title: "Add",
           routeTo: "/beds/add",
         },
       ],
@@ -75,32 +91,41 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.routeTo} className="[&.active]:font-bold">
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                  {item.subItems && (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <SidebarMenuAction>
-                          <MoreHorizontal className="absolute left-0 top-0" />
-                        </SidebarMenuAction>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent side="right" align="start">
-                        {item.subItems.map((subItem) => (
-                          <DropdownMenuItem key={subItem.title}>
-                            <Link to={subItem.routeTo}>
-                              <span>{subItem.title}</span>
-                            </Link>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-                </SidebarMenuItem>
+                <Collapsible
+                  key={item.title}
+                  defaultOpen
+                  className="group/collapsible"
+                >
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={item.routeTo}
+                          className="flex tex-sm [&.active]:font-bold"
+                        >
+                          {item.icon && <item.icon className="text-sm" />}
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    {item.subItems && (
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {item.subItems.map((subItem) => (
+                            <SidebarMenuSubItem key={subItem.title}>
+                              <Link
+                                to={subItem.routeTo}
+                                className="[&.active]:font-bold"
+                              >
+                                <span>{subItem.title}</span>
+                              </Link>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    )}
+                  </SidebarMenuItem>
+                </Collapsible>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
