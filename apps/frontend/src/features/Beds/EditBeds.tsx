@@ -194,6 +194,7 @@ export const EditBeds = () => {
                             <Select
                               name="selectSeed"
                               value={bed.grid[i]?.seed as unknown as string}
+                              defaultOpen
                               onValueChange={(value) =>
                                 handleSelectChange({
                                   name: "grid",
