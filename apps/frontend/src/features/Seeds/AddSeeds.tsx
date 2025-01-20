@@ -13,8 +13,9 @@ import { Button } from "@/shadcdn/components/ui/button";
 import { Month, PlantHeight, Seed } from "@/features/Seeds/seeds.model";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
+import { SelectChange } from "@/shared/select.model";
 
-const emptySeed = {
+const emptySeed: Seed = {
   name: "",
   variety: "",
   sowFrom: undefined,
@@ -27,11 +28,14 @@ const emptySeed = {
   plantHeight: undefined,
   plantDistance: undefined,
   quantity: undefined,
+  numberOfSeedsPerGridCell: 1,
   notes: "",
   tags: [],
   photo: null,
   url: "",
   expirationDate: undefined, // new Date().toISOString().substring(0, 10)
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
 export const AddSeeds = () => {
@@ -39,8 +43,6 @@ export const AddSeeds = () => {
   const [seed, setSeed] = useState<Seed>(emptySeed);
   const [newTag, setNewTag] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
-
-  type SelectChange = { name: string; value: string };
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -102,6 +104,17 @@ export const AddSeeds = () => {
             type="text"
             name="variety"
             value={seed.variety}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <Label htmlFor="numberOfSeedsPerGridCell">
+            Number of seeds per grid cell:
+          </Label>
+          <Input
+            type="number"
+            name="numberOfSeedsPerGridCell"
+            value={seed.numberOfSeedsPerGridCell}
             onChange={handleInputChange}
           />
         </div>

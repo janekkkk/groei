@@ -31,6 +31,7 @@ export interface Seed {
   url?: string;
   plantHeight?: PlantHeight;
   plantDistance?: number;
+  numberOfSeedsPerGridCell: number;
   name: string;
   variety?: string;
   daysToMaturity?: number;

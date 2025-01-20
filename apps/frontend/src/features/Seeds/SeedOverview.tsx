@@ -20,6 +20,7 @@ export const SeedOverview = () => {
           <TableHead className="w-[100px]">Name</TableHead>
           <TableHead>Variety</TableHead>
           <TableHead className="text-right">Quantity</TableHead>
+          <TableHead className="text-right">Number of seeds per cell</TableHead>
           <TableHead className="text-right">Days to maturity</TableHead>
           <TableHead className="text-right">Plant Distance</TableHead>
           <TableHead>Expiration Date</TableHead>
@@ -31,6 +32,10 @@ export const SeedOverview = () => {
             <TableCell>{seed.name}</TableCell>
             <TableCell>{seed.variety}</TableCell>
             <TableCell className="text-right">{seed.quantity}</TableCell>
+            <TableCell className="text-right">
+              {seed.numberOfSeedsPerGridCell}
+            </TableCell>
+
             <TableCell className="text-right">{seed.daysToMaturity}</TableCell>
             <TableCell className="text-right">{seed.plantDistance}</TableCell>
             <TableCell>{seed.expirationDate}</TableCell>
