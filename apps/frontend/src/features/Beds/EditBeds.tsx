@@ -149,10 +149,10 @@ export const EditBeds = () => {
           <p className="text-sm text-muted-foreground">
             By clicking on a cell in the grid you can add seeds to it.
           </p>
-          <div className="flex">
+          <div className="flex mt-2">
             <div
               className={classNames(
-                `grow grid gap-1 p-2 grid-cols-${bed.gridWidth} grid-rows-${bed.gridHeight} mt-2`,
+                `grow grid gap-1 pr-2 grid-cols-${bed.gridWidth} grid-rows-${bed.gridHeight}`,
               )}
             >
               {Array.from({ length: bed.gridWidth * bed.gridHeight }).map(
@@ -212,7 +212,10 @@ export const EditBeds = () => {
                                       key={seed.name}
                                       value={seed as unknown as string}
                                     >
-                                      {seed.name}
+                                      {seed.name}{" "}
+                                      {seed.variety && (
+                                        <span> - {seed.variety}</span>
+                                      )}
                                     </SelectItem>
                                   ))}
                                 </SelectGroup>
