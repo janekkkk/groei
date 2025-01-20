@@ -4,13 +4,11 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
-  SidebarTrigger,
 } from "@/shadcdn/components/ui/sidebar";
 import { Home, LucideIcon, Sprout, Grid2x2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -68,13 +66,7 @@ export const AppSidebar = () => {
   ];
 
   return (
-    <Sidebar variant="sidebar">
-      <SidebarHeader className=" bg-white dark:bg-black ">
-        <div className="flex items-center justify-between">
-          <span>Bladwijzer</span>
-          <SidebarTrigger />
-        </div>
-      </SidebarHeader>
+    <Sidebar variant="sidebar" collapsible="icon">
       <SidebarContent className="bg-white dark:bg-black">
         <SidebarGroup>
           <SidebarGroupContent>

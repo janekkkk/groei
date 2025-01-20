@@ -14,12 +14,12 @@ export const Route = createRootRoute({
       <ThemeProvider>
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full absolute">
-            <div className="relative top-0 left-0">
-              <SidebarTrigger />
-            </div>
+          <main className="w-full ">
             <MainLayout>
-              <Outlet />
+              <SidebarTrigger className="absolute left-2 top-2" />
+              <div className="mt-4">
+                <Outlet />
+              </div>
             </MainLayout>
           </main>
         </SidebarProvider>
