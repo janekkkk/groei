@@ -4,13 +4,13 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarTrigger,
 } from "@/shadcdn/components/ui/sidebar";
 import { Home, LucideIcon, Sprout, Grid2x2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -28,7 +28,7 @@ interface NavigationItem {
   subItems?: NavigationItem[];
 }
 
-export function AppSidebar() {
+export const AppSidebar = () => {
   const items: NavigationItem[] = [
     {
       title: "Home",
@@ -69,8 +69,13 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="sidebar">
-      <SidebarHeader>Bladwijzer</SidebarHeader>
-      <SidebarContent>
+      <SidebarHeader className=" bg-white dark:bg-black ">
+        <div className="flex items-center justify-between">
+          <span>Bladwijzer</span>
+          <SidebarTrigger />
+        </div>
+      </SidebarHeader>
+      <SidebarContent className="bg-white dark:bg-black">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -114,14 +119,12 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Settings</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <ThemeToggle />
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter className="bg-white dark:bg-black">
+        <div className="flex justify-end items-center">
+          <ThemeToggle />
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
-}
+};

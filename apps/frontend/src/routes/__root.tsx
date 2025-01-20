@@ -14,8 +14,10 @@ export const Route = createRootRoute({
       <ThemeProvider>
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full">
-            <SidebarTrigger />
+          <main className="w-full absolute">
+            <div className="relative top-0 left-0">
+              <SidebarTrigger />
+            </div>
             <MainLayout>
               <Outlet />
             </MainLayout>
