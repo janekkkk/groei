@@ -8,10 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcdn/components/ui/table";
+import { Link } from "@tanstack/react-router";
 
 export const BedOverview = () => {
   const { beds } = useBedStore((state) => state);
-
+  console.log({ beds });
   return (
     <Table>
       <TableCaption>Beds</TableCaption>
@@ -23,7 +24,9 @@ export const BedOverview = () => {
       <TableBody>
         {beds.map((bed) => (
           <TableRow key={bed.name}>
-            <TableCell>{bed.name}</TableCell>
+            <TableCell>
+              <Link to={bed.id}>{bed.name}</Link>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

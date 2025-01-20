@@ -7,28 +7,14 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "@/shadcdn/components/ui/sidebar";
-import {
-  Home,
-  LucideIcon,
-  MoreHorizontal,
-  Sprout,
-  Grid2x2,
-} from "lucide-react";
+import { Home, LucideIcon, Sprout, Grid2x2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/shadcdn/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/core/Theme/ThemeToggle";
-import React from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -86,8 +72,6 @@ export function AppSidebar() {
       <SidebarHeader>Bladwijzer</SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

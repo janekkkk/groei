@@ -39,4 +39,6 @@ export interface Seed {
   notes?: string;
   tags?: string[];
   photo?: File | null;
+  createdAt: Date;
+  updatedAt: Date;
 }

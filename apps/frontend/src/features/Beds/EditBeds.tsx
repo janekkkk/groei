@@ -1,4 +1,10 @@
-import { ChangeEventHandler, useEffect, useRef, useState } from "react";
+import {
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Input } from "@/shadcdn/components/ui/input";
 import { Label } from "@/shadcdn/components/ui/label";
 import { Button } from "@/shadcdn/components/ui/button";
@@ -23,9 +29,10 @@ import {
 import { SelectChange } from "@/shared/select.model";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { Seed } from "@/features/Seeds/seeds.model";
+import { Route } from "@/routes/beds/$bedId";
 
 const emptyBed: Bed = {
-  id: "", // generate uuid?
+  id: crypto.randomUUID(),
   name: "",
   notes: "",
   gridWidth: 2,
@@ -35,32 +42,52 @@ const emptyBed: Bed = {
   updatedAt: new Date(),
 };
 
-export const AddBeds = () => {
-  const { addBed } = useBedStore((state) => state);
+export const EditBeds = () => {
+  const { addBed, updateBed, beds } = useBedStore((state) => state);
   const { seeds } = useSeedStore((state) => state);
   const [bed, setBed] = useState<Bed>(emptyBed);
-  const nameInputRef = useRef<HTMLInputElement>(null); // Initialize with null
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const { bedId } = Route.useParams();
+  const isCreate = bedId === "add";
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    setBed({ ...bed, [name]: value });
+    setBed({ ...bed, [name]: value, updatedAt: new Date() });
   };
 
   const handleSelectChange = (e: SelectChange) => {
     if (e.index !== undefined) {
       const grid = bed.grid;
       grid[e.index] = { index: e.index, seed: e.value as Seed };
-      setBed({ ...bed, grid });
+      setBed({ ...bed, grid, updatedAt: new Date() });
     }
   };
 
   const handleSubmit = () => {
-    addBed(bed);
-    setBed(emptyBed);
-    nameInputRef?.current?.focus();
+    if (isCreate) {
+      addBed(bed);
+      setBed(emptyBed);
+      nameInputRef?.current?.focus();
+    } else {
+      updateBed(bed);
+    }
   };
+
+  const initExistingBed = useCallback(() => {
+    const existingBed = beds.find((b) => b.id === bedId);
+    if (bedId && !isCreate && existingBed) {
+      setBed(existingBed as unknown as Bed);
+    } else {
+      setBed(emptyBed);
+      nameInputRef?.current?.focus();
+    }
+  }, [bedId, beds, isCreate]);
+
+  useEffect(() => {
+    initExistingBed();
+  }, [bedId, beds, initExistingBed]);
 
   useEffect(() => {
     console.log({ bed });
@@ -68,7 +95,8 @@ export const AddBeds = () => {
 
   return (
     <div>
-      <h1 className="mb-4">Add Beds</h1>
+      {isCreate && <h1 className="mb-4">Add Bed</h1>}
+      {!isCreate && <h1 className="mb-4">Edit Bed</h1>}
 
       <form
         onSubmit={(e) => {
@@ -164,8 +192,7 @@ export const AddBeds = () => {
                           </Label>
                           <Select
                             name="selectSeed"
-                            value={bed.grid[i]?.seed}
-                            className="w-full"
+                            value={bed.grid[i]?.seed as unknown as string}
                             onValueChange={(value) =>
                               handleSelectChange({
                                 name: "grid",
@@ -180,7 +207,10 @@ export const AddBeds = () => {
                             <SelectContent>
                               <SelectGroup>
                                 {seeds.map((seed) => (
-                                  <SelectItem key={seed.name} value={seed}>
+                                  <SelectItem
+                                    key={seed.name}
+                                    value={seed as unknown as string}
+                                  >
                                     {seed.name}
                                   </SelectItem>
                                 ))}

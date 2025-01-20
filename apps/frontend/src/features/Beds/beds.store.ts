@@ -6,6 +6,7 @@ import { Bed } from "./beds.model";
 interface BedStore {
   beds: Bed[];
   addBed: (bed: Bed) => void;
+  updateBed: (bed: Bed) => void;
 }
 
 export const useBedStore = create<BedStore>()(
@@ -14,6 +15,10 @@ export const useBedStore = create<BedStore>()(
       (set) => ({
         beds: [],
         addBed: (bed) => set((state) => ({ beds: [...state.beds, bed] })),
+        updateBed: (bed) =>
+          set((state) => ({
+            beds: state.beds.map((b) => (b.id === bed.id ? bed : b)),
+          })),
       }),
       { name: "bedStore", storage: createJSONStorage(() => indexedDbStorage) },
     ),
