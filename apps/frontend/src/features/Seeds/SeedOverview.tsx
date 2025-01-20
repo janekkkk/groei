@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcdn/components/ui/table";
+import { Link } from "@tanstack/react-router";
 
 export const SeedOverview = () => {
   const { seeds } = useSeedStore((state) => state);
@@ -29,7 +30,9 @@ export const SeedOverview = () => {
       <TableBody>
         {seeds.map((seed) => (
           <TableRow key={seed.name}>
-            <TableCell>{seed.name}</TableCell>
+            <TableCell>
+              <Link to={seed.id}>{seed.name}</Link>
+            </TableCell>
             <TableCell>{seed.variety}</TableCell>
             <TableCell className="text-right">{seed.quantity}</TableCell>
             <TableCell className="text-right">

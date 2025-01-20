@@ -29,7 +29,7 @@ import {
 import { SelectChange } from "@/shared/select.model";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { Seed } from "@/features/Seeds/seeds.model";
-import { Route } from "@/routes/beds/$bedId";
+import { Route } from "@/routes/beds/$bedId.lazy";
 
 const emptyBed: Bed = {
   id: crypto.randomUUID(),

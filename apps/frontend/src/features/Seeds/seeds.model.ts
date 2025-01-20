@@ -21,6 +21,7 @@ export enum Month {
 }
 
 export interface Seed {
+  id: string;
   sowFrom?: Month;
   sowTill?: Month;
   plantFrom?: Month;

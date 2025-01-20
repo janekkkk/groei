@@ -1,14 +1,14 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { AddSeeds } from "@/features/Seeds/AddSeeds";
+import { EditSeeds } from "@/features/Seeds/EditSeeds";
 
-export const Route = createLazyFileRoute("/seeds/add")({
+export const Route = createLazyFileRoute("/seeds/$seedId")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   return (
     <div>
-      <AddSeeds />
+      <EditSeeds />
     </div>
   );
 }

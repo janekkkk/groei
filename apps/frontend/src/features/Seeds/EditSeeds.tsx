@@ -1,4 +1,10 @@
-import React, { ChangeEventHandler, useRef, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Input } from "@/shadcdn/components/ui/input";
 import {
   Select,
@@ -14,8 +20,10 @@ import { Month, PlantHeight, Seed } from "@/features/Seeds/seeds.model";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { SelectChange } from "@/shared/select.model";
+import { Route } from "@/routes/seeds/$seedId.lazy";
 
 const emptySeed: Seed = {
+  id: crypto.randomUUID(),
   name: "",
   variety: "",
   sowFrom: undefined,
@@ -38,25 +46,31 @@ const emptySeed: Seed = {
   updatedAt: new Date(),
 };
 
-export const AddSeeds = () => {
-  const { addSeed } = useSeedStore((state) => state);
+export const EditSeeds = () => {
+  const { addSeed, updateSeed, seeds } = useSeedStore((state) => state);
   const [seed, setSeed] = useState<Seed>(emptySeed);
   const [newTag, setNewTag] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const { seedId } = Route.useParams();
+  const isCreate = seedId === "add";
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    setSeed({ ...seed, [name]: value });
+    setSeed({ ...seed, [name]: value, updatedAt: new Date() });
   };
 
   const handleSelectChange = (e: SelectChange) => {
-    setSeed({ ...seed, [e.name]: e.value });
+    setSeed({ ...seed, [e.name]: e.value, updatedAt: new Date() });
   };
 
   const handleTagAdd = () => {
-    setSeed({ ...seed, tags: [...(seed.tags || []), newTag] });
+    setSeed({
+      ...seed,
+      tags: [...(seed.tags || []), newTag],
+      updatedAt: new Date(),
+    });
     setNewTag("");
   };
 
@@ -66,15 +80,41 @@ export const AddSeeds = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setSeed({ ...seed, photo: e.target.files[0] as unknown as File });
+      setSeed({
+        ...seed,
+        photo: e.target.files[0] as unknown as File,
+        updatedAt: new Date(),
+      });
     }
   };
 
   const handleSubmit = () => {
-    addSeed(seed);
-    setSeed(emptySeed);
-    nameInputRef?.current?.focus();
+    if (isCreate) {
+      addSeed(seed);
+      setSeed(emptySeed);
+      nameInputRef?.current?.focus();
+    } else {
+      updateSeed(seed);
+    }
   };
+
+  const initExistingSeed = useCallback(() => {
+    const existingSeed = seeds.find((s) => s.id === seedId);
+    if (seedId && !isCreate && existingSeed) {
+      setSeed(existingSeed as unknown as Seed);
+    } else {
+      setSeed(emptySeed);
+      nameInputRef?.current?.focus();
+    }
+  }, [isCreate, seedId, seeds]);
+
+  useEffect(() => {
+    initExistingSeed();
+  }, [initExistingSeed]);
+
+  useEffect(() => {
+    console.log({ seed });
+  }, [seed]);
 
   return (
     <div>
