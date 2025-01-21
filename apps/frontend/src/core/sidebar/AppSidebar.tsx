@@ -9,15 +9,16 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarRail,
 } from "@/shadcdn/components/ui/sidebar";
 import { Home, LucideIcon, Sprout, Grid2x2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { ThemeToggle } from "@/core/Theme/ThemeToggle";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/shadcdn/components/ui/collapsible";
+import { Username } from "@/core/authentication/Username";
 
 interface NavigationItem {
   title: string;
@@ -113,10 +114,11 @@ export const AppSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="bg-white dark:bg-black">
-        <div className="flex justify-end items-center">
-          <ThemeToggle />
+        <div className="flex items-center">
+          <Username />
         </div>
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 };

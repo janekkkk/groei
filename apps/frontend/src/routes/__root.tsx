@@ -3,10 +3,10 @@ import {
   SidebarTrigger,
 } from "@/shadcdn/components/ui/sidebar";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { AppSidebar } from "@/core/Sidebar/AppSidebar";
+import { AppSidebar } from "@/core/sidebar/AppSidebar";
 import { MainLayout } from "@/core/layouts/main.layout";
-import { ThemeProvider } from "@/core/Theme/ThemeProvider";
+import { ThemeProvider } from "@/core/theme/ThemeProvider";
+import { ThemeToggle } from "@/core/theme/ThemeToggle";
 
 export const Route = createRootRoute({
   component: () => (
@@ -17,7 +17,9 @@ export const Route = createRootRoute({
           <main className="w-full ">
             <MainLayout>
               <SidebarTrigger className="absolute left-2 top-2" />
-              <div className="mt-4">
+              <ThemeToggle className="absolute right-2 top-2" />
+
+              <div className="pt-14">
                 <Outlet />
               </div>
             </MainLayout>
@@ -25,7 +27,7 @@ export const Route = createRootRoute({
         </SidebarProvider>
       </ThemeProvider>
 
-      <TanStackRouterDevtools />
+      {/*<TanStackRouterDevtools />*/}
     </>
   ),
 });
