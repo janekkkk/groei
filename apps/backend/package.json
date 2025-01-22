@@ -7,10 +7,21 @@
   "dependencies": {
     "@bladwijzer/common": "*",
     "@hono/hono": "npm:@jsr/hono__hono@^4.6.1",
+    "@libsql/client": "^0.14.0",
+    "better-sqlite3": "^11.8.1",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.38.4",
     "hono": "^4.6.16"
   },
   "scripts": {
     "test": "ENV=test deno test --allow-env",
-    "dev": "deno run --allow-net --allow-env --watch index.ts"
+    "dev": "deno run --allow-net --allow-env --allow-read --allow-ffi --watch index.ts",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.30.2",
+    "tsx": "^4.19.2"
   }
 }
