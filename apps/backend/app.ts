@@ -9,22 +9,18 @@ import middlewares from "./middleware.ts";
 
 const app = new Hono().basePath("/");
 
-app.use("*", compress());
-app.use("*", cors());
-
 if (Deno.env.get("ENV") !== "test") {
   app.use("*", logger(customLogger));
 }
-
+app.use("*", compress());
+app.use("*", cors());
 app.use("*", secureHeaders());
-
+app.route("/api", api);
 app.get("/", (c) =>
   c.json({
     message: "🦄🌈✨👋🌎🌍🌏✨🌈🦄",
   }),
 );
-
-app.route("/api", api);
 
 app.notFound(middlewares.notFound);
 

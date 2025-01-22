@@ -18,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcdn/components/ui/dropdown-menu";
+import { useMount } from "react-use";
 
 export const Username = () => {
   const isLoggedIn = false;
@@ -31,6 +32,11 @@ export const Username = () => {
   const login = () => {};
 
   const logout = () => {};
+
+  useMount(async () => {
+    const bla = await fetch("http://localhost:8000").then((res) => res.json());
+    console.log({ bla });
+  });
 
   return (
     <SidebarMenu>

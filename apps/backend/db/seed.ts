@@ -5,8 +5,8 @@ import { db } from "./index.ts";
 const main = async () => {
   const user: typeof usersTable.$inferInsert = {
     name: "John",
-    age: 30,
     email: "john@example.com",
+    avatar: "https://example.com/avatar.jpg",
   };
 
   await db.delete(usersTable).where(eq(usersTable.email, user.email));
@@ -21,7 +21,7 @@ const main = async () => {
   await db
     .update(usersTable)
     .set({
-      age: 31,
+      email: "example@example.com",
     })
     .where(eq(usersTable.email, user.email));
   console.log("User info updated!");
