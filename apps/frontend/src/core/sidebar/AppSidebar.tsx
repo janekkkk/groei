@@ -45,7 +45,7 @@ export const AppSidebar = () => {
         },
         {
           title: "Add",
-          routeTo: "/seeds/add",
+          routeTo: "/seeds/-1",
         },
       ],
     },
@@ -60,7 +60,7 @@ export const AppSidebar = () => {
         },
         {
           title: "Add",
-          routeTo: "/beds/add",
+          routeTo: "/beds/-1",
         },
       ],
     },

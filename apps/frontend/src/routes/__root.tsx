@@ -19,7 +19,7 @@ export const Route = createRootRoute({
               <SidebarTrigger className="absolute left-2 top-2" />
               <ThemeToggle className="absolute right-2 top-2" />
 
-              <div className="pt-14">
+              <div className="pt-14 pb-4">
                 <Outlet />
               </div>
             </MainLayout>

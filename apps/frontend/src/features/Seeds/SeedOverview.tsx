@@ -10,6 +10,7 @@ import {
 } from "@/shadcdn/components/ui/table";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/shadcdn/components/ui/button";
+import { Seed } from "@bladwijzer/common/src/models/Seed";
 
 export const SeedOverview = () => {
   const { seeds } = useSeedStore((state) => state);
@@ -19,7 +20,7 @@ export const SeedOverview = () => {
       <div className="w-full flex justify-end mb-2">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore*/}
-        <Link to={"/seeds/add"}>
+        <Link to={"/seeds/-1"}>
           <Button type="button">Add new seed</Button>
         </Link>
       </div>
@@ -39,10 +40,10 @@ export const SeedOverview = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {seeds.map((seed) => (
+          {seeds.map((seed: Seed) => (
             <TableRow key={seed.name}>
               <TableCell>
-                <Link to={seed.id}>{seed.name}</Link>
+                <Link to={seed.id.toString()}>{seed.name}</Link>
               </TableCell>
               <TableCell>{seed.variety}</TableCell>
               <TableCell className="text-right">{seed.quantity}</TableCell>

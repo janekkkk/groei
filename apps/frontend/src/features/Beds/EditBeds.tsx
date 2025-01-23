@@ -28,11 +28,11 @@ import {
 } from "@/shadcdn/components/ui/select";
 import { SelectChange } from "@/shared/select.model";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
-import { Seed } from "@/features/Seeds/seeds.model";
 import { Route } from "@/routes/beds/$bedId.lazy";
+import { Seed } from "@bladwijzer/common/src/models/Seed";
 
 const emptyBed: Bed = {
-  id: crypto.randomUUID(),
+  id: -1,
   name: "",
   notes: "",
   gridWidth: 2,
@@ -48,7 +48,7 @@ export const EditBeds = () => {
   const [bed, setBed] = useState<Bed>(emptyBed);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { bedId } = Route.useParams();
-  const isCreate = bedId === "add";
+  const isCreate = Number(bedId) === -1;
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -76,7 +76,7 @@ export const EditBeds = () => {
   };
 
   const initExistingBed = useCallback(() => {
-    const existingBed = beds.find((b) => b.id === bedId);
+    const existingBed = beds.find((b) => b.id === Number(bedId));
     if (bedId && !isCreate && existingBed) {
       setBed(existingBed as unknown as Bed);
     } else {

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, devtools } from "zustand/middleware";
 import { indexedDbStorage } from "@/core/store/indexedDbStorage";
-import { Seed } from "@/features/Seeds/seeds.model";
+import { Seed } from "@bladwijzer/common/src/models/Seed";
 
 interface SeedStore {
   seeds: Seed[];

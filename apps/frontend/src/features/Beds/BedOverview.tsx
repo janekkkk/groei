@@ -19,7 +19,7 @@ export const BedOverview = () => {
       <div className="w-full flex justify-end mb-2">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore*/}
-        <Link to={"/beds/add"}>
+        <Link to={"/beds/-1"}>
           <Button type="button">Add new bed</Button>
         </Link>
       </div>
@@ -34,7 +34,7 @@ export const BedOverview = () => {
           {beds.map((bed) => (
             <TableRow key={bed.name}>
               <TableCell>
-                <Link to={bed.id}>{bed.name}</Link>
+                <Link to={bed.id?.toString()}>{bed.name}</Link>
               </TableCell>
             </TableRow>
           ))}

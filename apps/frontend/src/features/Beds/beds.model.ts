@@ -1,8 +1,8 @@
-import { Seed } from "@/features/Seeds/seeds.model";
+import { Seed } from "@bladwijzer/common/src/models/Seed";
 
 export interface Bed {
   notes: string | readonly string[] | number | undefined;
-  id?: string;
+  id?: number;
   name: string;
   gridWidth: number;
   gridHeight: number;

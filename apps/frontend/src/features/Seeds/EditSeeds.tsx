@@ -16,14 +16,14 @@ import {
 } from "@/shadcdn/components/ui/select";
 import { Label } from "@/shadcdn/components/ui/label";
 import { Button } from "@/shadcdn/components/ui/button";
-import { Month, PlantHeight, Seed } from "@/features/Seeds/seeds.model";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { SelectChange } from "@/shared/select.model";
 import { Route } from "@/routes/seeds/$seedId.lazy";
+import { Month, PlantHeight, Seed } from "@bladwijzer/common/src/models/Seed";
 
 const emptySeed: Seed = {
-  id: crypto.randomUUID(),
+  id: 0,
   name: "",
   variety: "",
   sowFrom: undefined,
@@ -39,11 +39,11 @@ const emptySeed: Seed = {
   numberOfSeedsPerGridCell: 1,
   notes: "",
   tags: [],
-  photo: null,
   url: "",
   expirationDate: undefined, // new Date().toISOString().substring(0, 10)
   createdAt: new Date(),
   updatedAt: new Date(),
+  deletedAt: undefined,
 };
 
 export const EditSeeds = () => {
@@ -52,7 +52,7 @@ export const EditSeeds = () => {
   const [newTag, setNewTag] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { seedId } = Route.useParams();
-  const isCreate = seedId === "add";
+  const isCreate = Number(seedId) === -1;
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -78,16 +78,6 @@ export const EditSeeds = () => {
     setNewTag(e.target.value);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setSeed({
-        ...seed,
-        photo: e.target.files[0] as unknown as File,
-        updatedAt: new Date(),
-      });
-    }
-  };
-
   const handleSubmit = () => {
     if (isCreate) {
       addSeed(seed);
@@ -99,7 +89,7 @@ export const EditSeeds = () => {
   };
 
   const initExistingSeed = useCallback(() => {
-    const existingSeed = seeds.find((s) => s.id === seedId);
+    const existingSeed = seeds.find((s) => s.id === Number(seedId));
     if (seedId && !isCreate && existingSeed) {
       setSeed(existingSeed as unknown as Seed);
     } else {
@@ -118,7 +108,8 @@ export const EditSeeds = () => {
 
   return (
     <div>
-      <h1 className="mb-4">Add Seeds</h1>
+      {isCreate && <h1 className="mb-4">Add Seed</h1>}
+      {!isCreate && <h1 className="mb-4">Edit Seed</h1>}
 
       <form
         onSubmit={(e) => {
@@ -405,13 +396,6 @@ export const EditSeeds = () => {
               </li>
             ))}
           </ul>
-        </div>
-        <div>
-          <Label>Photo:</Label>
-          <Input
-            type="file"
-            onChange={handleFileChange as ChangeEventHandler<HTMLInputElement>}
-          />
         </div>
         <div className="flex items-center justify-end gap-2">
           <Button type="button" onClick={() => console.log("Cancelled")}>
