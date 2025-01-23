@@ -21,6 +21,10 @@ import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { SelectChange } from "@/shared/select.model";
 import { Route } from "@/routes/seeds/$seedId.lazy";
 import { Month, PlantHeight, Seed } from "@bladwijzer/common/src/models/Seed";
+import {
+  useCreateSeedMutation,
+  useUpdateSeedMutation,
+} from "@/features/Seeds/useSeedQuery";
 
 const emptySeed: Seed = {
   id: 0,
@@ -47,12 +51,15 @@ const emptySeed: Seed = {
 };
 
 export const EditSeeds = () => {
-  const { addSeed, updateSeed, seeds } = useSeedStore((state) => state);
+  const seeds = useSeedStore((state) => state.seeds);
+  const createSeed = useCreateSeedMutation();
+  const updateSeed = useUpdateSeedMutation();
   const [seed, setSeed] = useState<Seed>(emptySeed);
   const [newTag, setNewTag] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { seedId } = Route.useParams();
   const isCreate = Number(seedId) === -1;
+  console.log({ seeds });
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -80,11 +87,11 @@ export const EditSeeds = () => {
 
   const handleSubmit = () => {
     if (isCreate) {
-      addSeed(seed);
+      createSeed.mutate(seed);
       setSeed(emptySeed);
       nameInputRef?.current?.focus();
     } else {
-      updateSeed(seed);
+      updateSeed.mutate(seed);
     }
   };
 

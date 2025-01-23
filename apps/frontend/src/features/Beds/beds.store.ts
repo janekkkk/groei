@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, devtools } from "zustand/middleware";
 import { indexedDbStorage } from "@/core/store/indexedDbStorage";
-import { Bed } from "./beds.model";
+import { Bed } from "@bladwijzer/common/src/models/Bed";
 
 interface BedStore {
   beds: Bed[];

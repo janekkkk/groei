@@ -8,7 +8,7 @@ import {
 import { Input } from "@/shadcdn/components/ui/input";
 import { Label } from "@/shadcdn/components/ui/label";
 import { Button } from "@/shadcdn/components/ui/button";
-import { Bed } from "@/features/Beds/beds.model";
+import { Bed } from "@bladwijzer/common/src/models/Bed";
 import { useBedStore } from "./beds.store";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { classNames } from "@/shared/utils";
@@ -60,7 +60,7 @@ export const EditBeds = () => {
   const handleSelectChange = (e: SelectChange) => {
     if (e.index !== undefined) {
       const grid = bed.grid;
-      grid[e.index] = { index: e.index, seed: e.value as Seed };
+      grid[e.index] = { index: e.index, bed: e.value as Seed };
       setBed({ ...bed, grid, updatedAt: new Date() });
     }
   };

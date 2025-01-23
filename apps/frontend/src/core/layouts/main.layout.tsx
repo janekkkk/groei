@@ -1,10 +1,13 @@
 import { ReactNode } from "react";
+import { useSeedsQuery } from "@/features/Seeds/useSeedQuery";
 
 interface Props {
   children: ReactNode;
 }
 
 export const MainLayout = ({ children }: Props) => {
+  useSeedsQuery();
+
   return (
     <div className="relative overflow-y-auto bg-white dark:bg-black">
       <div className="min-h-screen">

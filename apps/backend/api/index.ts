@@ -1,6 +1,7 @@
 import { Hono } from "hono";
-import seeds from "./seeds.ts";
-import users from "./user.ts";
+import seedRoute from "./seedRoute.ts";
+import userRoute from "./userRoute.ts";
+import bedRoute from "./bedRoute.ts";
 
 const router = new Hono();
 
@@ -10,7 +11,8 @@ router.get("/", ({ json }) =>
   }),
 );
 
-router.route("/seeds", seeds);
-router.route("/user", users);
+router.route("/seeds", seedRoute);
+router.route("/user", userRoute);
+router.route("/beds", bedRoute);
 
 export default router;

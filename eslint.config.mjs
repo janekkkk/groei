@@ -7,6 +7,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import react from "eslint-plugin-react";
 import { fileURLToPath } from "url";
 import path from "path";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -44,10 +45,11 @@ export default [
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
     },
-    ignores: ["**/shadcdn"],
+    ignores: ["**/shadcdn", "**/dev-dist", "**/dist", "**/vite.config.ts"],
     rules: {
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
+      // ...pluginQuery.configs["flat/recommended"],
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",

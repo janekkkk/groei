@@ -124,3 +124,6 @@ dist
 
 .nx/cache
 .nx/workspace-data
+
+## Vite
+dev-dist/
