@@ -20,14 +20,14 @@ import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { SelectChange } from "@/shared/select.model";
 import { Route } from "@/routes/seeds/$seedId.lazy";
-import { Month, PlantHeight, Seed } from "@bladwijzer/common/src/models/Seed";
+import { Month, PlantHeight, Seed } from "@groei/common/src/models/Seed";
 import {
   useCreateSeedMutation,
   useUpdateSeedMutation,
 } from "@/features/Seeds/useSeedQuery";
 
 const emptySeed: Seed = {
-  id: 0,
+  id: crypto.randomUUID(),
   name: "",
   variety: "",
   sowFrom: undefined,
@@ -54,30 +54,30 @@ export const EditSeeds = () => {
   const seeds = useSeedStore((state) => state.seeds);
   const createSeed = useCreateSeedMutation();
   const updateSeed = useUpdateSeedMutation();
-  const [seed, setSeed] = useState<Seed>(emptySeed);
+  const [seed, setSeed] = useState<Seed>();
   const [newTag, setNewTag] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { seedId } = Route.useParams();
   const isCreate = Number(seedId) === -1;
-  console.log({ seeds });
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    setSeed({ ...seed, [name]: value, updatedAt: new Date() });
+    if (seed) setSeed({ ...seed, [name]: value, updatedAt: new Date() });
   };
 
   const handleSelectChange = (e: SelectChange) => {
-    setSeed({ ...seed, [e.name]: e.value, updatedAt: new Date() });
+    if (seed) setSeed({ ...seed, [e.name]: e.value, updatedAt: new Date() });
   };
 
   const handleTagAdd = () => {
-    setSeed({
-      ...seed,
-      tags: [...(seed.tags || []), newTag],
-      updatedAt: new Date(),
-    });
+    if (seed)
+      setSeed({
+        ...seed,
+        tags: [...(seed?.tags || []), newTag],
+        updatedAt: new Date(),
+      });
     setNewTag("");
   };
 
@@ -86,20 +86,22 @@ export const EditSeeds = () => {
   };
 
   const handleSubmit = () => {
-    if (isCreate) {
+    if (isCreate && seed) {
       createSeed.mutate(seed);
       setSeed(emptySeed);
       nameInputRef?.current?.focus();
     } else {
-      updateSeed.mutate(seed);
+      if (seed) updateSeed.mutate(seed);
     }
   };
 
   const initExistingSeed = useCallback(() => {
-    const existingSeed = seeds.find((s) => s.id === Number(seedId));
+    const existingSeed = seeds.find((s) => s.id === seedId);
     if (seedId && !isCreate && existingSeed) {
+      console.log("found seed!", { existingSeed });
       setSeed(existingSeed as unknown as Seed);
     } else {
+      console.log("no seed found, creating new one");
       setSeed(emptySeed);
       nameInputRef?.current?.focus();
     }
@@ -130,7 +132,7 @@ export const EditSeeds = () => {
           <Input
             type="text"
             name="name"
-            value={seed.name}
+            value={seed?.name}
             onChange={handleInputChange}
             required
             ref={nameInputRef}
@@ -141,7 +143,7 @@ export const EditSeeds = () => {
           <Input
             type="text"
             name="variety"
-            value={seed.variety}
+            value={seed?.variety}
             onChange={handleInputChange}
           />
         </div>
@@ -152,7 +154,7 @@ export const EditSeeds = () => {
           <Input
             type="number"
             name="numberOfSeedsPerGridCell"
-            value={seed.numberOfSeedsPerGridCell}
+            value={seed?.numberOfSeedsPerGridCell}
             onChange={handleInputChange}
           />
         </div>
@@ -161,7 +163,7 @@ export const EditSeeds = () => {
             <Label htmlFor="sowFrom">Sow From:</Label>
             <Select
               name="sowFrom"
-              value={seed.sowFrom}
+              value={seed?.sowFrom}
               onValueChange={(value) =>
                 handleSelectChange({ name: "sowFrom", value: value })
               }
@@ -184,7 +186,7 @@ export const EditSeeds = () => {
             <Label htmlFor="sowTill">Sow Till:</Label>
             <Select
               name="sowTill"
-              value={seed.sowTill}
+              value={seed?.sowTill}
               onValueChange={(value) =>
                 handleSelectChange({ name: "sowTill", value: value })
               }
@@ -210,7 +212,7 @@ export const EditSeeds = () => {
             <Label htmlFor="plantFrom">Plant From:</Label>
             <Select
               name="plantFrom"
-              value={seed.plantFrom}
+              value={seed?.plantFrom}
               onValueChange={(value) =>
                 handleSelectChange({ name: "plantFrom", value: value })
               }
@@ -233,7 +235,7 @@ export const EditSeeds = () => {
             <Label htmlFor="plantTill">Plant Till:</Label>
             <Select
               name="plantTill"
-              value={seed.plantTill}
+              value={seed?.plantTill}
               onValueChange={(value) =>
                 handleSelectChange({ name: "plantTill", value: value })
               }
@@ -259,7 +261,7 @@ export const EditSeeds = () => {
             <Label htmlFor="harvestFrom">Harvest From:</Label>
             <Select
               name="harvestFrom"
-              value={seed.harvestFrom}
+              value={seed?.harvestFrom}
               onValueChange={(value) =>
                 handleSelectChange({ name: "harvestFrom", value: value })
               }
@@ -282,7 +284,7 @@ export const EditSeeds = () => {
             <Label htmlFor="harvestTill">Harvest Till:</Label>
             <Select
               name="harvestTill"
-              value={seed.harvestTill}
+              value={seed?.harvestTill}
               onValueChange={(value) =>
                 handleSelectChange({ name: "harvestTill", value: value })
               }
@@ -308,7 +310,7 @@ export const EditSeeds = () => {
           <Input
             type="number"
             name="daysToMaturity"
-            value={seed.daysToMaturity || ""}
+            value={seed?.daysToMaturity || ""}
             onChange={handleInputChange}
           />
         </div>
@@ -317,7 +319,7 @@ export const EditSeeds = () => {
           <Input
             type="number"
             name="plantDistance"
-            value={seed.plantDistance || ""}
+            value={seed?.plantDistance || ""}
             onChange={handleInputChange}
           />
         </div>
@@ -325,7 +327,7 @@ export const EditSeeds = () => {
           <Label htmlFor="plantHeight">Plant Height:</Label>
           <Select
             name="plantHeight"
-            value={seed.plantHeight}
+            value={seed?.plantHeight}
             onValueChange={(value) =>
               handleSelectChange({ name: "plantHeight", value: value })
             }
@@ -348,7 +350,7 @@ export const EditSeeds = () => {
           <Input
             type="number"
             name="quantity"
-            value={seed.quantity || ""}
+            value={seed?.quantity || ""}
             onChange={handleInputChange}
           />
         </div>
@@ -357,7 +359,7 @@ export const EditSeeds = () => {
           <Input
             type="date"
             name="experationDate"
-            value={seed.expirationDate}
+            value={seed?.expirationDate}
             onChange={handleInputChange}
           />
         </div>
@@ -366,7 +368,7 @@ export const EditSeeds = () => {
           <Input
             type="url"
             name="url"
-            value={seed.url}
+            value={seed?.url}
             onChange={handleInputChange}
           />
         </div>
@@ -374,7 +376,7 @@ export const EditSeeds = () => {
           <Label htmlFor="notes">Notes:</Label>
           <Textarea
             name="notes"
-            value={seed.notes}
+            value={seed?.notes}
             onChange={handleInputChange}
           />
         </div>
@@ -397,7 +399,7 @@ export const EditSeeds = () => {
             </Button>
           </div>
           <ul className="mt-2 flex gap-1 ">
-            {(seed.tags || []).map((tag) => (
+            {(seed?.tags || []).map((tag) => (
               <li key={tag} className="border p-1">
                 {tag}
               </li>

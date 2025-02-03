@@ -1,4 +1,4 @@
-import { Seed } from "@bladwijzer/common/src/models/Seed";
+import { Seed, SeedDTO } from "@groei/common/src/models/Seed";
 
 class SeedService {
   private static readonly baseUrl = import.meta.env.VITE_API_URI + "/seeds";
@@ -6,13 +6,27 @@ class SeedService {
   async fetchSeeds(): Promise<Seed[]> {
     const response = await fetch(SeedService.baseUrl);
 
-    return response.json();
+    return response.json().then((seeds: SeedDTO[]) => {
+      return seeds.map((seed) => ({
+        ...seed,
+        tags: seed.tags?.split(","),
+        createdAt: new Date(seed.createdAt),
+        updatedAt: new Date(seed.updatedAt),
+        deletedAt: seed.deletedAt ? new Date(seed.deletedAt) : undefined,
+      }));
+    });
   }
 
-  async fetchSeed(id: number): Promise<Seed> {
+  async fetchSeed(id: string): Promise<Seed> {
     const response = await fetch(`${SeedService.baseUrl}/${id}`);
 
-    return response.json();
+    return response.json().then((seed: SeedDTO) => ({
+      ...seed,
+      tags: seed.tags?.split(","),
+      createdAt: new Date(seed.createdAt),
+      updatedAt: new Date(seed.updatedAt),
+      deletedAt: seed.deletedAt ? new Date(seed.deletedAt) : undefined,
+    }));
   }
 
   async createSeed(seed: Seed): Promise<Seed> {
@@ -21,7 +35,7 @@ class SeedService {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(seed),
+      body: JSON.stringify({ ...seed, tags: seed?.tags?.join(",") }),
     });
 
     return response.json();
@@ -33,13 +47,13 @@ class SeedService {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(seed),
+      body: JSON.stringify({ ...seed, tags: seed?.tags?.join(",") }),
     });
 
     return response.json();
   }
 
-  async deleteSeed(id: number): Promise<void> {
+  async deleteSeed(id: string): Promise<void> {
     const response = await fetch(`${SeedService.baseUrl}/${id}`, {
       method: "DELETE",
     });

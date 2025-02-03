@@ -20,7 +20,7 @@ import {
 } from "@/shadcdn/components/ui/dropdown-menu";
 import { useMount } from "react-use";
 import { useState } from "react";
-import { User } from "@bladwijzer/common/src/models/User";
+import { User } from "@groei/common/src/models/User";
 
 export const Username = () => {
   const isLoggedIn = false;

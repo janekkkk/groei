@@ -4,13 +4,20 @@ import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import mkcert from "vite-plugin-mkcert";
 
 // https://vitejs.dev/config https://vitest.dev/config
 export default defineConfig({
+  server: {
+    host: true,
+  },
   plugins: [
     react(),
     TanStackRouterVite(),
     tsconfigPaths(),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    mkcert(),
     VitePWA({
       devOptions: {
         enabled: true,
@@ -40,8 +47,8 @@ export default defineConfig({
         orientation: "any",
         display: "standalone",
         lang: "nl-NL",
-        name: "Bladwijzer",
-        short_name: "Bladwijzer",
+        name: "Groei!",
+        short_name: "Groei!",
       },
     }),
   ],

@@ -2,7 +2,7 @@ import { Seed } from "./Seed.ts";
 
 export interface Bed {
   notes: string | readonly string[] | number | undefined;
-  id?: number;
+  id?: string;
   name: string;
   gridWidth: number;
   gridHeight: number;

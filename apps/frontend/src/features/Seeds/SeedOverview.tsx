@@ -10,7 +10,7 @@ import {
 } from "@/shadcdn/components/ui/table";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/shadcdn/components/ui/button";
-import { Seed } from "@bladwijzer/common/src/models/Seed";
+import { Seed } from "@groei/common/src/models/Seed";
 
 export const SeedOverview = () => {
   const { seeds } = useSeedStore((state) => state);

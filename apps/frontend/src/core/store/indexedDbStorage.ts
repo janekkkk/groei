@@ -7,7 +7,7 @@ export const indexedDbStorage: StateStorage = {
     return (await get(name)) || null;
   },
   setItem: async (name: string, value: string): Promise<void> => {
-    console.log(name, "with value", value, "has been saved");
+    console.log(name, "with value", JSON.parse(value), "has been saved");
     await set(name, value);
   },
   removeItem: async (name: string): Promise<void> => {

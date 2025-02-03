@@ -4,12 +4,12 @@ import { relations } from "drizzle-orm";
 
 export const usersTable = sqliteTable("users_table", {
   name: text().notNull(),
-  email: text().primaryKey().notNull().unique(),
+  email: text().primaryKey().notNull(),
   avatar: text(),
 });
 
 export const seedsTable = sqliteTable("seeds_table", {
-  id: int().primaryKey({ autoIncrement: true }),
+  id: text().primaryKey(),
   name: text().notNull(),
   sowFrom: text(),
   sowTill: text(),
@@ -19,7 +19,7 @@ export const seedsTable = sqliteTable("seeds_table", {
   harvestTill: text(),
   expirationDate: text(),
   url: text(),
-  plantHeight: int(),
+  plantHeight: text(),
   plantDistance: int(),
   numberOfSeedsPerGridCell: int(),
   variety: text(),
@@ -32,7 +32,7 @@ export const seedsTable = sqliteTable("seeds_table", {
 });
 
 export const bedTable = sqliteTable("bed_table", {
-  id: int().primaryKey({ autoIncrement: true }),
+  id: text().primaryKey(),
   name: text().notNull(),
   description: text(),
   gridWidth: int(),

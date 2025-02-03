@@ -10,3 +10,21 @@ export const merge = <T>(
   );
   return c;
 };
+
+export type Item<T extends { id: string; updatedAt: Date }> = T;
+
+export const mergeItems = <T extends { id: string; updatedAt: Date }>(
+  items: T[],
+): T[] => {
+  const mergedMap = new Map<string, T>();
+
+  for (const item of items) {
+    const existing = mergedMap.get(item.id);
+
+    if (!existing || item.updatedAt > existing.updatedAt) {
+      mergedMap.set(item.id, item);
+    }
+  }
+
+  return Array.from(mergedMap.values());
+};

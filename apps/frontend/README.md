@@ -1,7 +1,7 @@
 
-# BladWijzer 🌿
+# groei 🌿
 
-BladWijzer is an offline-first, mobile-friendly web application designed as a plant logbook, allowing users to track their plants' growth, care routines, and other personal notes. Built using React, it utilizes TypeScript and Vite for fast development, along with Tailwind CSS for styling.
+groei is an offline-first, mobile-friendly web application designed as a plant logbook, allowing users to track their plants' growth, care routines, and other personal notes. Built using React, it utilizes TypeScript and Vite for fast development, along with Tailwind CSS for styling.
 It's just something I'm just making for myself to keep track of what's happening in my garden and what to do next.
 
 ## Table of Contents
@@ -31,7 +31,7 @@ It's just something I'm just making for myself to keep track of what's happening
    npm run dev
    ```
 
-BladWijzer should now be running locally at `http://localhost:3000`.
+groei should now be running locally at `http://localhost:3000`.
 
 ## Features
 - Offline-first functionality
@@ -54,7 +54,7 @@ Below are the available commands to help manage the project:
 
 ## Technologies
 
-BladWijzer is built with a modern web stack:
+groei is built with a modern web stack:
 
 - **[React](https://reactjs.org/)** - For building user interfaces.
 - **[TypeScript](https://www.typescriptlang.org/)** - For type-safe JavaScript.

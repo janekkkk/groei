@@ -8,7 +8,7 @@ import {
 import { Input } from "@/shadcdn/components/ui/input";
 import { Label } from "@/shadcdn/components/ui/label";
 import { Button } from "@/shadcdn/components/ui/button";
-import { Bed } from "@bladwijzer/common/src/models/Bed";
+import { Bed, GridItem } from "@groei/common/src/models/Bed";
 import { useBedStore } from "./beds.store";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { classNames } from "@/shared/utils";
@@ -29,10 +29,9 @@ import {
 import { SelectChange } from "@/shared/select.model";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { Route } from "@/routes/beds/$bedId.lazy";
-import { Seed } from "@bladwijzer/common/src/models/Seed";
 
 const emptyBed: Bed = {
-  id: -1,
+  id: crypto.randomUUID(),
   name: "",
   notes: "",
   gridWidth: 2,
@@ -60,7 +59,7 @@ export const EditBeds = () => {
   const handleSelectChange = (e: SelectChange) => {
     if (e.index !== undefined) {
       const grid = bed.grid;
-      grid[e.index] = { index: e.index, bed: e.value as Seed };
+      grid[e.index] = { index: e.index, bed: e.value };
       setBed({ ...bed, grid, updatedAt: new Date() });
     }
   };
@@ -76,7 +75,7 @@ export const EditBeds = () => {
   };
 
   const initExistingBed = useCallback(() => {
-    const existingBed = beds.find((b) => b.id === Number(bedId));
+    const existingBed = beds.find((b) => b.id === bedId);
     if (bedId && !isCreate && existingBed) {
       setBed(existingBed as unknown as Bed);
     } else {

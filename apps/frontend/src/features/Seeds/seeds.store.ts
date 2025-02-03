@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, devtools } from "zustand/middleware";
 import { indexedDbStorage } from "@/core/store/indexedDbStorage";
-import { Seed } from "@bladwijzer/common/src/models/Seed";
+import { Seed } from "@groei/common/src/models/Seed";
 
 interface SeedStore {
   seeds: Seed[];
   addSeedToStore: (seed: Seed) => void;
   updateSeedInStore: (seed: Seed) => void;
-  deleteSeedFromStore: (id: number) => void;
+  deleteSeedFromStore: (id: string) => void;
   setSeeds: (seeds: Seed[]) => void;
 }
 
@@ -22,7 +22,7 @@ export const useSeedStore = create<SeedStore>()(
           set((state) => ({
             seeds: state.seeds.map((s) => (s.id === seed.id ? seed : s)),
           })),
-        deleteSeedFromStore: (id: number) =>
+        deleteSeedFromStore: (id: string) =>
           set((state) => ({
             seeds: state.seeds.filter((s) => s.id !== id),
           })),

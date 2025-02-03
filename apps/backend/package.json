@@ -1,11 +1,11 @@
 {
-  "name": "@bladwijzer/backend",
+  "name": "@groei/backend",
   "description": "",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@bladwijzer/common": "*",
+    "@groei/common": "*",
     "@hono/hono": "npm:@jsr/hono__hono@^4.6.1",
     "@libsql/client": "^0.14.0",
     "better-sqlite3": "^11.8.1",

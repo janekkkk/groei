@@ -1,12 +1,8 @@
 import { eq } from "drizzle-orm";
 import { seedsTable, usersTable } from "./schema.ts";
 import { db } from "./index.ts";
-import { User } from "@bladwijzer/common/src/models/user.ts";
-import {
-  Month,
-  PlantHeight,
-  SeedDTO,
-} from "@bladwijzer/common/src/models/Seed.ts";
+import { User } from "@groei/common/src/models/user.ts";
+import { Month, PlantHeight, SeedDTO } from "@groei/common/src/models/Seed.ts";
 
 const main = async () => {
   const user: User = {
@@ -16,7 +12,7 @@ const main = async () => {
   };
 
   const seed: SeedDTO = {
-    id: 1,
+    id: crypto.randomUUID(),
     name: "Tomaat",
     variety: "Cherry",
     sowFrom: Month.March,
@@ -34,8 +30,8 @@ const main = async () => {
     quantity: 10,
     notes: "This is a note",
     tags: "tomato, cherry, red",
-    // createdAt: new Date().toString(),
-    // updatedAt: new Date().toString(),
+    createdAt: new Date().toString(),
+    updatedAt: new Date().toString(),
   };
 
   await db.delete(usersTable).where(eq(usersTable.email, user.email));

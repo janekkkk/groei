@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { SeedDTO } from "@bladwijzer/common/src/models/Seed.ts";
+import { SeedDTO } from "@groei/common/src/models/Seed.ts";
 import { db } from "../db/index.ts";
 import { seedsTable } from "../db/schema.ts";
 import { eq } from "drizzle-orm";
@@ -16,7 +16,7 @@ router.get("/:id", async (c) => {
   const result = await db
     .select()
     .from(seedsTable)
-    .where(eq(seedsTable.id, Number(id)));
+    .where(eq(seedsTable.id, id));
   return c.json(result[0]);
 });
 

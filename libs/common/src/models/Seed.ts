@@ -1,5 +1,5 @@
 export interface Seed {
-  id: number;
+  id: string;
   sowFrom?: Month;
   sowTill?: Month;
   plantFrom?: Month;
