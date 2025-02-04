@@ -1,14 +1,8 @@
 import { Seed, SeedDTO } from "@groei/common/src/models/Seed";
+import { dateService } from "@/shared/date.service";
 
 class SeedService {
   private static readonly baseUrl = import.meta.env.VITE_API_URI + "/seeds";
-
-  private formatedTimestamp(newDate?: Date) {
-    const d = newDate ?? new Date();
-    const date = d.toISOString().split("T")[0];
-    const time = d.toTimeString().split(" ")[0].replace(/:/g, "-");
-    return `${date} ${time}`;
-  }
 
   async fetchSeeds(): Promise<Seed[]> {
     const response = await fetch(SeedService.baseUrl);
@@ -19,9 +13,11 @@ class SeedService {
           ({
             ...seed,
             tags: seed.tags?.split(","),
-            createdAt: new Date(seed.createdAt),
-            updatedAt: new Date(seed.updatedAt),
-            deletedAt: seed.deletedAt ? new Date(seed.deletedAt) : undefined,
+            createdAt: dateService.convertDate(seed.createdAt),
+            updatedAt: dateService.convertDate(seed.updatedAt),
+            deletedAt: seed.deletedAt
+              ? dateService.convertDate(seed.deletedAt)
+              : undefined,
           }) as Seed,
       );
     });
@@ -33,9 +29,11 @@ class SeedService {
     return response.json().then((seed: SeedDTO) => ({
       ...seed,
       tags: seed.tags?.split(","),
-      createdAt: new Date(seed.createdAt),
-      updatedAt: new Date(seed.updatedAt),
-      deletedAt: seed.deletedAt ? new Date(seed.deletedAt) : undefined,
+      createdAt: dateService.convertDate(seed.createdAt),
+      updatedAt: dateService.convertDate(seed.updatedAt),
+      deletedAt: seed.deletedAt
+        ? dateService.convertDate(seed.deletedAt)
+        : undefined,
     }));
   }
 
@@ -48,10 +46,10 @@ class SeedService {
       body: JSON.stringify({
         ...seed,
         tags: seed?.tags?.join(","),
-        createdAt: this.formatedTimestamp(seed.createdAt),
-        updatedAt: this.formatedTimestamp(seed.updatedAt),
+        createdAt: dateService.formatedTimestamp(seed.createdAt),
+        updatedAt: dateService.formatedTimestamp(seed.updatedAt),
         deletedAt: seed.deletedAt
-          ? this.formatedTimestamp(seed.deletedAt)
+          ? dateService.formatedTimestamp(seed.deletedAt)
           : undefined,
       }),
     });
@@ -68,10 +66,10 @@ class SeedService {
       body: JSON.stringify({
         ...seed,
         tags: seed?.tags?.join(","),
-        createdAt: this.formatedTimestamp(seed.createdAt),
-        updatedAt: this.formatedTimestamp(seed.updatedAt),
+        createdAt: dateService.formatedTimestamp(seed.createdAt),
+        updatedAt: dateService.formatedTimestamp(seed.updatedAt),
         deletedAt: seed.deletedAt
-          ? this.formatedTimestamp(seed.deletedAt)
+          ? dateService.formatedTimestamp(seed.deletedAt)
           : undefined,
       }),
     });

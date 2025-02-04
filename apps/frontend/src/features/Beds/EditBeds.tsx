@@ -1,4 +1,4 @@
-import {
+import React, {
   ChangeEventHandler,
   useCallback,
   useEffect,
@@ -30,6 +30,7 @@ import { SelectChange } from "@/shared/select.model";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { Route } from "@/routes/beds/$bedId.lazy";
 import { Seed } from "@groei/common/src/models/Seed";
+import { useCanGoBack, useRouter } from "@tanstack/react-router";
 
 const emptyBed: Bed = {
   id: crypto.randomUUID(),
@@ -49,6 +50,7 @@ export const EditBeds = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { bedId } = Route.useParams();
   const isCreate = Number(bedId) === -1;
+  const router = useRouter();
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -287,10 +289,24 @@ export const EditBeds = () => {
         </div>
 
         <div className="flex items-center justify-end gap-2">
-          <Button type="button" onClick={() => console.log("Cancelled")}>
-            Cancel
+          <Button
+            type="button"
+            onClick={() => console.log("Deleted")}
+            className={classNames({ hidden: isCreate })}
+            variant="destructive"
+          >
+            Delete
           </Button>
-          <Button type="submit">Save</Button>
+          {useCanGoBack() && (
+            <Button
+              type="button"
+              onClick={() => router.history.back()}
+              variant="secondary"
+            >
+              Cancel
+            </Button>
+          )}
+          <Button type="submit">{isCreate ? "Create" : "Update"}</Button>
         </div>
       </form>
     </div>

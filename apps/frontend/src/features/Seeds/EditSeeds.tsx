@@ -23,8 +23,11 @@ import { Route } from "@/routes/seeds/$seedId.lazy";
 import { Month, PlantHeight, Seed } from "@groei/common/src/models/Seed";
 import {
   useCreateSeedMutation,
+  useDeleteSeedMutation,
   useUpdateSeedMutation,
 } from "@/features/Seeds/useSeedQuery";
+import { classNames } from "@/shared/utils";
+import { useRouter, useCanGoBack } from "@tanstack/react-router";
 
 const emptySeed: Seed = {
   id: crypto.randomUUID(),
@@ -54,11 +57,13 @@ export const EditSeeds = () => {
   const seeds = useSeedStore((state) => state.seeds);
   const createSeed = useCreateSeedMutation();
   const updateSeed = useUpdateSeedMutation();
+  const deleteSeed = useDeleteSeedMutation();
   const [seed, setSeed] = useState<Seed>();
   const [newTag, setNewTag] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { seedId } = Route.useParams();
   const isCreate = Number(seedId) === -1;
+  const router = useRouter();
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -90,6 +95,7 @@ export const EditSeeds = () => {
       setSeed(emptySeed);
       nameInputRef?.current?.focus();
     } else {
+      console.log("update", { seed });
       if (seed) updateSeed.mutate(seed);
     }
   };
@@ -406,10 +412,29 @@ export const EditSeeds = () => {
           </ul>
         </div>
         <div className="flex items-center justify-end gap-2">
-          <Button type="button" onClick={() => console.log("Cancelled")}>
-            Cancel
+          <Button
+            type="button"
+            onClick={() => {
+              if (seed && seed.id) {
+                deleteSeed.mutate(seed?.id);
+                router.history.back();
+              }
+            }}
+            className={classNames({ hidden: isCreate })}
+            variant="destructive"
+          >
+            Delete
           </Button>
-          <Button type="submit">Save</Button>
+          {useCanGoBack() && (
+            <Button
+              type="button"
+              onClick={() => router.history.back()}
+              variant="secondary"
+            >
+              Cancel
+            </Button>
+          )}
+          <Button type="submit">{isCreate ? "Create" : "Update"}</Button>
         </div>
       </form>
     </div>
