@@ -1,4 +1,4 @@
-import React, {
+import {
   ChangeEventHandler,
   useCallback,
   useEffect,
@@ -31,6 +31,11 @@ import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { Route } from "@/routes/beds/$bedId.lazy";
 import { Seed } from "@groei/common/src/models/Seed";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
+import {
+  useCreateBedMutation,
+  useDeleteBedMutation,
+  useUpdateBedMutation,
+} from "@/features/Beds/useBedQuery";
 
 const emptyBed: Bed = {
   id: crypto.randomUUID(),
@@ -44,7 +49,10 @@ const emptyBed: Bed = {
 };
 
 export const EditBeds = () => {
-  const { addBed, updateBed, beds } = useBedStore((state) => state);
+  const createBed = useCreateBedMutation();
+  const updateBed = useUpdateBedMutation();
+  const deleteBed = useDeleteBedMutation();
+  const { beds } = useBedStore((state) => state);
   const { seeds } = useSeedStore((state) => state);
   const [bed, setBed] = useState<Bed>(emptyBed);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -67,13 +75,20 @@ export const EditBeds = () => {
     }
   };
 
+  const handleDeleteBed = () => {
+    if (bed && bed.id) {
+      deleteBed.mutate(bed?.id);
+      router.history.back();
+    }
+  };
+
   const handleSubmit = () => {
     if (isCreate) {
-      addBed(bed);
+      createBed.mutate(bed);
       setBed(emptyBed);
       nameInputRef?.current?.focus();
     } else {
-      updateBed(bed);
+      updateBed.mutate(bed);
     }
   };
 
@@ -159,8 +174,6 @@ export const EditBeds = () => {
             >
               {Array.from({ length: bed.gridWidth * bed.gridHeight }).map(
                 (_, i) => {
-                  console.log(bed.grid[i]?.seed);
-
                   return (
                     <Popover key={i}>
                       <PopoverTrigger asChild>
@@ -173,11 +186,11 @@ export const EditBeds = () => {
                             {i + 1}
                           </span>
                           <div className="flex justify-center items-center">
-                            {!bed.grid[i]?.seed && <Plus />}
+                            {!bed?.grid?.[i]?.seed && <Plus />}
 
-                            {bed.grid[i]?.seed && (
+                            {bed?.grid?.[i]?.seed && (
                               <span className=" text-white text-sm">
-                                {bed.grid[i]?.seed.name}
+                                {bed?.grid?.[i]?.seed.name}
                               </span>
                             )}
                           </div>
@@ -198,7 +211,9 @@ export const EditBeds = () => {
                               </Label>
                               <Select
                                 name="selectSeed"
-                                value={bed.grid[i]?.seed as unknown as string}
+                                value={
+                                  bed?.grid?.[i]?.seed as unknown as string
+                                }
                                 defaultOpen
                                 onValueChange={(value) =>
                                   handleSelectChange({
@@ -291,7 +306,7 @@ export const EditBeds = () => {
         <div className="flex items-center justify-end gap-2">
           <Button
             type="button"
-            onClick={() => console.log("Deleted")}
+            onClick={handleDeleteBed}
             className={classNames({ hidden: isCreate })}
             variant="destructive"
           >

@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { db } from "../db/index.ts";
 import { bedTable } from "../db/schema.ts";
 import { eq } from "drizzle-orm";
-import { Bed } from "@groei/common/src/models/Bed.ts";
+import { BedDTO } from "@groei/common/src/models/Bed.ts";
 
 const router = new Hono();
 
@@ -18,11 +18,22 @@ router.get("/:id", async (c) => {
 });
 
 router.post("/", async (c) => {
-  const bed = await c.req.json<Bed>();
+  const bed = await c.req.json<BedDTO>();
   await db.insert(bedTable).values(bed);
-  console.log({ bed });
-
   return c.json(bed);
+});
+
+router.put("/:id", async (c) => {
+  const id = c.req.param("id");
+  const bed = await c.req.json<BedDTO>();
+  await db.update(bedTable).set(bed).where(eq(bedTable.id, id));
+  return c.json(bed);
+});
+
+router.delete("/:id", async (c) => {
+  const id = c.req.param("id");
+  await db.delete(bedTable).where(eq(bedTable.id, id));
+  return c.json({ id });
 });
 
 export default router;

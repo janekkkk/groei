@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { useSeedsQuery } from "@/features/Seeds/useSeedQuery";
+import { useBedsQuery } from "@/features/Beds/useBedQuery";
 
 interface Props {
   children: ReactNode;
@@ -7,6 +8,7 @@ interface Props {
 
 export const MainLayout = ({ children }: Props) => {
   useSeedsQuery();
+  useBedsQuery();
 
   return (
     <div className="relative overflow-y-auto bg-white dark:bg-black">

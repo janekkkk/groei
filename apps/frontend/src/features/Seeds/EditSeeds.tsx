@@ -100,6 +100,13 @@ export const EditSeeds = () => {
     }
   };
 
+  const handleDeleteSeed = () => {
+    if (seed && seed.id) {
+      deleteSeed.mutate(seed?.id);
+      router.history.back();
+    }
+  };
+
   const initExistingSeed = useCallback(() => {
     const existingSeed = seeds.find((s) => s.id === seedId);
     if (seedId && !isCreate && existingSeed) {
@@ -414,12 +421,7 @@ export const EditSeeds = () => {
         <div className="flex items-center justify-end gap-2">
           <Button
             type="button"
-            onClick={() => {
-              if (seed && seed.id) {
-                deleteSeed.mutate(seed?.id);
-                router.history.back();
-              }
-            }}
+            onClick={handleDeleteSeed}
             className={classNames({ hidden: isCreate })}
             variant="destructive"
           >
