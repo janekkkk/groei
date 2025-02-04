@@ -64,11 +64,11 @@ export const EditSeeds = () => {
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    if (seed) setSeed({ ...seed, [name]: value, updatedAt: new Date() });
+    if (seed) setSeed({ ...seed, [name]: value });
   };
 
   const handleSelectChange = (e: SelectChange) => {
-    if (seed) setSeed({ ...seed, [e.name]: e.value, updatedAt: new Date() });
+    if (seed) setSeed({ ...seed, [e.name]: e.value });
   };
 
   const handleTagAdd = () => {
@@ -76,7 +76,6 @@ export const EditSeeds = () => {
       setSeed({
         ...seed,
         tags: [...(seed?.tags || []), newTag],
-        updatedAt: new Date(),
       });
     setNewTag("");
   };

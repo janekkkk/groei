@@ -85,15 +85,15 @@ importers:
         specifier: ^16.4.7
         version: 16.4.7
       drizzle-orm:
-        specifier: ^0.38.4
-        version: 0.38.4(@libsql/client@0.14.0)(better-sqlite3@11.8.1)
+        specifier: ^0.39.1
+        version: 0.39.1(@libsql/client@0.14.0)(better-sqlite3@11.8.1)
       hono:
-        specifier: ^4.6.16
-        version: 4.6.16
+        specifier: ^4.6.20
+        version: 4.6.20
     devDependencies:
       drizzle-kit:
-        specifier: ^0.30.2
-        version: 0.30.2
+        specifier: ^0.30.4
+        version: 0.30.4
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
@@ -6459,8 +6459,8 @@ packages:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
-  /drizzle-kit@0.30.2:
-    resolution: {integrity: sha512-vhdLrxWA32WNVF77NabpSnX7pQBornx64VDQDmKddRonOB2Xe/yY4glQ7rECoa+ogqcQNo7VblLUbeBK6Zn9Ow==}
+  /drizzle-kit@0.30.4:
+    resolution: {integrity: sha512-B2oJN5UkvwwNHscPWXDG5KqAixu7AUzZ3qbe++KU9SsQ+cZWR4DXEPYcvWplyFAno0dhRJECNEhNxiDmFaPGyQ==}
     hasBin: true
     dependencies:
       '@drizzle-team/brocli': 0.10.2
@@ -6471,8 +6471,8 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.38.4(@libsql/client@0.14.0)(better-sqlite3@11.8.1):
-    resolution: {integrity: sha512-s7/5BpLKO+WJRHspvpqTydxFob8i1vo2rEx4pY6TGY7QSMuUfWUuzaY0DIpXCkgHOo37BaFC+SJQb99dDUXT3Q==}
+  /drizzle-orm@0.39.1(@libsql/client@0.14.0)(better-sqlite3@11.8.1):
+    resolution: {integrity: sha512-2bDHlzTY31IDmrYn8i+ZZrxK8IyBD4mPZ7JmZdVDQj2tpBZXs/gxB/1kK5pSvkjxPUMNOVsTnoGkSltgjuJwcA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -7645,8 +7645,8 @@ packages:
     hasBin: true
     dev: true
 
-  /hono@4.6.16:
-    resolution: {integrity: sha512-iE6xOPwDYlfnZFwk6BfIMMIH4WZm3pPhz6rc1uJM/OPew0pjG5K6p8WTLaMBY1/szF/T0TaEjprMpwn16BA0NQ==}
+  /hono@4.6.20:
+    resolution: {integrity: sha512-5qfNQeaIptMaJKyoJ6N/q4gIq0DBp2FCRaLNuUI3LlJKL4S37DY/rLL1uAxA4wrPB39tJ3s+f7kgI79O4ScSug==}
     engines: {node: '>=16.9.0'}
     dev: false
 

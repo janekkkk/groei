@@ -3,6 +3,13 @@ import { Seed, SeedDTO } from "@groei/common/src/models/Seed";
 class SeedService {
   private static readonly baseUrl = import.meta.env.VITE_API_URI + "/seeds";
 
+  private formatedTimestamp(newDate?: Date) {
+    const d = newDate ?? new Date();
+    const date = d.toISOString().split("T")[0];
+    const time = d.toTimeString().split(" ")[0].replace(/:/g, "-");
+    return `${date} ${time}`;
+  }
+
   async fetchSeeds(): Promise<Seed[]> {
     const response = await fetch(SeedService.baseUrl);
 
@@ -41,9 +48,11 @@ class SeedService {
       body: JSON.stringify({
         ...seed,
         tags: seed?.tags?.join(","),
-        createdAt: seed.createdAt.getTime(),
-        updatedAt: seed.updatedAt.getTime(),
-        deletedAt: seed.deletedAt?.getTime(),
+        createdAt: this.formatedTimestamp(seed.createdAt),
+        updatedAt: this.formatedTimestamp(seed.updatedAt),
+        deletedAt: seed.deletedAt
+          ? this.formatedTimestamp(seed.deletedAt)
+          : undefined,
       }),
     });
 
@@ -59,9 +68,11 @@ class SeedService {
       body: JSON.stringify({
         ...seed,
         tags: seed?.tags?.join(","),
-        createdAt: seed.createdAt.getTime(),
-        updatedAt: seed.updatedAt.getTime(),
-        deletedAt: seed.deletedAt?.getTime(),
+        createdAt: this.formatedTimestamp(seed.createdAt),
+        updatedAt: this.formatedTimestamp(seed.updatedAt),
+        deletedAt: seed.deletedAt
+          ? this.formatedTimestamp(seed.deletedAt)
+          : undefined,
       }),
     });
 

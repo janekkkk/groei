@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ef5e1f87-91c7-4296-b6ec-ba953f1ad264",
+  "id": "9ed85a37-0087-4fc2-9d70-f0de87ec1b50",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "bed_table": {
@@ -44,23 +44,23 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(unixepoch())"
+          "default": "(current_timestamp)"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(unixepoch())"
+          "default": "(current_timestamp)"
         },
         "deleted_at": {
           "name": "deleted_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -91,23 +91,23 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(unixepoch())"
+          "default": "(current_timestamp)"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(unixepoch())"
+          "default": "(current_timestamp)"
         },
         "deleted_at": {
           "name": "deleted_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -257,23 +257,23 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(unixepoch())"
+          "default": "(current_timestamp)"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(unixepoch())"
+          "default": "(current_timestamp)"
         },
         "deleted_at": {
           "name": "deleted_at",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

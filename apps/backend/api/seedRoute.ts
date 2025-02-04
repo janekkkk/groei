@@ -22,8 +22,9 @@ router.get("/:id", async (c) => {
 
 router.post("/", async (c) => {
   const seed = await c.req.json<SeedDTO>();
-  await db.insert(seedsTable).values(seed);
   console.log({ seed });
+
+  await db.insert(seedsTable).values(seed);
 
   return c.json(seed);
 });

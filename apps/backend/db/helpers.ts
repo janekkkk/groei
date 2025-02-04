@@ -1,17 +1,21 @@
-import { integer } from "drizzle-orm/sqlite-core";
+import { text } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 
 /**
  * https://orm.drizzle.team/docs/guides/timestamp-default-value#sqlite
  */
 export const timestamps = {
-  createdAt: integer({ mode: "timestamp" })
+  createdAt: text()
     .notNull()
-    .default(sql`(unixepoch())`)
-    .$onUpdate(() => sql`(unixepoch())`),
-  updatedAt: integer({ mode: "timestamp" })
+    .default(sql`(current_timestamp)`),
+  // .$onUpdate(() => new Date())
+  // .$type<Date>(),
+  updatedAt: text()
     .notNull()
-    .default(sql`(unixepoch())`)
-    .$onUpdate(() => sql`(unixepoch())`),
-  deletedAt: integer({ mode: "timestamp" }).$onUpdate(() => sql`(unixepoch())`),
+    .default(sql`(current_timestamp)`),
+  // .$onUpdate(() => new Date())
+  // .$type<Date>(),
+  deletedAt: text(),
+  // .$onUpdate(() => new Date())
+  // .$type<Date>(),
 };
