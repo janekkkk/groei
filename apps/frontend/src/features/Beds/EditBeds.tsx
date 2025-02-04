@@ -8,7 +8,7 @@ import {
 import { Input } from "@/shadcdn/components/ui/input";
 import { Label } from "@/shadcdn/components/ui/label";
 import { Button } from "@/shadcdn/components/ui/button";
-import { Bed, GridItem } from "@groei/common/src/models/Bed";
+import { Bed } from "@groei/common/src/models/Bed";
 import { useBedStore } from "./beds.store";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { classNames } from "@/shared/utils";
@@ -29,6 +29,7 @@ import {
 import { SelectChange } from "@/shared/select.model";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { Route } from "@/routes/beds/$bedId.lazy";
+import { Seed } from "@groei/common/src/models/Seed";
 
 const emptyBed: Bed = {
   id: crypto.randomUUID(),
@@ -59,7 +60,7 @@ export const EditBeds = () => {
   const handleSelectChange = (e: SelectChange) => {
     if (e.index !== undefined) {
       const grid = bed.grid;
-      grid[e.index] = { index: e.index, bed: e.value };
+      grid[e.index] = { index: e.index, seed: e.value as Seed };
       setBed({ ...bed, grid, updatedAt: new Date() });
     }
   };
@@ -155,78 +156,82 @@ export const EditBeds = () => {
               )}
             >
               {Array.from({ length: bed.gridWidth * bed.gridHeight }).map(
-                (_, i) => (
-                  <Popover key={i}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="p-2 bg-amber-900 text-white hover:text-white hover:bg-amber-800 border rounded-xl relative cursor-pointer"
-                      >
-                        <span className="absolute bottom-1 right-2 text-xs">
-                          <span className="sr-only">Cell</span>
-                          {i + 1}
-                        </span>
-                        <div className="flex justify-center items-center">
-                          {!bed.grid[i]?.seed && <Plus />}
+                (_, i) => {
+                  console.log(bed.grid[i]?.seed);
 
-                          {bed.grid[i]?.seed && (
-                            <span className=" text-white text-sm">
-                              {bed.grid[i]?.seed.name}
-                            </span>
-                          )}
-                        </div>
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80">
-                      <div className="grid gap-4">
-                        <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Seed</h4>
-                          <p className="text-sm text-muted-foreground">
-                            Plant a seed for this grid cell.
-                          </p>
-                        </div>
-                        <div className="grid gap-2">
-                          <div className="flex gap-2">
-                            <Label htmlFor="selectSeed" className="sr-only">
-                              Select Seed
-                            </Label>
-                            <Select
-                              name="selectSeed"
-                              value={bed.grid[i]?.seed as unknown as string}
-                              defaultOpen
-                              onValueChange={(value) =>
-                                handleSelectChange({
-                                  name: "grid",
-                                  index: i,
-                                  value: value,
-                                })
-                              }
-                            >
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select Seed" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectGroup>
-                                  {seeds.map((seed) => (
-                                    <SelectItem
-                                      key={seed.name}
-                                      value={seed as unknown as string}
-                                    >
-                                      {seed.name}{" "}
-                                      {seed.variety && (
-                                        <span> - {seed.variety}</span>
-                                      )}
-                                    </SelectItem>
-                                  ))}
-                                </SelectGroup>
-                              </SelectContent>
-                            </Select>
+                  return (
+                    <Popover key={i}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="p-2 bg-amber-900 text-white hover:text-white hover:bg-amber-800 border rounded-xl relative cursor-pointer"
+                        >
+                          <span className="absolute bottom-1 right-2 text-xs">
+                            <span className="sr-only">Cell</span>
+                            {i + 1}
+                          </span>
+                          <div className="flex justify-center items-center">
+                            {!bed.grid[i]?.seed && <Plus />}
+
+                            {bed.grid[i]?.seed && (
+                              <span className=" text-white text-sm">
+                                {bed.grid[i]?.seed.name}
+                              </span>
+                            )}
+                          </div>
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-80">
+                        <div className="grid gap-4">
+                          <div className="space-y-2">
+                            <h4 className="font-medium leading-none">Seed</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Plant a seed for this grid cell.
+                            </p>
+                          </div>
+                          <div className="grid gap-2">
+                            <div className="flex gap-2">
+                              <Label htmlFor="selectSeed" className="sr-only">
+                                Select Seed
+                              </Label>
+                              <Select
+                                name="selectSeed"
+                                value={bed.grid[i]?.seed as unknown as string}
+                                defaultOpen
+                                onValueChange={(value) =>
+                                  handleSelectChange({
+                                    name: "grid",
+                                    index: i,
+                                    value: value,
+                                  })
+                                }
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select Seed" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {seeds.map((seed) => (
+                                      <SelectItem
+                                        key={seed.name}
+                                        value={seed as unknown as string}
+                                      >
+                                        {seed.name}{" "}
+                                        {seed.variety && (
+                                          <span> - {seed.variety}</span>
+                                        )}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                ),
+                      </PopoverContent>
+                    </Popover>
+                  );
+                },
               )}
             </div>
             <div className="flex flex-col gap-1">

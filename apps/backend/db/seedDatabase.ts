@@ -30,9 +30,7 @@ const main = async () => {
     quantity: 10,
     notes: "This is a note",
     tags: "tomato, cherry, red",
-    createdAt: new Date().toString(),
-    updatedAt: new Date().toString(),
-  };
+  } as SeedDTO;
 
   await db.delete(usersTable).where(eq(usersTable.email, user.email));
   console.log("User deleted!");

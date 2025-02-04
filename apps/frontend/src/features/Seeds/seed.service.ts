@@ -7,13 +7,16 @@ class SeedService {
     const response = await fetch(SeedService.baseUrl);
 
     return response.json().then((seeds: SeedDTO[]) => {
-      return seeds.map((seed) => ({
-        ...seed,
-        tags: seed.tags?.split(","),
-        createdAt: new Date(seed.createdAt),
-        updatedAt: new Date(seed.updatedAt),
-        deletedAt: seed.deletedAt ? new Date(seed.deletedAt) : undefined,
-      }));
+      return seeds.map(
+        (seed: SeedDTO) =>
+          ({
+            ...seed,
+            tags: seed.tags?.split(","),
+            createdAt: new Date(seed.createdAt),
+            updatedAt: new Date(seed.updatedAt),
+            deletedAt: seed.deletedAt ? new Date(seed.deletedAt) : undefined,
+          }) as Seed,
+      );
     });
   }
 
@@ -35,7 +38,13 @@ class SeedService {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...seed, tags: seed?.tags?.join(",") }),
+      body: JSON.stringify({
+        ...seed,
+        tags: seed?.tags?.join(","),
+        createdAt: seed.createdAt.getTime(),
+        updatedAt: seed.updatedAt.getTime(),
+        deletedAt: seed.deletedAt?.getTime(),
+      }),
     });
 
     return response.json();
@@ -47,7 +56,13 @@ class SeedService {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...seed, tags: seed?.tags?.join(",") }),
+      body: JSON.stringify({
+        ...seed,
+        tags: seed?.tags?.join(","),
+        createdAt: seed.createdAt.getTime(),
+        updatedAt: seed.updatedAt.getTime(),
+        deletedAt: seed.deletedAt?.getTime(),
+      }),
     });
 
     return response.json();

@@ -355,7 +355,7 @@ export const EditSeeds = () => {
           />
         </div>
         <div>
-          <Label htmlFor="expirationDate">Expatriation date:</Label>
+          <Label htmlFor="expirationDate">Expiration date:</Label>
           <Input
             type="date"
             name="experationDate"

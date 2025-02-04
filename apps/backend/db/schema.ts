@@ -9,7 +9,9 @@ export const usersTable = sqliteTable("users_table", {
 });
 
 export const seedsTable = sqliteTable("seeds_table", {
-  id: text().primaryKey(),
+  id: text()
+    .primaryKey()
+    .$default(() => crypto.randomUUID()),
   name: text().notNull(),
   sowFrom: text(),
   sowTill: text(),
@@ -32,7 +34,9 @@ export const seedsTable = sqliteTable("seeds_table", {
 });
 
 export const bedTable = sqliteTable("bed_table", {
-  id: text().primaryKey(),
+  id: text()
+    .primaryKey()
+    .$default(() => crypto.randomUUID()),
   name: text().notNull(),
   description: text(),
   gridWidth: int(),

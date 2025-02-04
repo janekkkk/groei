@@ -4,17 +4,17 @@ CREATE TABLE `bed_table` (
 	`description` text,
 	`grid_width` integer,
 	`grid_height` integer,
-	`updated_at` text DEFAULT (current_timestamp),
-	`created_at` text DEFAULT (current_timestamp) NOT NULL,
-	`deleted_at` text DEFAULT (current_timestamp)
+	`created_at` integer DEFAULT (unixepoch()) NOT NULL,
+	`updated_at` integer DEFAULT (unixepoch()) NOT NULL,
+	`deleted_at` integer
 );
 --> statement-breakpoint
 CREATE TABLE `grid_item_table` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`index` integer NOT NULL,
-	`updated_at` text DEFAULT (current_timestamp),
-	`created_at` text DEFAULT (current_timestamp) NOT NULL,
-	`deleted_at` text DEFAULT (current_timestamp)
+	`created_at` integer DEFAULT (unixepoch()) NOT NULL,
+	`updated_at` integer DEFAULT (unixepoch()) NOT NULL,
+	`deleted_at` integer
 );
 --> statement-breakpoint
 CREATE TABLE `seeds_table` (
@@ -37,9 +37,9 @@ CREATE TABLE `seeds_table` (
 	`notes` text,
 	`tags` text,
 	`photo` text,
-	`updated_at` text DEFAULT (current_timestamp),
-	`created_at` text DEFAULT (current_timestamp) NOT NULL,
-	`deleted_at` text DEFAULT (current_timestamp)
+	`created_at` integer DEFAULT (unixepoch()) NOT NULL,
+	`updated_at` integer DEFAULT (unixepoch()) NOT NULL,
+	`deleted_at` integer
 );
 --> statement-breakpoint
 CREATE TABLE `users_table` (
