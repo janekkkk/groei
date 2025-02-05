@@ -29,7 +29,7 @@ import {
 import { classNames } from "@/shared/utils";
 import { useRouter, useCanGoBack } from "@tanstack/react-router";
 
-const emptySeed: Seed = {
+const getEmptySeed = (): Seed => ({
   id: crypto.randomUUID(),
   name: "",
   variety: "",
@@ -51,7 +51,7 @@ const emptySeed: Seed = {
   createdAt: new Date(),
   updatedAt: new Date(),
   deletedAt: undefined,
-};
+});
 
 export const EditSeeds = () => {
   const seeds = useSeedStore((state) => state.seeds);
@@ -92,7 +92,7 @@ export const EditSeeds = () => {
   const handleSubmit = () => {
     if (isCreate && seed) {
       createSeed.mutate(seed);
-      setSeed(emptySeed);
+      setSeed(getEmptySeed());
       nameInputRef?.current?.focus();
     } else {
       console.log("update", { seed });
@@ -114,7 +114,7 @@ export const EditSeeds = () => {
       setSeed(existingSeed as unknown as Seed);
     } else {
       console.log("no seed found, creating new one");
-      setSeed(emptySeed);
+      setSeed(getEmptySeed());
       nameInputRef?.current?.focus();
     }
   }, [isCreate, seedId, seeds]);

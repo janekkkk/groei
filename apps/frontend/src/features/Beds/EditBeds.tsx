@@ -37,16 +37,17 @@ import {
   useUpdateBedMutation,
 } from "@/features/Beds/useBedQuery";
 
-const emptyBed: Bed = {
-  id: crypto.randomUUID(),
-  name: "",
-  notes: "",
-  gridWidth: 2,
-  gridHeight: 2,
-  grid: [],
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
+const getEmptyBed = (): Bed =>
+  ({
+    id: crypto.randomUUID(),
+    name: "",
+    notes: "",
+    gridWidth: 2,
+    gridHeight: 2,
+    grid: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }) as Bed;
 
 export const EditBeds = () => {
   const createBed = useCreateBedMutation();
@@ -54,7 +55,7 @@ export const EditBeds = () => {
   const deleteBed = useDeleteBedMutation();
   const { beds } = useBedStore((state) => state);
   const { seeds } = useSeedStore((state) => state);
-  const [bed, setBed] = useState<Bed>(emptyBed);
+  const [bed, setBed] = useState<Bed>(getEmptyBed());
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { bedId } = Route.useParams();
   const isCreate = Number(bedId) === -1;
@@ -85,7 +86,7 @@ export const EditBeds = () => {
   const handleSubmit = () => {
     if (isCreate) {
       createBed.mutate(bed);
-      setBed(emptyBed);
+      setBed(getEmptyBed());
       nameInputRef?.current?.focus();
     } else {
       updateBed.mutate(bed);
@@ -97,7 +98,7 @@ export const EditBeds = () => {
     if (bedId && !isCreate && existingBed) {
       setBed(existingBed as unknown as Bed);
     } else {
-      setBed(emptyBed);
+      setBed(getEmptyBed());
       nameInputRef?.current?.focus();
     }
   }, [bedId, beds, isCreate]);
@@ -107,7 +108,7 @@ export const EditBeds = () => {
   }, [bedId, beds, initExistingBed]);
 
   useEffect(() => {
-    console.log({ bed });
+    console.log("useEffect", { bed });
   }, [bed]);
 
   return (

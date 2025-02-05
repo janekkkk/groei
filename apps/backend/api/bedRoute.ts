@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { db } from "../db/index.ts";
 import { eq } from "drizzle-orm";
 import { bedTable, gridItemTable } from "../db/schema.ts";
+import { GridItem } from "@groei/common/src/models/Bed.ts";
 
 const router = new Hono();
 
@@ -11,7 +12,7 @@ router.get("/", async (c) => {
   const gridItems = await db.select().from(gridItemTable);
   const bedsWithGridItems = beds.map((bed) => ({
     ...bed,
-    gridItems: gridItems.filter((item) => item.bedId === bed.id),
+    grid: gridItems.filter((item) => item.bedId === bed.id),
   }));
   return c.json(bedsWithGridItems);
 });
@@ -31,15 +32,19 @@ router.get("/:id", async (c) => {
 // Create a new bed with grid items
 router.post("/", async (c) => {
   const body = await c.req.json();
-  const { gridItems, ...bedData } = body;
+  const { gridItems: grid, ...bedData } = body;
   const [newBed] = await db.insert(bedTable).values(bedData).returning();
-  if (gridItems && gridItems.length) {
-    await db
-      .insert(gridItemTable)
-      .values(
-        gridItems.map((seedId: string) => ({ bedId: newBed.id, seedId })),
-      );
+  console.log({ body });
+  if (grid && grid.length) {
+    console.log(grid);
+    await db.insert(gridItemTable).values(
+      grid.map((gridItem: GridItem) => ({
+        bedId: newBed.id,
+        seedId: gridItem.seed?.id,
+      })),
+    );
   }
+
   return c.json(newBed, 201);
 });
 
@@ -47,18 +52,22 @@ router.post("/", async (c) => {
 router.put("/:id", async (c) => {
   const { id } = c.req.param();
   const body = await c.req.json();
-  const { gridItems, ...bedData } = body;
+  const { grid, ...bedData } = body;
   const [updatedBed] = await db
     .update(bedTable)
     .set(bedData)
     .where(eq(bedTable.id, id))
     .returning();
   if (!updatedBed) return c.notFound();
-  if (gridItems) {
+
+  if (grid) {
     await db.delete(gridItemTable).where(eq(gridItemTable.bedId, id));
-    await db
-      .insert(gridItemTable)
-      .values(gridItems.map((seedId: string) => ({ bedId: id, seedId })));
+    await db.insert(gridItemTable).values(
+      grid.map((gridItem: GridItem) => ({
+        bedId: id,
+        seedId: gridItem.seed?.id,
+      })),
+    );
   }
   return c.json(updatedBed);
 });

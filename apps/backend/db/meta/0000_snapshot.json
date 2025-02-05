@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "982fffb7-0168-41a6-bff6-745331f71ec3",
+  "id": "f07e145c-340f-4828-9646-1b7e623c1dd8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "bed_table": {
@@ -42,13 +42,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "grid_id": {
-          "name": "grid_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "created_at": {
           "name": "created_at",
           "type": "text",
@@ -74,17 +67,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "bed_table_grid_id_grid_item_table_id_fk": {
-          "name": "bed_table_grid_id_grid_item_table_id_fk",
-          "tableFrom": "bed_table",
-          "tableTo": "grid_item_table",
-          "columnsFrom": ["grid_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -99,6 +82,13 @@
           "notNull": true,
           "autoincrement": true
         },
+        "bed_id": {
+          "name": "bed_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "seed_id": {
           "name": "seed_id",
           "type": "text",
@@ -109,6 +99,15 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "grid_item_table_bed_id_bed_table_id_fk": {
+          "name": "grid_item_table_bed_id_bed_table_id_fk",
+          "tableFrom": "grid_item_table",
+          "tableTo": "bed_table",
+          "columnsFrom": ["bed_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "grid_item_table_seed_id_seeds_table_id_fk": {
           "name": "grid_item_table_seed_id_seeds_table_id_fk",
           "tableFrom": "grid_item_table",

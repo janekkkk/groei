@@ -34,6 +34,7 @@ export const seedsTable = sqliteTable("seeds_table", {
 
 export const gridItemTable = sqliteTable("grid_item_table", {
   id: integer().notNull().primaryKey({ autoIncrement: true }),
+  bedId: text().references(() => bedTable.id),
   seedId: text().references(() => seedsTable.id),
 });
 
@@ -45,6 +46,6 @@ export const bedTable = sqliteTable("bed_table", {
   description: text(),
   gridWidth: integer(),
   gridHeight: integer(),
-  gridId: integer().references(() => gridItemTable.id),
+  // gridId: integer().references(() => gridItemTable.id),
   ...timestamps,
 });
