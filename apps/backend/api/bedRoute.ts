@@ -32,15 +32,15 @@ router.get("/:id", async (c) => {
 // Create a new bed with grid items
 router.post("/", async (c) => {
   const body = await c.req.json();
-  const { gridItems: grid, ...bedData } = body;
+  const { grid, ...bedData } = body;
   const [newBed] = await db.insert(bedTable).values(bedData).returning();
-  console.log({ body });
+
   if (grid && grid.length) {
-    console.log(grid);
+    console.log({ grid });
     await db.insert(gridItemTable).values(
       grid.map((gridItem: GridItem) => ({
         bedId: newBed.id,
-        seedId: gridItem.seed?.id,
+        seedId: gridItem?.seed?.id,
       })),
     );
   }
