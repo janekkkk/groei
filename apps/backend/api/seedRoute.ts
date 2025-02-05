@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 const router = new Hono();
 
 router.get("/", async (c) => {
-  const result = await db.select().from(seedsTable);
+  const result = await db.select().from(seedsTable).all();
   return c.json(result);
 });
 

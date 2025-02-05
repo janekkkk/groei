@@ -1,6 +1,5 @@
-import { sqliteTable, text, int } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { timestamps } from "./helpers.ts";
-import { relations } from "drizzle-orm";
 
 export const usersTable = sqliteTable("users_table", {
   name: text().notNull(),
@@ -22,15 +21,20 @@ export const seedsTable = sqliteTable("seeds_table", {
   expirationDate: text(),
   url: text(),
   plantHeight: text(),
-  plantDistance: int(),
-  numberOfSeedsPerGridCell: int(),
+  plantDistance: integer(),
+  numberOfSeedsPerGridCell: integer(),
   variety: text(),
-  daysToMaturity: int(),
-  quantity: int(),
+  daysToMaturity: integer(),
+  quantity: integer(),
   notes: text(),
   tags: text(),
   photo: text(),
   ...timestamps,
+});
+
+export const gridItemTable = sqliteTable("grid_item_table", {
+  id: integer().notNull().primaryKey({ autoIncrement: true }),
+  seedId: text().references(() => seedsTable.id),
 });
 
 export const bedTable = sqliteTable("bed_table", {
@@ -39,24 +43,8 @@ export const bedTable = sqliteTable("bed_table", {
     .$default(() => crypto.randomUUID()),
   name: text().notNull(),
   description: text(),
-  gridWidth: int(),
-  gridHeight: int(),
+  gridWidth: integer(),
+  gridHeight: integer(),
+  gridId: integer().references(() => gridItemTable.id),
   ...timestamps,
 });
-
-export const bedRelations = relations(bedTable, ({ many }) => ({
-  grid: many(gridItemTable),
-}));
-
-export const gridItemTable = sqliteTable("grid_item_table", {
-  id: int().primaryKey({ autoIncrement: true }),
-  index: int().notNull(),
-  ...timestamps,
-});
-
-export const gridRelations = relations(gridItemTable, ({ one }) => ({
-  gridItem: one(bedTable, {
-    fields: [gridItemTable.id],
-    references: [bedTable.id],
-  }),
-}));

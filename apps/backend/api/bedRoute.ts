@@ -1,39 +1,74 @@
 import { Hono } from "hono";
 import { db } from "../db/index.ts";
-import { bedTable } from "../db/schema.ts";
 import { eq } from "drizzle-orm";
-import { BedDTO } from "@groei/common/src/models/Bed.ts";
+import { bedTable, gridItemTable } from "../db/schema.ts";
 
 const router = new Hono();
 
+// Get all beds with their grid items
 router.get("/", async (c) => {
-  const result = await db.select().from(bedTable);
-  return c.json(result);
+  const beds = await db.select().from(bedTable);
+  const gridItems = await db.select().from(gridItemTable);
+  const bedsWithGridItems = beds.map((bed) => ({
+    ...bed,
+    gridItems: gridItems.filter((item) => item.bedId === bed.id),
+  }));
+  return c.json(bedsWithGridItems);
 });
 
+// Get a single bed by ID with its grid items
 router.get("/:id", async (c) => {
-  const id = c.req.param("id");
-  const result = await db.select().from(bedTable).where(eq(bedTable.id, id));
-  return c.json(result[0]);
+  const { id } = c.req.param();
+  const bed = await db.select().from(bedTable).where(eq(bedTable.id, id));
+  if (!bed.length) return c.notFound();
+  const gridItems = await db
+    .select()
+    .from(gridItemTable)
+    .where(eq(gridItemTable.bedId, id));
+  return c.json({ ...bed[0], gridItems });
 });
 
+// Create a new bed with grid items
 router.post("/", async (c) => {
-  const bed = await c.req.json<BedDTO>();
-  await db.insert(bedTable).values(bed);
-  return c.json(bed);
+  const body = await c.req.json();
+  const { gridItems, ...bedData } = body;
+  const [newBed] = await db.insert(bedTable).values(bedData).returning();
+  if (gridItems && gridItems.length) {
+    await db
+      .insert(gridItemTable)
+      .values(
+        gridItems.map((seedId: string) => ({ bedId: newBed.id, seedId })),
+      );
+  }
+  return c.json(newBed, 201);
 });
 
+// Update a bed by ID
 router.put("/:id", async (c) => {
-  const id = c.req.param("id");
-  const bed = await c.req.json<BedDTO>();
-  await db.update(bedTable).set(bed).where(eq(bedTable.id, id));
-  return c.json(bed);
+  const { id } = c.req.param();
+  const body = await c.req.json();
+  const { gridItems, ...bedData } = body;
+  const [updatedBed] = await db
+    .update(bedTable)
+    .set(bedData)
+    .where(eq(bedTable.id, id))
+    .returning();
+  if (!updatedBed) return c.notFound();
+  if (gridItems) {
+    await db.delete(gridItemTable).where(eq(gridItemTable.bedId, id));
+    await db
+      .insert(gridItemTable)
+      .values(gridItems.map((seedId: string) => ({ bedId: id, seedId })));
+  }
+  return c.json(updatedBed);
 });
 
+// Delete a bed by ID along with its grid items
 router.delete("/:id", async (c) => {
-  const id = c.req.param("id");
+  const { id } = c.req.param();
+  await db.delete(gridItemTable).where(eq(gridItemTable.bedId, id));
   await db.delete(bedTable).where(eq(bedTable.id, id));
-  return c.json({ id });
+  return c.text("Deleted successfully");
 });
 
 export default router;

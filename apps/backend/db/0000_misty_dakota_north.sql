@@ -4,17 +4,17 @@ CREATE TABLE `bed_table` (
 	`description` text,
 	`grid_width` integer,
 	`grid_height` integer,
+	`grid_id` integer,
 	`created_at` text DEFAULT (current_timestamp) NOT NULL,
 	`updated_at` text DEFAULT (current_timestamp) NOT NULL,
-	`deleted_at` text
+	`deleted_at` text,
+	FOREIGN KEY (`grid_id`) REFERENCES `grid_item_table`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `grid_item_table` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`index` integer NOT NULL,
-	`created_at` text DEFAULT (current_timestamp) NOT NULL,
-	`updated_at` text DEFAULT (current_timestamp) NOT NULL,
-	`deleted_at` text
+	`seed_id` text,
+	FOREIGN KEY (`seed_id`) REFERENCES `seeds_table`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `seeds_table` (

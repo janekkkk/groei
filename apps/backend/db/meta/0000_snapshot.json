@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9ed85a37-0087-4fc2-9d70-f0de87ec1b50",
+  "id": "982fffb7-0168-41a6-bff6-745331f71ec3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "bed_table": {
@@ -42,6 +42,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "grid_id": {
+          "name": "grid_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "text",
@@ -67,7 +74,17 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "bed_table_grid_id_grid_item_table_id_fk": {
+          "name": "bed_table_grid_id_grid_item_table_id_fk",
+          "tableFrom": "bed_table",
+          "tableTo": "grid_item_table",
+          "columnsFrom": ["grid_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -82,31 +99,8 @@
           "notNull": true,
           "autoincrement": true
         },
-        "index": {
-          "name": "index",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(current_timestamp)"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(current_timestamp)"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
+        "seed_id": {
+          "name": "seed_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -114,7 +108,17 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "grid_item_table_seed_id_seeds_table_id_fk": {
+          "name": "grid_item_table_seed_id_seeds_table_id_fk",
+          "tableFrom": "grid_item_table",
+          "tableTo": "seeds_table",
+          "columnsFrom": ["seed_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

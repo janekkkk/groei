@@ -20,7 +20,8 @@
     "better-sqlite3": "^11.8.1",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.1",
-    "hono": "^4.6.20"
+    "hono": "^4.6.20",
+    "idb-keyval": "^6.2.1"
   },
   "devDependencies": {
     "drizzle-kit": "^0.30.4",
