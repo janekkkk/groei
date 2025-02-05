@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { db } from "../db/index.ts";
 import { eq } from "drizzle-orm";
-import { bedTable, gridItemTable } from "../db/schema.ts";
+import { bedTable, gridItemTable, seedsTable } from "../db/schema.ts";
 import { GridItem } from "@groei/common/src/models/Bed.ts";
 
 const router = new Hono();
@@ -10,9 +10,16 @@ const router = new Hono();
 router.get("/", async (c) => {
   const beds = await db.select().from(bedTable);
   const gridItems = await db.select().from(gridItemTable);
+  const seedItems = await db.select().from(seedsTable);
+
   const bedsWithGridItems = beds.map((bed) => ({
     ...bed,
-    grid: gridItems.filter((item) => item.bedId === bed.id),
+    grid: gridItems
+      .filter((item) => item.bedId === bed.id)
+      .map((item) => ({
+        ...item,
+        seed: seedItems.find((seed) => seed.id === item.seedId),
+      })),
   }));
   return c.json(bedsWithGridItems);
 });

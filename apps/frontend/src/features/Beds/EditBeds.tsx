@@ -95,6 +95,7 @@ export const EditBeds = () => {
 
   const initExistingBed = useCallback(() => {
     const existingBed = beds.find((b) => b.id === bedId);
+    console.log({ existingBed });
     if (bedId && !isCreate && existingBed) {
       setBed(existingBed as unknown as Bed);
     } else {

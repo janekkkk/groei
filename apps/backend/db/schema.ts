@@ -46,6 +46,5 @@ export const bedTable = sqliteTable("bed_table", {
   description: text(),
   gridWidth: integer(),
   gridHeight: integer(),
-  // gridId: integer().references(() => gridItemTable.id),
   ...timestamps,
 });
