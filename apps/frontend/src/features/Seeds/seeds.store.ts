@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { persist, createJSONStorage, devtools } from "zustand/middleware";
-import { indexedDbStorage } from "@/core/store/indexedDbStorage";
+import { persist, devtools, PersistStorage } from "zustand/middleware";
 import { Seed } from "@groei/common/src/models/Seed";
+import { indexedDBStorage } from "@/core/store/indexedDbStorage";
 
 interface SeedStore {
   seeds: Seed[];
@@ -28,7 +28,10 @@ export const useSeedStore = create<SeedStore>()(
           })),
         setSeeds: (seeds) => set({ seeds }),
       }),
-      { name: "seedStore", storage: createJSONStorage(() => indexedDbStorage) },
+      {
+        name: "seedStore",
+        storage: indexedDBStorage as unknown as PersistStorage<SeedStore>,
+      },
     ),
   ),
 );

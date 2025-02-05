@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { persist, createJSONStorage, devtools } from "zustand/middleware";
-import { indexedDbStorage } from "@/core/store/indexedDbStorage";
+import { persist, devtools, PersistStorage } from "zustand/middleware";
 import { Bed } from "@groei/common/src/models/Bed";
+import { indexedDBStorage } from "@/core/store/indexedDbStorage";
 
 interface BedStore {
   beds: Bed[];
@@ -28,7 +28,10 @@ export const useBedStore = create<BedStore>()(
           })),
         setBeds: (beds) => set({ beds }),
       }),
-      { name: "bedStore", storage: createJSONStorage(() => indexedDbStorage) },
+      {
+        name: "bedStore",
+        storage: indexedDBStorage as unknown as PersistStorage<BedStore>,
+      },
     ),
   ),
 );

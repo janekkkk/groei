@@ -1,17 +1,21 @@
-import { StateStorage } from "zustand/middleware";
 import { del, get, set } from "idb-keyval";
+import { StorageValue } from "zustand/middleware";
 
-export const indexedDbStorage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    console.log(name, "has been retrieved");
+export const indexedDBStorage = {
+  getItem: async (name: string): Promise<unknown | null> => {
     return (await get(name)) || null;
   },
-  setItem: async (name: string, value: string): Promise<void> => {
-    console.log(name, "with value", JSON.parse(value), "has been saved");
-    await set(name, value);
+  setItem: async (
+    name: string,
+    value: StorageValue<Record<string, unknown>>,
+  ): Promise<void> => {
+    // Pick only keys that are not functions
+    const state = Object.fromEntries(
+      Object.entries(value.state).filter(([_, v]) => typeof v !== "function"),
+    );
+    await set(name, { version: value.version, state });
   },
   removeItem: async (name: string): Promise<void> => {
-    console.log(name, "has been deleted");
     await del(name);
   },
 };

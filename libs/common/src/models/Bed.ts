@@ -18,6 +18,7 @@ export interface BedDTO extends Bed {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+  gridId: number;
 }
 
 export interface GridItem {
