@@ -11,6 +11,7 @@ export const indexedDBStorage = {
   ): Promise<void> => {
     // Pick only keys that are not functions
     const state = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Object.entries(value.state).filter(([_, v]) => typeof v !== "function"),
     );
     await set(name, { version: value.version, state });
