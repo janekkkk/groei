@@ -21,6 +21,7 @@ router.get("/", async (c) => {
         seed: seedItems.find((seed) => seed.id === item.seedId),
       })),
   }));
+
   return c.json(bedsWithGridItems);
 });
 
@@ -28,11 +29,14 @@ router.get("/", async (c) => {
 router.get("/:id", async (c) => {
   const { id } = c.req.param();
   const bed = await db.select().from(bedTable).where(eq(bedTable.id, id));
+
   if (!bed.length) return c.notFound();
+
   const gridItems = await db
     .select()
     .from(gridItemTable)
     .where(eq(gridItemTable.bedId, id));
+
   return c.json({ ...bed[0], gridItems });
 });
 
@@ -40,10 +44,10 @@ router.get("/:id", async (c) => {
 router.post("/", async (c) => {
   const body = await c.req.json();
   const { grid, ...bedData } = body;
+
   const [newBed] = await db.insert(bedTable).values(bedData).returning();
 
   if (grid && grid.length) {
-    console.log({ grid });
     await db.insert(gridItemTable).values(
       grid.map((gridItem: GridItem) => ({
         bedId: newBed.id,
@@ -60,11 +64,13 @@ router.put("/:id", async (c) => {
   const { id } = c.req.param();
   const body = await c.req.json();
   const { grid, ...bedData } = body;
+
   const [updatedBed] = await db
     .update(bedTable)
     .set(bedData)
     .where(eq(bedTable.id, id))
     .returning();
+
   if (!updatedBed) return c.notFound();
 
   if (grid) {
@@ -72,18 +78,21 @@ router.put("/:id", async (c) => {
     await db.insert(gridItemTable).values(
       grid.map((gridItem: GridItem) => ({
         bedId: id,
-        seedId: gridItem.seed?.id,
+        seedId: gridItem?.seed?.id,
       })),
     );
   }
+
   return c.json(updatedBed);
 });
 
 // Delete a bed by ID along with its grid items
 router.delete("/:id", async (c) => {
   const { id } = c.req.param();
+
   await db.delete(gridItemTable).where(eq(gridItemTable.bedId, id));
   await db.delete(bedTable).where(eq(bedTable.id, id));
+
   return c.text("Deleted successfully");
 });
 
