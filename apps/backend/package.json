@@ -5,8 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "deno run --allow-net --allow-env --allow-read --allow-ffi --allow-sys index.ts",
     "test": "ENV=test deno test --allow-env",
-    "dev": "deno run --allow-net --allow-env --allow-read --allow-ffi --watch index.ts",
+    "dev": "deno run --allow-net --allow-env --allow-read --allow-ffi --allow-sys --watch index.ts",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:seed": "deno run --allow-env --allow-read --allow-ffi db/seedDatabase.ts",
