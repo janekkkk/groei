@@ -14,6 +14,7 @@
     "pnpm": ">=8.14.0"
   },
   "scripts": {
+    "start": "pm2 kill && pnpm exec nx run-many -t start",
     "dev": "pnpm exec nx run-many -t dev",
     "build": "pnpm exec nx run-many -t build",
     "lint:all": "pnpm exec nx run-many -t lint",
