@@ -42,7 +42,7 @@ export const Username = () => {
 
   useMount(async () => {
     const newUser = await fetch(
-      `http://localhost:8000/api/user/${fakePersistedUser.email}`,
+      `${import.meta.env.VITE_API_URI}/user/${fakePersistedUser.email}`,
     )
       .then((res) => res.json())
       .then((data) => data);

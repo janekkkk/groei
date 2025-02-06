@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "pm2 start --name frontend \"deno run -A https://deno.land/std@0.224.0/http/file_server.ts ./dist --port 4001\"",
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",

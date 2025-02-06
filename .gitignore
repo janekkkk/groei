@@ -128,3 +128,5 @@ dist
 ## Vite
 dev-dist/
 vite.config.ts.timestamp*
+
+tsconfig.tsbuildinfo
