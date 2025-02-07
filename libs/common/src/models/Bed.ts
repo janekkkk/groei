@@ -7,6 +7,7 @@ export interface Bed {
   gridWidth: number;
   gridHeight: number;
   grid: GridItem[];
+  sowDate?: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;

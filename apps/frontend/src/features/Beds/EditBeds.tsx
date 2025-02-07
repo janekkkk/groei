@@ -45,6 +45,7 @@ const getEmptyBed = (): Bed =>
     gridWidth: 2,
     gridHeight: 2,
     grid: [],
+    sowDate: new Date().toISOString().substring(0, 10),
     createdAt: new Date(),
     updatedAt: new Date(),
   }) as Bed;
@@ -133,6 +134,16 @@ export const EditBeds = () => {
             onChange={handleInputChange}
             required
             ref={nameInputRef}
+          />
+        </div>
+        <div>
+          <Label htmlFor="sowDate">Sow Date:</Label>
+          <Input
+            type="date"
+            name="sowDate"
+            value={bed.sowDate}
+            onChange={handleInputChange}
+            required
           />
         </div>
         <div>
