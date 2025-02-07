@@ -62,11 +62,22 @@ export const EditBeds = () => {
   const isCreate = Number(bedId) === -1;
   const router = useRouter();
 
+  const isNumeric = (num: string) => !isNaN(Number(num));
+
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    setBed({ ...bed, [name]: value, updatedAt: new Date() });
+    let numberValue;
+
+    if (isNumeric(value)) {
+      numberValue = parseInt(value, 10);
+      if (numberValue < 1) {
+        return;
+      }
+    }
+
+    setBed({ ...bed, [name]: numberValue ?? value, updatedAt: new Date() });
   };
 
   const handleSelectChange = (e: SelectChange) => {
@@ -82,6 +93,22 @@ export const EditBeds = () => {
       deleteBed.mutate(bed?.id);
       router.history.back();
     }
+  };
+
+  const addRow = () => {
+    setBed({ ...bed, gridHeight: bed.gridHeight + 1 });
+  };
+
+  const removeRow = () => {
+    setBed({ ...bed, gridHeight: bed.gridHeight - 1 });
+  };
+
+  const addColumn = () => {
+    setBed({ ...bed, gridWidth: bed.gridWidth + 1 });
+  };
+
+  const removeColumn = () => {
+    setBed({ ...bed, gridWidth: bed.gridWidth - 1 });
   };
 
   const handleSubmit = () => {
@@ -270,7 +297,7 @@ export const EditBeds = () => {
                 type="button"
                 className="h-full"
                 title="Add Column"
-                onClick={() => setBed({ ...bed, gridWidth: bed.gridWidth + 1 })}
+                onClick={addColumn}
               >
                 <Plus />
               </Button>
@@ -279,7 +306,7 @@ export const EditBeds = () => {
                 type="button"
                 className="h-full"
                 title="Remove Column"
-                onClick={() => setBed({ ...bed, gridWidth: bed.gridWidth - 1 })}
+                onClick={removeColumn}
               >
                 <Minus />
               </Button>
@@ -291,7 +318,7 @@ export const EditBeds = () => {
               type="button"
               className="w-full mt-2"
               title="Add Row"
-              onClick={() => setBed({ ...bed, gridHeight: bed.gridHeight + 1 })}
+              onClick={addRow}
             >
               <Plus />
             </Button>
@@ -300,7 +327,7 @@ export const EditBeds = () => {
               type="button"
               className="w-full mt-2"
               title="Remove Row"
-              onClick={() => setBed({ ...bed, gridHeight: bed.gridHeight - 1 })}
+              onClick={removeRow}
             >
               <Minus />
             </Button>
