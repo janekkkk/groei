@@ -61,8 +61,8 @@ Deno.serve(
   {
     port: process.env.PORT,
     hostname: process.env.HOSTNAME,
-    cert: cert,
-    key: key,
+    // cert: cert,
+    // key: key,
   },
   app.fetch,
 );
