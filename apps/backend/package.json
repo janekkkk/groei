@@ -5,9 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "pm2 start --name backend \"deno run -A index.ts\"",
+    "start": "NODE_ENV=production ENV=development pm2 start --name backend \"deno run -A index.ts\"",
     "test": "ENV=test deno test --allow-env",
-    "dev": "deno run --allow-net --allow-env --allow-read --allow-ffi --allow-sys --watch index.ts",
+    "dev": "NODE_ENV=development ENV=development deno run --allow-net --allow-env --allow-read --allow-ffi --allow-sys --watch index.ts",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:seed": "deno run --allow-env --allow-read --allow-ffi db/seedDatabase.ts",

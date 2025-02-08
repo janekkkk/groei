@@ -172,6 +172,9 @@ export const EditBeds = () => {
             onChange={handleInputChange}
             required
           />
+
+          {/*ToDo show how many days ago the bed was sown*/}
+          {/*ToDO show how may weeks ago the bed was sown*/}
         </div>
         <div>
           <Label htmlFor="gridWidth">Grid Width:</Label>
