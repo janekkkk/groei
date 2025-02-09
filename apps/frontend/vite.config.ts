@@ -12,6 +12,15 @@ export default defineConfig({
     host: true,
     port: 4001,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: "assets/[name]-[hash].js",
+        chunkFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash].[ext]",
+      },
+    },
+  },
   plugins: [
     react(),
     TanStackRouterVite(),
