@@ -17,6 +17,8 @@ export interface Seed {
   quantity?: number;
   notes?: string;
   tags?: string[];
+  preSprout?: boolean;
+  germinationType: GerminationType;
   // photo?: File | null;
   createdAt: Date;
   updatedAt: Date;
@@ -30,6 +32,13 @@ export interface SeedDTO extends Seed {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+}
+
+export enum GerminationType {
+  COLD = "Cold",
+  WARM = "Warm",
+  DARK = "Dark",
+  LIGHT = "Light",
 }
 
 export enum PlantHeight {

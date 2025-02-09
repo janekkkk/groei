@@ -36,6 +36,7 @@ import {
   useDeleteBedMutation,
   useUpdateBedMutation,
 } from "@/features/Beds/useBedQuery";
+import { isNumeric } from "@/shared/utils/is-numeric.helper";
 
 const getEmptyBed = (): Bed =>
   ({
@@ -61,8 +62,6 @@ export const EditBeds = () => {
   const { bedId } = Route.useParams();
   const isCreate = Number(bedId) === -1;
   const router = useRouter();
-
-  const isNumeric = (num: string) => !isNaN(Number(num));
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement

@@ -12,6 +12,8 @@ export const seedsTable = sqliteTable("seeds_table", {
     .primaryKey()
     .$default(() => crypto.randomUUID()),
   name: text().notNull(),
+  germinationType: text(),
+  preSprout: integer({ mode: "boolean" }),
   sowFrom: text(),
   sowTill: text(),
   plantFrom: text(),

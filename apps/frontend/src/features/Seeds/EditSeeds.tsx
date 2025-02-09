@@ -20,7 +20,12 @@ import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { SelectChange } from "@/shared/select.model";
 import { Route } from "@/routes/seeds/$seedId.lazy";
-import { Month, PlantHeight, Seed } from "@groei/common/src/models/Seed";
+import {
+  GerminationType,
+  Month,
+  PlantHeight,
+  Seed,
+} from "@groei/common/src/models/Seed";
 import {
   useCreateSeedMutation,
   useDeleteSeedMutation,
@@ -28,6 +33,9 @@ import {
 } from "@/features/Seeds/useSeedQuery";
 import { classNames } from "@/shared/utils";
 import { useRouter, useCanGoBack } from "@tanstack/react-router";
+import { Checkbox } from "@/shadcdn/components/ui/checkbox.tsx";
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { isNumeric } from "@/shared/utils/is-numeric.helper.ts";
 
 const getEmptySeed = (): Seed => ({
   id: crypto.randomUUID(),
@@ -35,6 +43,8 @@ const getEmptySeed = (): Seed => ({
   variety: "",
   sowFrom: undefined,
   sowTill: undefined,
+  germinationType: GerminationType.DARK,
+  preSprout: false,
   plantFrom: undefined,
   plantTill: undefined,
   harvestFrom: undefined,
@@ -69,7 +79,21 @@ export const EditSeeds = () => {
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    if (seed) setSeed({ ...seed, [name]: value });
+    let numberValue;
+
+    if (isNumeric(value)) {
+      numberValue = parseInt(value, 10);
+      if (numberValue < 1) {
+        return;
+      }
+    }
+
+    if (seed)
+      setSeed({ ...seed, [name]: numberValue ?? value, updatedAt: new Date() });
+  };
+
+  const handleCheckboxChange = (checked: CheckedState) => {
+    if (seed) setSeed({ ...seed, preSprout: checked as boolean });
   };
 
   const handleSelectChange = (e: SelectChange) => {
@@ -168,6 +192,42 @@ export const EditSeeds = () => {
             name="numberOfSeedsPerGridCell"
             value={seed?.numberOfSeedsPerGridCell}
             onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <Label htmlFor="germinationType">Germination Type:</Label>
+          <Select
+            name="germinationType"
+            value={seed?.germinationType}
+            onValueChange={(value) =>
+              handleSelectChange({ name: "germinationType", value: value })
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Germination Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {Object.values(GerminationType).map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center space-x-2">
+          <label
+            htmlFor="preSprout"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Pre-sprout:
+          </label>
+          <Checkbox
+            id="preSprout"
+            checked={seed?.preSprout}
+            onCheckedChange={handleCheckboxChange}
           />
         </div>
         <div className="flex flex-col gap-2 md:flex-row">
