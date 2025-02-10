@@ -9,6 +9,7 @@ import { MainLayout } from "@/core/layouts/main.layout.tsx";
 import { ThemeToggle } from "@/core/theme/ThemeToggle.tsx";
 import { Outlet } from "@tanstack/react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Main = () => {
   const queryClient = new QueryClient();
@@ -32,7 +33,7 @@ export const Main = () => {
       </ThemeProvider>
 
       <ReactQueryDevtools initialIsOpen={false} />
-      {/*<TanStackRouterDevtools />*/}
+      <TanStackRouterDevtools />
     </QueryClientProvider>
   );
 };
