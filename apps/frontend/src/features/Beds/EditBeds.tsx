@@ -270,6 +270,11 @@ export const EditBeds = () => {
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectGroup>
+                                    <SelectItem
+                                      value={null as unknown as string}
+                                    >
+                                      None
+                                    </SelectItem>
                                     {seeds.map((seed) => (
                                       <SelectItem
                                         key={seed.name}

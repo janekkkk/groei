@@ -386,15 +386,15 @@ export const EditSeeds = () => {
             onChange={handleInputChange}
           />
         </div>
-        <div>
-          <Label htmlFor="plantDistance">Plant distance (cm):</Label>
-          <Input
-            type="number"
-            name="plantDistance"
-            value={seed?.plantDistance || ""}
-            onChange={handleInputChange}
-          />
-        </div>
+        {/*<div>*/}
+        {/*  <Label htmlFor="plantDistance">Plant distance (cm):</Label>*/}
+        {/*  <Input*/}
+        {/*    type="number"*/}
+        {/*    name="plantDistance"*/}
+        {/*    value={seed?.plantDistance || ""}*/}
+        {/*    onChange={handleInputChange}*/}
+        {/*  />*/}
+        {/*</div>*/}
         <div>
           <Label htmlFor="plantHeight">Plant Height:</Label>
           <Select
@@ -409,41 +409,41 @@ export const EditSeeds = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value={PlantHeight.Short}>Short</SelectItem>
-                <SelectItem value={PlantHeight.Medium}>Medium</SelectItem>
-                <SelectItem value={PlantHeight.Tall}>Tall</SelectItem>
-                <SelectItem value={PlantHeight.Huge}>Huge</SelectItem>
+                <SelectItem value={PlantHeight.SHORT}>Short</SelectItem>
+                <SelectItem value={PlantHeight.MEDIUM}>Medium</SelectItem>
+                <SelectItem value={PlantHeight.TALL}>Tall</SelectItem>
+                <SelectItem value={PlantHeight.CLIMBER}>Climber</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-        <div>
-          <Label htmlFor="quantity">Quantity:</Label>
-          <Input
-            type="number"
-            name="quantity"
-            value={seed?.quantity || ""}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <Label htmlFor="expirationDate">Expiration date:</Label>
-          <Input
-            type="date"
-            name="experationDate"
-            value={seed?.expirationDate}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <Label htmlFor="url">URL:</Label>
-          <Input
-            type="url"
-            name="url"
-            value={seed?.url}
-            onChange={handleInputChange}
-          />
-        </div>
+        {/*<div>*/}
+        {/*  <Label htmlFor="quantity">Quantity:</Label>*/}
+        {/*  <Input*/}
+        {/*    type="number"*/}
+        {/*    name="quantity"*/}
+        {/*    value={seed?.quantity || ""}*/}
+        {/*    onChange={handleInputChange}*/}
+        {/*  />*/}
+        {/*</div>*/}
+        {/*<div>*/}
+        {/*  <Label htmlFor="expirationDate">Expiration date:</Label>*/}
+        {/*  <Input*/}
+        {/*    type="date"*/}
+        {/*    name="experationDate"*/}
+        {/*    value={seed?.expirationDate}*/}
+        {/*    onChange={handleInputChange}*/}
+        {/*  />*/}
+        {/*</div>*/}
+        {/*<div>*/}
+        {/*  <Label htmlFor="url">Image URL:</Label>*/}
+        {/*  <Input*/}
+        {/*    type="url"*/}
+        {/*    name="url"*/}
+        {/*    value={seed?.url}*/}
+        {/*    onChange={handleInputChange}*/}
+        {/*  />*/}
+        {/*</div>*/}
         <div>
           <Label htmlFor="notes">Notes:</Label>
           <Textarea
@@ -452,32 +452,32 @@ export const EditSeeds = () => {
             onChange={handleInputChange}
           />
         </div>
-        <div>
-          <Label htmlFor="tag">Tags:</Label>
-          <div className="flex gap-2">
-            <Input
-              type="text"
-              name="tag"
-              value={newTag}
-              onChange={handleTagChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleTagAdd();
-                }
-              }}
-            />
-            <Button variant="secondary" type="button" onClick={handleTagAdd}>
-              + Add Tag
-            </Button>
-          </div>
-          <ul className="mt-2 flex gap-1 ">
-            {(seed?.tags || []).map((tag) => (
-              <li key={tag} className="border p-1">
-                {tag}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/*<div>*/}
+        {/*  <Label htmlFor="tag">Tags:</Label>*/}
+        {/*  <div className="flex gap-2">*/}
+        {/*    <Input*/}
+        {/*      type="text"*/}
+        {/*      name="tag"*/}
+        {/*      value={newTag}*/}
+        {/*      onChange={handleTagChange}*/}
+        {/*      onKeyDown={(e) => {*/}
+        {/*        if (e.key === "Enter") {*/}
+        {/*          handleTagAdd();*/}
+        {/*        }*/}
+        {/*      }}*/}
+        {/*    />*/}
+        {/*    <Button variant="secondary" type="button" onClick={handleTagAdd}>*/}
+        {/*      + Add Tag*/}
+        {/*    </Button>*/}
+        {/*  </div>*/}
+        {/*  <ul className="mt-2 flex gap-1 ">*/}
+        {/*    {(seed?.tags || []).map((tag) => (*/}
+        {/*      <li key={tag} className="border p-1">*/}
+        {/*        {tag}*/}
+        {/*      </li>*/}
+        {/*    ))}*/}
+        {/*  </ul>*/}
+        {/*</div>*/}
         <div className="flex items-center justify-end gap-2">
           <Button
             type="button"
