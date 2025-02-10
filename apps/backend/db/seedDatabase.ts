@@ -23,7 +23,7 @@ const main = async () => {
     harvestTill: Month.October,
     expirationDate: "2022-03-01",
     url: "https://example.com/tomato",
-    plantHeight: PlantHeight.Short,
+    plantHeight: PlantHeight.SHORT,
     plantDistance: 50,
     numberOfSeedsPerGridCell: 2,
     daysToMaturity: 60,

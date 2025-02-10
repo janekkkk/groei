@@ -42,10 +42,10 @@ export enum GerminationType {
 }
 
 export enum PlantHeight {
-  Short = "Short",
-  Medium = "Medium",
-  Tall = "Tall",
-  Huge = "Huge",
+  SHORT = "SHORT",
+  MEDIUM = "MEDIUM",
+  TALL = "TALL",
+  CLIMBER = "CLIMBER",
 }
 
 export enum Month {
