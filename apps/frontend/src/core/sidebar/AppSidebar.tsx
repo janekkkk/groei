@@ -21,6 +21,7 @@ import {
 } from "@/shadcdn/components/ui/collapsible";
 import { Username } from "@/core/authentication/Username";
 import { useSwipe } from "@/shared/use-swipe.hook.ts";
+import { useTranslation } from "react-i18next";
 
 interface NavigationItem {
   title: string;
@@ -30,38 +31,40 @@ interface NavigationItem {
 }
 
 export const AppSidebar = () => {
+  const { t } = useTranslation();
+
   const items: NavigationItem[] = [
     {
-      title: "Home",
+      title: t("navigation.home"),
       routeTo: "/",
       icon: Home,
     },
     {
-      title: "Seeds",
+      title: t("navigation.seeds"),
       routeTo: "/seeds",
       icon: Sprout,
       subItems: [
         {
-          title: "Overview",
+          title: t("navigation.overview"),
           routeTo: "/seeds",
         },
         {
-          title: "Add",
+          title: t("navigation.add"),
           routeTo: "/seeds/-1",
         },
       ],
     },
     {
-      title: "Beds",
+      title: t("navigation.beds"),
       routeTo: "/beds",
       icon: Grid2x2,
       subItems: [
         {
-          title: "Overview",
+          title: t("navigation.overview"),
           routeTo: "/beds",
         },
         {
-          title: "Add",
+          title: t("navigation.add"),
           routeTo: "/beds/-1",
         },
       ],
@@ -91,7 +94,7 @@ export const AppSidebar = () => {
                         <SidebarMenuButton asChild>
                           <Link
                             to={item.routeTo}
-                            className="flex text-lg md:text-sm [&.active]:font-bold"
+                            className="flex text-lg md:text-sm [&.active]:font-bold capitalize"
                           >
                             {item.icon && (
                               <item.icon className="text-lg md:text-sm" />
@@ -109,7 +112,7 @@ export const AppSidebar = () => {
                               <SidebarMenuSubItem key={subItem.title}>
                                 <Link
                                   to={subItem.routeTo}
-                                  className="[&.active]:font-bold text-lg md:text-sm"
+                                  className="[&.active]:font-bold text-lg md:text-sm capitalize"
                                 >
                                   <span>{subItem.title}</span>
                                 </Link>

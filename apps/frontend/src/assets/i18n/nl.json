@@ -1,0 +1,10 @@
+{
+  "simpleContent": "Eenvoudige inhoud",
+  "navigation": {
+    "home": "thuis",
+    "seeds": "zaden",
+    "beds": "bedden",
+    "overview": "overzicht",
+    "add": "toevoegen"
+  }
+}

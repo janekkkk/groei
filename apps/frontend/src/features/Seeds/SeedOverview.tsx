@@ -11,9 +11,11 @@ import {
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/shadcdn/components/ui/button";
 import { Seed } from "@groei/common/src/models/Seed";
+import { useTranslation } from "react-i18next";
 
 export const SeedOverview = () => {
   const { seeds } = useSeedStore((state) => state);
+  const { t } = useTranslation();
 
   return (
     <div>

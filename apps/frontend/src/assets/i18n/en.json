@@ -1,0 +1,10 @@
+{
+  "simpleContent": "simple content",
+  "navigation": {
+    "home": "Home",
+    "seeds": "seeds",
+    "beds": "beds",
+    "overview": "overview",
+    "add": "add"
+  }
+}
