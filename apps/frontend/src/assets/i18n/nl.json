@@ -1,10 +1,20 @@
 {
-  "simpleContent": "Eenvoudige inhoud",
   "navigation": {
     "home": "thuis",
     "seeds": "zaden",
     "beds": "bedden",
     "overview": "overzicht",
     "add": "toevoegen"
+  },
+  "seeds": {
+    "title": "Zaden",
+    "add": "Voeg zaad toe",
+    "name": "Naam",
+    "variety": "Variëteit",
+    "numberOfSeedsPerCell": "Aantal zaden per cel",
+    "numberOfDaysToMaturity": "Aantal dagen tot volwassenheid",
+    "expirationDate": "Vervaldatum",
+    "edit": "Bewerk",
+    "delete": "Verwijder"
   }
 }

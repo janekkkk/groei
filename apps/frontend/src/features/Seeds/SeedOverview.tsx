@@ -23,22 +23,22 @@ export const SeedOverview = () => {
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore*/}
         <Link to={"/seeds/-1"}>
-          <Button type="button">Add new seed</Button>
+          <Button type="button">{t("seeds.add")}</Button>
         </Link>
       </div>
       <Table>
-        <TableCaption>Seeds</TableCaption>
+        <TableCaption>{t("seeds.title")}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Name</TableHead>
-            <TableHead>Variety</TableHead>
-            <TableHead className="text-right">Quantity</TableHead>
+            <TableHead className="w-[100px]">{t("seeds.name")}</TableHead>
+            <TableHead>{t("seeds.variety")}</TableHead>
             <TableHead className="text-right">
-              Number of seeds per cell
+              {t("seeds.numberOfSeedsPerCell")}
             </TableHead>
-            <TableHead className="text-right">Days to maturity</TableHead>
-            <TableHead className="text-right">Plant Distance</TableHead>
-            <TableHead>Expiration Date</TableHead>
+            <TableHead className="text-right">
+              {t("seeds.numberOfDaysToMaturity")}
+            </TableHead>
+            <TableHead>{t("seeds.expirationDate")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -48,15 +48,12 @@ export const SeedOverview = () => {
                 <Link to={seed.id.toString()}>{seed.name}</Link>
               </TableCell>
               <TableCell>{seed.variety}</TableCell>
-              <TableCell className="text-right">{seed.quantity}</TableCell>
               <TableCell className="text-right">
                 {seed.numberOfSeedsPerGridCell}
               </TableCell>
-
               <TableCell className="text-right">
                 {seed.daysToMaturity}
               </TableCell>
-              <TableCell className="text-right">{seed.plantDistance}</TableCell>
               <TableCell>{seed.expirationDate}</TableCell>
             </TableRow>
           ))}

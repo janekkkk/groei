@@ -1,4 +1,4 @@
-import React, {
+import {
   ChangeEventHandler,
   useCallback,
   useEffect,
@@ -36,6 +36,7 @@ import { useRouter, useCanGoBack } from "@tanstack/react-router";
 import { Checkbox } from "@/shadcdn/components/ui/checkbox.tsx";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { isNumeric } from "@/shared/utils/is-numeric.helper.ts";
+import { useTranslation } from "react-i18next";
 
 const getEmptySeed = (): Seed => ({
   id: crypto.randomUUID(),
@@ -51,11 +52,9 @@ const getEmptySeed = (): Seed => ({
   harvestTill: undefined,
   daysToMaturity: undefined,
   plantHeight: undefined,
-  plantDistance: undefined,
   quantity: undefined,
   numberOfSeedsPerGridCell: 1,
   notes: "",
-  tags: [],
   url: "",
   expirationDate: undefined, // new Date().toISOString().substring(0, 10)
   createdAt: new Date(),
@@ -69,11 +68,11 @@ export const EditSeeds = () => {
   const updateSeed = useUpdateSeedMutation();
   const deleteSeed = useDeleteSeedMutation();
   const [seed, setSeed] = useState<Seed>();
-  const [newTag, setNewTag] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { seedId } = Route.useParams();
   const isCreate = Number(seedId) === -1;
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -98,19 +97,6 @@ export const EditSeeds = () => {
 
   const handleSelectChange = (e: SelectChange) => {
     if (seed) setSeed({ ...seed, [e.name]: e.value });
-  };
-
-  const handleTagAdd = () => {
-    if (seed)
-      setSeed({
-        ...seed,
-        tags: [...(seed?.tags || []), newTag],
-      });
-    setNewTag("");
-  };
-
-  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTag(e.target.value);
   };
 
   const handleSubmit = () => {
@@ -153,8 +139,16 @@ export const EditSeeds = () => {
 
   return (
     <div>
-      {isCreate && <h1 className="mb-4">Add Seed</h1>}
-      {!isCreate && <h1 className="mb-4">Edit Seed</h1>}
+      {isCreate && (
+        <h1 className="mb-4">
+          {t("core.add")} {t("seeds.title")}
+        </h1>
+      )}
+      {!isCreate && (
+        <h1 className="mb-4">
+          {t("core.edit")} {t("seeds.title")}
+        </h1>
+      )}
 
       <form
         onSubmit={(e) => {
@@ -164,7 +158,7 @@ export const EditSeeds = () => {
         className="flex flex-col gap-2"
       >
         <div>
-          <Label htmlFor="name">Name:</Label>
+          <Label htmlFor="name">{t("seeds.name")}</Label>
           <Input
             type="text"
             name="name"
@@ -175,7 +169,7 @@ export const EditSeeds = () => {
           />
         </div>
         <div>
-          <Label htmlFor="variety">Variety:</Label>
+          <Label htmlFor="variety">{t("seeds.variety")}</Label>
           <Input
             type="text"
             name="variety"
@@ -185,7 +179,7 @@ export const EditSeeds = () => {
         </div>
         <div>
           <Label htmlFor="numberOfSeedsPerGridCell">
-            Number of seeds per grid cell:
+            {t("seeds.numberOfSeedsPerGridCell")}
           </Label>
           <Input
             type="number"
@@ -195,7 +189,7 @@ export const EditSeeds = () => {
           />
         </div>
         <div>
-          <Label htmlFor="germinationType">Germination Type:</Label>
+          <Label htmlFor="germinationType">{t("seeds.germinationType")}</Label>
           <Select
             name="germinationType"
             value={seed?.germinationType}
@@ -204,7 +198,9 @@ export const EditSeeds = () => {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Germination Type" />
+              <SelectValue
+                placeholder={`${t("core.select")} ${t("seeds.germinationType")}`}
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -222,7 +218,7 @@ export const EditSeeds = () => {
             htmlFor="preSprout"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            Pre-sprout:
+            {t("seeds.preSprout")}
           </label>
           <Checkbox
             id="preSprout"
@@ -232,7 +228,7 @@ export const EditSeeds = () => {
         </div>
         <div className="flex flex-col gap-2 md:flex-row">
           <div className="grow">
-            <Label htmlFor="sowFrom">Sow From:</Label>
+            <Label htmlFor="sowFrom">{t("seeds.sowFrom")}</Label>
             <Select
               name="sowFrom"
               value={seed?.sowFrom}
@@ -241,13 +237,15 @@ export const EditSeeds = () => {
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Month" />
+                <SelectValue
+                  placeholder={`${t("core.select")} ${t("seeds.month")}`}
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {Object.values(Month).map((month) => (
                     <SelectItem key={month} value={month}>
-                      {month}
+                      {t(`months.${month.toLowerCase()}`)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -255,7 +253,7 @@ export const EditSeeds = () => {
             </Select>
           </div>
           <div className="grow">
-            <Label htmlFor="sowTill">Sow Till:</Label>
+            <Label htmlFor="sowTill">{t("seeds.sowTill")}</Label>
             <Select
               name="sowTill"
               value={seed?.sowTill}
@@ -264,13 +262,15 @@ export const EditSeeds = () => {
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Month" />
+                <SelectValue
+                  placeholder={`${t("core.select")} ${t("seeds.month")}`}
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {Object.values(Month).map((month) => (
                     <SelectItem key={month} value={month}>
-                      {month}
+                      {t(`months.${month.toLowerCase()}`)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -281,7 +281,7 @@ export const EditSeeds = () => {
 
         <div className="flex flex-col gap-2 md:flex-row">
           <div className="grow">
-            <Label htmlFor="plantFrom">Plant From:</Label>
+            <Label htmlFor="plantFrom">{t("seeds.plantFrom")}</Label>
             <Select
               name="plantFrom"
               value={seed?.plantFrom}
@@ -290,13 +290,15 @@ export const EditSeeds = () => {
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Month" />
+                <SelectValue
+                  placeholder={`${t("core.select")} ${t("seeds.month")}`}
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {Object.values(Month).map((month) => (
                     <SelectItem key={month} value={month}>
-                      {month}
+                      {t(`months.${month.toLowerCase()}`)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -304,7 +306,7 @@ export const EditSeeds = () => {
             </Select>
           </div>
           <div className="grow">
-            <Label htmlFor="plantTill">Plant Till:</Label>
+            <Label htmlFor="plantTill">{t("seeds.plantTill")}</Label>
             <Select
               name="plantTill"
               value={seed?.plantTill}
@@ -313,13 +315,15 @@ export const EditSeeds = () => {
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Month" />
+                <SelectValue
+                  placeholder={`${t("core.select")} ${t("seeds.month")}`}
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {Object.values(Month).map((month) => (
                     <SelectItem key={month} value={month}>
-                      {month}
+                      {t(`months.${month.toLowerCase()}`)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -330,7 +334,7 @@ export const EditSeeds = () => {
 
         <div className="flex flex-col gap-2 md:flex-row">
           <div className="grow">
-            <Label htmlFor="harvestFrom">Harvest From:</Label>
+            <Label htmlFor="harvestFrom">{t("seeds.harvestFrom")}</Label>
             <Select
               name="harvestFrom"
               value={seed?.harvestFrom}
@@ -339,13 +343,15 @@ export const EditSeeds = () => {
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Month" />
+                <SelectValue
+                  placeholder={`${t("core.select")} ${t("seeds.month")}`}
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {Object.values(Month).map((month) => (
                     <SelectItem key={month} value={month}>
-                      {month}
+                      {t(`months.${month.toLowerCase()}`)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -353,7 +359,7 @@ export const EditSeeds = () => {
             </Select>
           </div>
           <div className="grow">
-            <Label htmlFor="harvestTill">Harvest Till:</Label>
+            <Label htmlFor="harvestTill">{t("seeds.harvestTill")}</Label>
             <Select
               name="harvestTill"
               value={seed?.harvestTill}
@@ -362,13 +368,15 @@ export const EditSeeds = () => {
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Month" />
+                <SelectValue
+                  placeholder={`${t("core.select")} ${t("seeds.month")}`}
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {Object.values(Month).map((month) => (
                     <SelectItem key={month} value={month}>
-                      {month}
+                      {t(`months.${month.toLowerCase()}`)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -378,7 +386,9 @@ export const EditSeeds = () => {
         </div>
 
         <div>
-          <Label htmlFor="daysToMaturity">Days to Maturity:</Label>
+          <Label htmlFor="daysToMaturity">
+            {t("seeds.numberOfDaysToMaturity")}
+          </Label>
           <Input
             type="number"
             name="daysToMaturity"
@@ -386,17 +396,8 @@ export const EditSeeds = () => {
             onChange={handleInputChange}
           />
         </div>
-        {/*<div>*/}
-        {/*  <Label htmlFor="plantDistance">Plant distance (cm):</Label>*/}
-        {/*  <Input*/}
-        {/*    type="number"*/}
-        {/*    name="plantDistance"*/}
-        {/*    value={seed?.plantDistance || ""}*/}
-        {/*    onChange={handleInputChange}*/}
-        {/*  />*/}
-        {/*</div>*/}
         <div>
-          <Label htmlFor="plantHeight">Plant Height:</Label>
+          <Label htmlFor="plantHeight">{t("seeds.plantHeight")}</Label>
           <Select
             name="plantHeight"
             value={seed?.plantHeight}
@@ -405,7 +406,9 @@ export const EditSeeds = () => {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Height (roughly)" />
+              <SelectValue
+                placeholder={`${t("core.select")} ${t("seeds.height")}`}
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -417,67 +420,14 @@ export const EditSeeds = () => {
             </SelectContent>
           </Select>
         </div>
-        {/*<div>*/}
-        {/*  <Label htmlFor="quantity">Quantity:</Label>*/}
-        {/*  <Input*/}
-        {/*    type="number"*/}
-        {/*    name="quantity"*/}
-        {/*    value={seed?.quantity || ""}*/}
-        {/*    onChange={handleInputChange}*/}
-        {/*  />*/}
-        {/*</div>*/}
-        {/*<div>*/}
-        {/*  <Label htmlFor="expirationDate">Expiration date:</Label>*/}
-        {/*  <Input*/}
-        {/*    type="date"*/}
-        {/*    name="experationDate"*/}
-        {/*    value={seed?.expirationDate}*/}
-        {/*    onChange={handleInputChange}*/}
-        {/*  />*/}
-        {/*</div>*/}
-        {/*<div>*/}
-        {/*  <Label htmlFor="url">Image URL:</Label>*/}
-        {/*  <Input*/}
-        {/*    type="url"*/}
-        {/*    name="url"*/}
-        {/*    value={seed?.url}*/}
-        {/*    onChange={handleInputChange}*/}
-        {/*  />*/}
-        {/*</div>*/}
         <div>
-          <Label htmlFor="notes">Notes:</Label>
+          <Label htmlFor="notes">{t("seeds.notes")}</Label>
           <Textarea
             name="notes"
             value={seed?.notes}
             onChange={handleInputChange}
           />
         </div>
-        {/*<div>*/}
-        {/*  <Label htmlFor="tag">Tags:</Label>*/}
-        {/*  <div className="flex gap-2">*/}
-        {/*    <Input*/}
-        {/*      type="text"*/}
-        {/*      name="tag"*/}
-        {/*      value={newTag}*/}
-        {/*      onChange={handleTagChange}*/}
-        {/*      onKeyDown={(e) => {*/}
-        {/*        if (e.key === "Enter") {*/}
-        {/*          handleTagAdd();*/}
-        {/*        }*/}
-        {/*      }}*/}
-        {/*    />*/}
-        {/*    <Button variant="secondary" type="button" onClick={handleTagAdd}>*/}
-        {/*      + Add Tag*/}
-        {/*    </Button>*/}
-        {/*  </div>*/}
-        {/*  <ul className="mt-2 flex gap-1 ">*/}
-        {/*    {(seed?.tags || []).map((tag) => (*/}
-        {/*      <li key={tag} className="border p-1">*/}
-        {/*        {tag}*/}
-        {/*      </li>*/}
-        {/*    ))}*/}
-        {/*  </ul>*/}
-        {/*</div>*/}
         <div className="flex items-center justify-end gap-2">
           <Button
             type="button"
@@ -485,7 +435,7 @@ export const EditSeeds = () => {
             className={classNames({ hidden: isCreate })}
             variant="destructive"
           >
-            Delete
+            {t("core.delete")}
           </Button>
           {useCanGoBack() && (
             <Button
@@ -493,10 +443,12 @@ export const EditSeeds = () => {
               onClick={() => router.history.back()}
               variant="secondary"
             >
-              Cancel
+              {t("core.cancel")}
             </Button>
           )}
-          <Button type="submit">{isCreate ? "Create" : "Update"}</Button>
+          <Button type="submit">
+            {isCreate ? t("core.create") : t("core.update")}
+          </Button>
         </div>
       </form>
     </div>

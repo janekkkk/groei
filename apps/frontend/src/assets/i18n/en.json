@@ -1,10 +1,57 @@
 {
-  "simpleContent": "simple content",
   "navigation": {
-    "home": "Home",
+    "home": "home",
     "seeds": "seeds",
     "beds": "beds",
     "overview": "overview",
     "add": "add"
+  },
+  "core": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "select": "Select",
+    "search": "Search",
+    "create": "create",
+    "update": "update"
+  },
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+  "seeds": {
+    "title": "Seeds",
+    "name": "Name",
+    "variety": "Variety",
+    "numberOfSeedsPerGridCell": "Number of seeds per cell",
+    "numberOfDaysToMaturity": "Number of days to maturity",
+    "expirationDate": "Expiration date",
+    "germinationType": "Germination type",
+    "preSprout": "Pre-sprouting",
+    "sowFrom": "Sow from",
+    "sowTill": "Sow till",
+    "plantFrom": "Plant from",
+    "plantTill": "Plant till",
+    "harvestFrom": "Harvest from",
+    "harvestTill": "Harvest till",
+    "month": "Month",
+    "plantHeight": "Plant height",
+    "notes": "notes",
+    "height": "Height (roughly)"
   }
 }

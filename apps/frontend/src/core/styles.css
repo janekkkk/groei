@@ -74,4 +74,8 @@
   input:user-valid {
     @apply border-primary;
   }
+
+  label {
+    @apply capitalize;
+  }
 }

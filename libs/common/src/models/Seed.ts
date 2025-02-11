@@ -9,17 +9,13 @@ export interface Seed {
   expirationDate?: string;
   url?: string;
   plantHeight?: PlantHeight;
-  plantDistance?: number;
   numberOfSeedsPerGridCell: number;
   name: string;
   variety?: string;
   daysToMaturity?: number;
-  quantity?: number;
   notes?: string;
-  tags?: string[];
   preSprout?: boolean;
   germinationType: GerminationType;
-  // photo?: File | null;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
@@ -28,7 +24,6 @@ export interface Seed {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export interface SeedDTO extends Seed {
-  tags: string;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;

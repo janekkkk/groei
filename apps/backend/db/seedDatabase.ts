@@ -24,12 +24,9 @@ const main = async () => {
     expirationDate: "2022-03-01",
     url: "https://example.com/tomato",
     plantHeight: PlantHeight.SHORT,
-    plantDistance: 50,
     numberOfSeedsPerGridCell: 2,
     daysToMaturity: 60,
-    quantity: 10,
     notes: "This is a note",
-    tags: "tomato, cherry, red",
   } as SeedDTO;
 
   await db.delete(usersTable).where(eq(usersTable.email, user.email));

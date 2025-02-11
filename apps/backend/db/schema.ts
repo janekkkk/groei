@@ -23,14 +23,10 @@ export const seedsTable = sqliteTable("seeds_table", {
   expirationDate: text(),
   url: text(),
   plantHeight: text(),
-  plantDistance: integer(),
   numberOfSeedsPerGridCell: integer(),
   variety: text(),
   daysToMaturity: integer(),
-  quantity: integer(),
   notes: text(),
-  tags: text(),
-  photo: text(),
   ...timestamps,
 });
 
