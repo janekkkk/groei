@@ -35,7 +35,7 @@ export const SeedOverview = () => {
             <TableHead className="w-[100px]">{t("seeds.name")}</TableHead>
             <TableHead>{t("seeds.variety")}</TableHead>
             <TableHead className="text-right">
-              {t("seeds.numberOfSeedsPerCell")}
+              {t("seeds.numberOfSeedsPerGridCell")}
             </TableHead>
             <TableHead className="text-right">
               {t("seeds.numberOfDaysToMaturity")}
