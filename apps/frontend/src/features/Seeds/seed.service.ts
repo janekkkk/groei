@@ -12,7 +12,6 @@ class SeedService {
         (seed: SeedDTO) =>
           ({
             ...seed,
-            tags: seed.tags?.split(","),
             createdAt: dateService.convertDate(seed.createdAt),
             updatedAt: dateService.convertDate(seed.updatedAt),
             deletedAt: seed.deletedAt
@@ -28,7 +27,6 @@ class SeedService {
 
     return response.json().then((seed: SeedDTO) => ({
       ...seed,
-      tags: seed.tags?.split(","),
       createdAt: dateService.convertDate(seed.createdAt),
       updatedAt: dateService.convertDate(seed.updatedAt),
       deletedAt: seed.deletedAt
@@ -45,7 +43,6 @@ class SeedService {
       },
       body: JSON.stringify({
         ...seed,
-        tags: seed?.tags?.join(","),
         createdAt: dateService.formatedTimestamp(seed.createdAt),
         updatedAt: dateService.formatedTimestamp(seed.updatedAt),
         deletedAt: seed.deletedAt
@@ -65,7 +62,6 @@ class SeedService {
       },
       body: JSON.stringify({
         ...seed,
-        tags: seed?.tags?.join(","),
         createdAt: dateService.formatedTimestamp(seed.createdAt),
         updatedAt: dateService.formatedTimestamp(seed.updatedAt),
         deletedAt: seed.deletedAt
