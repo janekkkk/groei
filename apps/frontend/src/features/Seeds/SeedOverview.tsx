@@ -23,7 +23,9 @@ export const SeedOverview = () => {
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore*/}
         <Link to={"/seeds/-1"}>
-          <Button type="button">{t("seeds.add")}</Button>
+          <Button type="button">
+            {t("core.add")} {t("seeds.title")}
+          </Button>
         </Link>
       </div>
       <Table>

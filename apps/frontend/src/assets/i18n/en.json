@@ -36,6 +36,7 @@
   },
   "seeds": {
     "title": "Seeds",
+    "seed": "Seed",
     "name": "Name",
     "variety": "Variety",
     "numberOfSeedsPerGridCell": "Number of seeds per cell",
@@ -53,5 +54,20 @@
     "plantHeight": "Plant height",
     "notes": "notes",
     "height": "Height (roughly)"
+  },
+  "beds": {
+    "title": "Beds",
+    "name": "Name",
+    "sowDate": "Sow date",
+    "gridWidth": "Grid width",
+    "gridHeight": "Grid height",
+    "gridHelp": "Set the number of columns for the grid. Every grid cell is roughly 30x30cm.",
+    "grid": "Grid",
+    "gridHelp2": "By clicking on a cell in the grid you can add seeds to it.",
+    "cell": "Cell",
+    "plantSeedInCell": "Plant seed in this grid cell",
+    "column": "Column",
+    "row": "Row",
+    "notes": "Notes"
   }
 }

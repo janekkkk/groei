@@ -52,7 +52,6 @@ const getEmptySeed = (): Seed => ({
   harvestTill: undefined,
   daysToMaturity: undefined,
   plantHeight: undefined,
-  quantity: undefined,
   numberOfSeedsPerGridCell: 1,
   notes: "",
   url: "",

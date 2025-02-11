@@ -37,6 +37,7 @@ import {
   useUpdateBedMutation,
 } from "@/features/Beds/useBedQuery";
 import { isNumeric } from "@/shared/utils/is-numeric.helper";
+import { useTranslation } from "react-i18next";
 
 const getEmptyBed = (): Bed =>
   ({
@@ -62,6 +63,7 @@ export const EditBeds = () => {
   const { bedId } = Route.useParams();
   const isCreate = Number(bedId) === -1;
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -141,8 +143,16 @@ export const EditBeds = () => {
 
   return (
     <div>
-      {isCreate && <h1 className="mb-4">Add Bed</h1>}
-      {!isCreate && <h1 className="mb-4">Edit Bed</h1>}
+      {isCreate && (
+        <h1 className="mb-4">
+          {t("core.add")} {t("beds.title")}
+        </h1>
+      )}
+      {!isCreate && (
+        <h1 className="mb-4">
+          {t("core.edit")} {t("beds.title")}
+        </h1>
+      )}
 
       <form
         onSubmit={(e) => {
@@ -152,7 +162,7 @@ export const EditBeds = () => {
         className="flex flex-col gap-2"
       >
         <div>
-          <Label htmlFor="name">Name:</Label>
+          <Label htmlFor="name">{t("beds.name")}</Label>
           <Input
             type="text"
             name="name"
@@ -163,7 +173,7 @@ export const EditBeds = () => {
           />
         </div>
         <div>
-          <Label htmlFor="sowDate">Sow Date:</Label>
+          <Label htmlFor="sowDate">{t("beds.sowDate")}</Label>
           <Input
             type="date"
             name="sowDate"
@@ -176,11 +186,8 @@ export const EditBeds = () => {
           {/*ToDO show how may weeks ago the bed was sown*/}
         </div>
         <div>
-          <Label htmlFor="gridWidth">Grid Width:</Label>
-          <p className="text-sm text-muted-foreground">
-            Set the number of columns for the grid. Every grid cell is roughly
-            30x30cm.
-          </p>
+          <Label htmlFor="gridWidth">{t("beds.gridWidth")}</Label>
+          <p className="text-sm text-muted-foreground">{t("beds.gridHelp")}</p>
           <Input
             type="number"
             name="gridWidth"
@@ -190,11 +197,8 @@ export const EditBeds = () => {
           />
         </div>
         <div>
-          <Label htmlFor="gridWidth">Grid Height:</Label>
-          <p className="text-sm text-muted-foreground">
-            Set the number of rows for the grid. Every grid cell is roughly
-            30x30cm.
-          </p>
+          <Label htmlFor="gridWidth">{t("beds.gridHeight")}</Label>
+          <p className="text-sm text-muted-foreground">{t("beds.gridHelp")}</p>
           <Input
             type="number"
             name="gridHeight"
@@ -204,10 +208,8 @@ export const EditBeds = () => {
           />
         </div>
         <div>
-          <Label htmlFor="grid">Grid:</Label>
-          <p className="text-sm text-muted-foreground">
-            By clicking on a cell in the grid you can add seeds to it.
-          </p>
+          <Label htmlFor="grid">{t("beds.grid")}</Label>
+          <p className="text-sm text-muted-foreground">{t("beds.gridHelp2")}</p>
           <div className="flex mt-2">
             <div
               className={classNames(
@@ -224,7 +226,7 @@ export const EditBeds = () => {
                           className="p-2 bg-amber-900 text-white hover:text-white hover:bg-amber-800 border rounded-xl relative cursor-pointer"
                         >
                           <span className="absolute bottom-1 right-2 text-xs">
-                            <span className="sr-only">Cell</span>
+                            <span className="sr-only">{t("beds.cell")}</span>
                             {i + 1}
                           </span>
                           <div className="flex justify-center items-center">
@@ -241,15 +243,17 @@ export const EditBeds = () => {
                       <PopoverContent className="w-80">
                         <div className="grid gap-4">
                           <div className="space-y-2">
-                            <h4 className="font-medium leading-none">Seed</h4>
+                            <h4 className="font-medium leading-none">
+                              {t("seeds.seed")}
+                            </h4>
                             <p className="text-sm text-muted-foreground">
-                              Plant a seed for this grid cell.
+                              {t("beds.plantSeedInCell")}
                             </p>
                           </div>
                           <div className="grid gap-2">
                             <div className="flex gap-2">
                               <Label htmlFor="selectSeed" className="sr-only">
-                                Select Seed
+                                {t("core.select")} {t("seeds.seed")}
                               </Label>
                               <Select
                                 name="selectSeed"
@@ -266,7 +270,9 @@ export const EditBeds = () => {
                                 }
                               >
                                 <SelectTrigger className="w-full">
-                                  <SelectValue placeholder="Select Seed" />
+                                  <SelectValue
+                                    placeholder={`${t("core.select")} ${t("seeds.seed")}`}
+                                  />
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectGroup>
@@ -303,7 +309,7 @@ export const EditBeds = () => {
                 variant="secondary"
                 type="button"
                 className="h-full"
-                title="Add Column"
+                title={`${t("core.add")} ${t("beds.column")}`}
                 onClick={addColumn}
               >
                 <Plus />
@@ -312,7 +318,7 @@ export const EditBeds = () => {
                 variant="secondary"
                 type="button"
                 className="h-full"
-                title="Remove Column"
+                title={`${t("core.remove")} ${t("beds.column")}`}
                 onClick={removeColumn}
               >
                 <Minus />
@@ -324,7 +330,7 @@ export const EditBeds = () => {
               variant="secondary"
               type="button"
               className="w-full mt-2"
-              title="Add Row"
+              title={`${t("core.add")} ${t("beds.row")}`}
               onClick={addRow}
             >
               <Plus />
@@ -333,7 +339,7 @@ export const EditBeds = () => {
               variant="secondary"
               type="button"
               className="w-full mt-2"
-              title="Remove Row"
+              title={`${t("core.remove")} ${t("beds.row")}`}
               onClick={removeRow}
             >
               <Minus />
@@ -342,7 +348,7 @@ export const EditBeds = () => {
         </div>
 
         <div>
-          <Label htmlFor="notes">Notes:</Label>
+          <Label htmlFor="notes">{t("beds.notes")}</Label>
           <Textarea
             name="notes"
             value={bed.notes}
@@ -357,7 +363,7 @@ export const EditBeds = () => {
             className={classNames({ hidden: isCreate })}
             variant="destructive"
           >
-            Delete
+            {t("core.delete")}
           </Button>
           {useCanGoBack() && (
             <Button
@@ -365,10 +371,12 @@ export const EditBeds = () => {
               onClick={() => router.history.back()}
               variant="secondary"
             >
-              Cancel
+              {t("core.cancel")}
             </Button>
           )}
-          <Button type="submit">{isCreate ? "Create" : "Update"}</Button>
+          <Button type="submit">
+            {isCreate ? t("core.create") : t("core.update")}
+          </Button>
         </div>
       </form>
     </div>
