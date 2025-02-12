@@ -81,9 +81,7 @@ export const EditSeeds = () => {
 
     if (isNumeric(value)) {
       numberValue = parseInt(value, 10);
-      if (numberValue < 1) {
-        return;
-      }
+      if (isNaN(numberValue)) numberValue = undefined;
     }
 
     if (seed)
