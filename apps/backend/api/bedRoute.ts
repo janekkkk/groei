@@ -41,8 +41,7 @@ router.get("/:id", async (c) => {
 
 // Create a new bed with grid items
 router.post("/", async (c) => {
-  const body = await c.req.json();
-  const { grid, ...bedData } = body;
+  const { grid, ...bedData } = await c.req.json();
 
   const [newBed] = await db.insert(bedTable).values(bedData).returning();
 
@@ -50,7 +49,7 @@ router.post("/", async (c) => {
     await db.insert(gridItemTable).values(
       grid.map((gridItem: GridItem) => ({
         bedId: newBed.id,
-        seedId: gridItem?.seedId?.id,
+        seedId: gridItem?.seed?.id,
       })),
     );
   }
@@ -61,8 +60,7 @@ router.post("/", async (c) => {
 // Update a bed by ID
 router.put("/:id", async (c) => {
   const { id } = c.req.param();
-  const body = await c.req.json();
-  const { grid, ...bedData } = body;
+  const { grid, ...bedData } = await c.req.json();
 
   const [updatedBed] = await db
     .update(bedTable)
@@ -77,7 +75,7 @@ router.put("/:id", async (c) => {
     await db.insert(gridItemTable).values(
       grid.map((gridItem: GridItem) => ({
         bedId: id,
-        seedId: gridItem?.seedId?.id,
+        seedId: gridItem?.seed?.id,
       })),
     );
   }

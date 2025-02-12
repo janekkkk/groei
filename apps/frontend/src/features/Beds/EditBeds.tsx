@@ -84,7 +84,7 @@ export const EditBeds = () => {
   const handleSelectChange = (e: SelectChange) => {
     if (e.index !== undefined) {
       const grid = bed.grid;
-      grid[e.index] = { index: e.index, seedId: e.value as Seed };
+      grid[e.index] = { index: e.index, seed: e.value as Seed };
       setBed({ ...bed, grid, updatedAt: new Date() });
     }
   };
@@ -230,11 +230,11 @@ export const EditBeds = () => {
                             {i + 1}
                           </span>
                           <div className="flex justify-center items-center">
-                            {!bed?.grid?.[i]?.seedId && <Plus />}
+                            {!bed?.grid?.[i]?.seed?.id && <Plus />}
 
-                            {bed?.grid?.[i]?.seedId && (
+                            {bed?.grid?.[i]?.seed?.id && (
                               <span className=" text-white text-sm">
-                                {bed?.grid?.[i]?.seedId.name}
+                                {bed?.grid?.[i]?.seed?.name}
                               </span>
                             )}
                           </div>
@@ -258,16 +258,16 @@ export const EditBeds = () => {
                               <Select
                                 name="selectSeed"
                                 value={
-                                  bed?.grid?.[i]?.seedId as unknown as string
+                                  bed?.grid?.[i]?.seed?.id as unknown as string
                                 }
                                 defaultOpen
-                                onValueChange={(value) =>
+                                onValueChange={(value) => {
                                   handleSelectChange({
                                     name: "grid",
                                     index: i,
                                     value: value,
-                                  })
-                                }
+                                  });
+                                }}
                               >
                                 <SelectTrigger className="w-full">
                                   <SelectValue
