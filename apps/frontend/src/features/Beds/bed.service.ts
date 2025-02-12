@@ -9,7 +9,7 @@ class BedService {
 
     return response.json().then((beds: BedDTO[]) => {
       return beds.map(
-        (bed: BedDTO) =>
+        (bed) =>
           ({
             ...bed,
             createdAt: dateService.convertDate(bed.createdAt),
