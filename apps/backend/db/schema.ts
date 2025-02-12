@@ -1,5 +1,6 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { timestamps } from "./helpers.ts";
+import { relations } from "drizzle-orm";
 
 export const usersTable = sqliteTable("users_table", {
   name: text().notNull(),
@@ -32,8 +33,10 @@ export const seedsTable = sqliteTable("seeds_table", {
 
 export const gridItemTable = sqliteTable("grid_item_table", {
   id: integer().notNull().primaryKey({ autoIncrement: true }),
-  bedId: text().references(() => bedTable.id),
-  seedId: text().references(() => seedsTable.id),
+  seed: text(),
+  bedId: text()
+    .notNull()
+    .references(() => bedTable.id),
 });
 
 export const bedTable = sqliteTable("bed_table", {
@@ -47,3 +50,18 @@ export const bedTable = sqliteTable("bed_table", {
   gridHeight: integer(),
   ...timestamps,
 });
+
+export const bedRelations = relations(bedTable, ({ many }) => ({
+  grid: many(gridItemTable),
+}));
+
+export const gridItemRelations = relations(gridItemTable, ({ one }) => ({
+  seed: one(gridItemTable, {
+    fields: [gridItemTable.seed],
+    references: [gridItemTable.id],
+  }),
+  bed: one(bedTable, {
+    fields: [gridItemTable.bedId],
+    references: [bedTable.id],
+  }),
+}));

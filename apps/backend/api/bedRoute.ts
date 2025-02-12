@@ -1,28 +1,24 @@
 import { Hono } from "hono";
 import { db } from "../db/index.ts";
 import { eq } from "drizzle-orm";
-import { bedTable, gridItemTable, seedsTable } from "../db/schema.ts";
+import { bedTable, gridItemTable } from "../db/schema.ts";
 import { GridItem } from "@groei/common/src/models/Bed.ts";
 
 const router = new Hono();
 
 // Get all beds with their grid items
 router.get("/", async (c) => {
-  const beds = await db.select().from(bedTable);
-  const gridItems = await db.select().from(gridItemTable);
-  const seedItems = await db.select().from(seedsTable);
+  const result = await db.query.bedTable.findMany({
+    with: {
+      grid: {
+        with: {
+          seed: true,
+        },
+      },
+    },
+  });
 
-  const bedsWithGridItems = beds.map((bed) => ({
-    ...bed,
-    grid: gridItems
-      .filter((item) => item.bedId === bed.id)
-      .map((item) => ({
-        ...item,
-        seed: seedItems.find((seed) => seed.id === item.seedId),
-      })),
-  }));
-
-  return c.json(bedsWithGridItems);
+  return c.json(result);
 });
 
 // Get a single bed by ID with its grid items
@@ -51,7 +47,7 @@ router.post("/", async (c) => {
     await db.insert(gridItemTable).values(
       grid.map((gridItem: GridItem) => ({
         bedId: newBed.id,
-        seedId: gridItem?.seed?.id,
+        seedId: gridItem?.seedId?.id,
       })),
     );
   }
@@ -78,7 +74,7 @@ router.put("/:id", async (c) => {
     await db.insert(gridItemTable).values(
       grid.map((gridItem: GridItem) => ({
         bedId: id,
-        seedId: gridItem?.seed?.id,
+        seedId: gridItem?.seedId?.id,
       })),
     );
   }

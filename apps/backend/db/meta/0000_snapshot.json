@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f07e145c-340f-4828-9646-1b7e623c1dd8",
+  "id": "97564fcb-8a32-4ff7-ac6e-51f8ac0ba7d0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "bed_table": {
@@ -23,6 +23,13 @@
         },
         "description": {
           "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sow_date": {
+          "name": "sow_date",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -82,18 +89,18 @@
           "notNull": true,
           "autoincrement": true
         },
-        "bed_id": {
-          "name": "bed_id",
+        "seed": {
+          "name": "seed",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "seed_id": {
-          "name": "seed_id",
+        "bed_id": {
+          "name": "bed_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -104,15 +111,6 @@
           "tableFrom": "grid_item_table",
           "tableTo": "bed_table",
           "columnsFrom": ["bed_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "grid_item_table_seed_id_seeds_table_id_fk": {
-          "name": "grid_item_table_seed_id_seeds_table_id_fk",
-          "tableFrom": "grid_item_table",
-          "tableTo": "seeds_table",
-          "columnsFrom": ["seed_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -137,6 +135,20 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "germination_type": {
+          "name": "germination_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "pre_sprout": {
+          "name": "pre_sprout",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "sow_from": {
@@ -202,13 +214,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "plant_distance": {
-          "name": "plant_distance",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "number_of_seeds_per_grid_cell": {
           "name": "number_of_seeds_per_grid_cell",
           "type": "integer",
@@ -230,29 +235,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "quantity": {
-          "name": "quantity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "notes": {
           "name": "notes",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "tags": {
-          "name": "tags",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "photo": {
-          "name": "photo",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

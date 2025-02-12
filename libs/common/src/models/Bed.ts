@@ -19,10 +19,17 @@ export interface BedDTO extends Bed {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
-  gridId: number;
+  grid: number;
 }
 
 export interface GridItem {
   index: number;
-  seed?: Seed;
+  seedId?: Seed;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export interface GridItemDTO extends GridItem {
+  seedId?: string;
+  bedId: string;
 }

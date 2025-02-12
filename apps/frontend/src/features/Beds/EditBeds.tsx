@@ -84,7 +84,7 @@ export const EditBeds = () => {
   const handleSelectChange = (e: SelectChange) => {
     if (e.index !== undefined) {
       const grid = bed.grid;
-      grid[e.index] = { index: e.index, seed: e.value as Seed };
+      grid[e.index] = { index: e.index, seedId: e.value as Seed };
       setBed({ ...bed, grid, updatedAt: new Date() });
     }
   };
@@ -230,11 +230,11 @@ export const EditBeds = () => {
                             {i + 1}
                           </span>
                           <div className="flex justify-center items-center">
-                            {!bed?.grid?.[i]?.seed && <Plus />}
+                            {!bed?.grid?.[i]?.seedId && <Plus />}
 
-                            {bed?.grid?.[i]?.seed && (
+                            {bed?.grid?.[i]?.seedId && (
                               <span className=" text-white text-sm">
-                                {bed?.grid?.[i]?.seed.name}
+                                {bed?.grid?.[i]?.seedId.name}
                               </span>
                             )}
                           </div>
@@ -258,7 +258,7 @@ export const EditBeds = () => {
                               <Select
                                 name="selectSeed"
                                 value={
-                                  bed?.grid?.[i]?.seed as unknown as string
+                                  bed?.grid?.[i]?.seedId as unknown as string
                                 }
                                 defaultOpen
                                 onValueChange={(value) =>
