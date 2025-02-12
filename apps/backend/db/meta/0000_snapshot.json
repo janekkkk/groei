@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "97564fcb-8a32-4ff7-ac6e-51f8ac0ba7d0",
+  "id": "170a8c2d-bfe6-44f4-9f25-5322d23bf892",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "bed_table": {
@@ -89,8 +89,8 @@
           "notNull": true,
           "autoincrement": true
         },
-        "seed": {
-          "name": "seed",
+        "seed_id": {
+          "name": "seed_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

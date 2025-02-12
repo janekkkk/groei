@@ -33,7 +33,7 @@ export const seedsTable = sqliteTable("seeds_table", {
 
 export const gridItemTable = sqliteTable("grid_item_table", {
   id: integer().notNull().primaryKey({ autoIncrement: true }),
-  seed: text(),
+  seedId: text(),
   bedId: text()
     .notNull()
     .references(() => bedTable.id),
@@ -56,9 +56,9 @@ export const bedRelations = relations(bedTable, ({ many }) => ({
 }));
 
 export const gridItemRelations = relations(gridItemTable, ({ one }) => ({
-  seed: one(gridItemTable, {
-    fields: [gridItemTable.seed],
-    references: [gridItemTable.id],
+  seed: one(seedsTable, {
+    fields: [gridItemTable.seedId],
+    references: [seedsTable.id],
   }),
   bed: one(bedTable, {
     fields: [gridItemTable.bedId],

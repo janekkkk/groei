@@ -6,7 +6,7 @@ import { GridItem } from "@groei/common/src/models/Bed.ts";
 
 const router = new Hono();
 
-// Get all beds with their grid items
+// Get all beds with their grid items and their seeds
 router.get("/", async (c) => {
   const result = await db.query.bedTable.findMany({
     with: {
@@ -21,19 +21,22 @@ router.get("/", async (c) => {
   return c.json(result);
 });
 
-// Get a single bed by ID with its grid items
+// Get a single bed by ID with its grid items their seeds
 router.get("/:id", async (c) => {
   const { id } = c.req.param();
-  const bed = await db.select().from(bedTable).where(eq(bedTable.id, id));
 
-  if (!bed.length) return c.notFound();
+  const result = await db.query.bedTable.findFirst({
+    where: eq(bedTable.id, id),
+    with: {
+      grid: {
+        with: {
+          seed: true,
+        },
+      },
+    },
+  });
 
-  const gridItems = await db
-    .select()
-    .from(gridItemTable)
-    .where(eq(gridItemTable.bedId, id));
-
-  return c.json({ ...bed[0], gridItems });
+  return c.json(result);
 });
 
 // Create a new bed with grid items

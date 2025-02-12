@@ -12,7 +12,7 @@ CREATE TABLE `bed_table` (
 --> statement-breakpoint
 CREATE TABLE `grid_item_table` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`seed` text,
+	`seed_id` text,
 	`bed_id` text NOT NULL,
 	FOREIGN KEY (`bed_id`) REFERENCES `bed_table`(`id`) ON UPDATE no action ON DELETE no action
 );
