@@ -102,8 +102,9 @@ export const EditSeeds = () => {
       setSeed(getEmptySeed());
       nameInputRef?.current?.focus();
     } else {
-      console.log("update", { seed });
-      if (seed) updateSeed.mutate(seed);
+      if (seed) {
+        updateSeed.mutate(seed);
+      }
     }
   };
 
@@ -117,10 +118,8 @@ export const EditSeeds = () => {
   const initExistingSeed = useCallback(() => {
     const existingSeed = seeds.find((s) => s.id === seedId);
     if (seedId && !isCreate && existingSeed) {
-      console.log("found seed!", { existingSeed });
       setSeed(existingSeed as unknown as Seed);
     } else {
-      console.log("no seed found, creating new one");
       setSeed(getEmptySeed());
       nameInputRef?.current?.focus();
     }
@@ -129,10 +128,6 @@ export const EditSeeds = () => {
   useEffect(() => {
     initExistingSeed();
   }, [initExistingSeed]);
-
-  useEffect(() => {
-    console.log({ seed });
-  }, [seed]);
 
   return (
     <div>
