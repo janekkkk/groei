@@ -19,7 +19,7 @@ import { Button } from "@/shadcdn/components/ui/button";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { SelectChange } from "@/shared/select.model";
-import { Route } from "@/routes/seeds/$seedId.lazy";
+import { Route } from "@/routes/seeds/$seedId.tsx";
 import {
   GerminationType,
   Month,

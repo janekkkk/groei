@@ -1,7 +1,7 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { BedOverview } from "@/features/Beds/BedOverview";
 
-export const Route = createLazyFileRoute("/beds/")({
+export const Route = createFileRoute("/beds/")({
   component: RouteComponent,
 });
 

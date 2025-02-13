@@ -28,7 +28,7 @@ import {
 } from "@/shadcdn/components/ui/select";
 import { SelectChange } from "@/shared/select.model";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
-import { Route } from "@/routes/beds/$bedId.lazy";
+import { Route } from "@/routes/beds/$bedId.tsx";
 import { Seed } from "@groei/common/src/models/Seed";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import {

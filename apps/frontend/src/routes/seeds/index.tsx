@@ -1,7 +1,7 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SeedOverview } from "@/features/Seeds/SeedOverview";
 
-export const Route = createLazyFileRoute("/seeds/")({
+export const Route = createFileRoute("/seeds/")({
   component: RouteComponent,
 });
 
