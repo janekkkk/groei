@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "170a8c2d-bfe6-44f4-9f25-5322d23bf892",
+  "id": "16b101ce-0840-4605-af34-43a172e3cbec",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "bed_table": {
@@ -110,8 +110,12 @@
           "name": "grid_item_table_bed_id_bed_table_id_fk",
           "tableFrom": "grid_item_table",
           "tableTo": "bed_table",
-          "columnsFrom": ["bed_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "bed_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

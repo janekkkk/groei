@@ -16,6 +16,7 @@ export interface Seed {
   notes?: string;
   preSprout?: boolean;
   germinationType: GerminationType;
+  perennial?: boolean; // ToDo add to form
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
