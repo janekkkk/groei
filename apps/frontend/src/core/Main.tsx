@@ -13,6 +13,7 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Main = () => {
   const queryClient = new QueryClient();
+  const isDev = import.meta.env.MODE === "development";
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -31,8 +32,12 @@ export const Main = () => {
         </SidebarProvider>
       </ThemeProvider>
 
-      <ReactQueryDevtools initialIsOpen={false} />
-      <TanStackRouterDevtools />
+      {isDev && (
+        <>
+          <ReactQueryDevtools />
+          <TanStackRouterDevtools />
+        </>
+      )}
     </QueryClientProvider>
   );
 };
