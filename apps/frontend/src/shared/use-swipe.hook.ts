@@ -16,8 +16,14 @@ interface SwipeOutput {
  * import useSwipe from "whatever-path/useSwipe";
  * const swipeHandlers = useSwipe({ onSwipedLeft: () => console.log('left'), onSwipedRight: () => console.log('right') });
  * <div {...swipeHandlers}>some swipeable div (or whatever html tag)</div>
+ * @param input - the input object with the callbacks for left and right swipe
+ * @param leftSwipeThresholdPercentage - the percentage of the screen width from the left side where the swipe should be detected, for instance for menu bar only opening on left 10% of the screen.
  */
-export const useSwipe = (input: SwipeInput): SwipeOutput => {
+export const useSwipe = (
+  input: SwipeInput,
+  leftSwipeThresholdPercentage?: number,
+  rightSwipeThresholdPercentage?: number,
+): SwipeOutput => {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
@@ -36,11 +42,28 @@ export const useSwipe = (input: SwipeInput): SwipeOutput => {
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
-    if (isLeftSwipe) {
-      input.onSwipedLeft();
-    }
-    if (isRightSwipe) {
-      input.onSwipedRight();
+    const screenWidth = window.innerWidth;
+
+    console.log({ isLeftSwipe, isRightSwipe });
+
+    if (rightSwipeThresholdPercentage && isRightSwipe) {
+      const rightThreshold =
+        screenWidth * (rightSwipeThresholdPercentage / 100);
+      if (touchStart <= rightThreshold) {
+        input.onSwipedRight();
+      }
+    } else if (leftSwipeThresholdPercentage && isLeftSwipe) {
+      const leftThreshold = screenWidth * (leftSwipeThresholdPercentage / 100);
+      if (touchStart >= leftThreshold) {
+        input.onSwipedLeft();
+      }
+    } else {
+      if (isLeftSwipe) {
+        input.onSwipedLeft();
+      }
+      if (isRightSwipe) {
+        input.onSwipedRight();
+      }
     }
   };
 

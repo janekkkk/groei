@@ -44,7 +44,7 @@ const getEmptyBed = (): Bed =>
     id: crypto.randomUUID(),
     name: "",
     notes: "",
-    gridWidth: 2,
+    gridWidth: 7,
     gridHeight: 2,
     grid: [],
     sowDate: new Date().toISOString().substring(0, 10),
@@ -203,119 +203,131 @@ export const EditBeds = () => {
         <div>
           <Label htmlFor="grid">{t("beds.grid")}</Label>
           <p className="text-sm text-muted-foreground">{t("beds.gridHelp2")}</p>
-          <div className="flex mt-2">
-            <div
-              className={classNames(
-                `grow grid gap-1 pr-2 grid-cols-${bed.gridWidth} grid-rows-${bed.gridHeight}`,
-              )}
-            >
-              {Array.from({ length: bed.gridWidth * bed.gridHeight }).map(
-                (_, i) => {
-                  return (
-                    <Popover key={i}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="p-2 bg-amber-900 text-white hover:text-white hover:bg-amber-800 border rounded-xl relative cursor-pointer"
-                        >
-                          <span className="absolute bottom-1 right-2 text-xs">
-                            <span className="sr-only">{t("beds.cell")}</span>
-                            {i + 1}
-                          </span>
-                          <div className="flex justify-center items-center">
-                            {!bed?.grid?.[i]?.seed?.id && <Plus />}
-
-                            {bed?.grid?.[i]?.seed?.id && (
-                              <span className=" text-white text-sm">
-                                {bed?.grid?.[i]?.seed?.name}
+          <div className="relative mt-2">
+            <div className="flex">
+              <div className="overflow-x-auto max-w-full grow">
+                <div
+                  className="grid gap-1 w-max min-w-full pr-2"
+                  style={{
+                    gridTemplateColumns: `repeat(${bed.gridWidth}, minmax(120px, max-content))`,
+                    gridTemplateRows: `repeat(${bed.gridHeight}, 1fr)`,
+                  }}
+                >
+                  {Array.from({ length: bed.gridWidth * bed.gridHeight }).map(
+                    (_, i) => {
+                      return (
+                        <Popover key={i}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="p-2 bg-amber-900 text-white hover:text-white hover:bg-amber-800 border rounded-xl relative cursor-pointer"
+                            >
+                              <span className="absolute bottom-1 right-2 text-xs">
+                                <span className="sr-only">
+                                  {t("beds.cell")}
+                                </span>
+                                {i + 1}
                               </span>
-                            )}
-                          </div>
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-80">
-                        <div className="grid gap-4">
-                          <div className="space-y-2">
-                            <h4 className="font-medium leading-none">
-                              {t("seeds.seed")}
-                            </h4>
-                            <p className="text-sm text-muted-foreground">
-                              {t("beds.plantSeedInCell")}
-                            </p>
-                          </div>
-                          <div className="grid gap-2">
-                            <div className="flex gap-2">
-                              <Label htmlFor="selectSeed" className="sr-only">
-                                {t("core.select")} {t("seeds.seed")}
-                              </Label>
-                              <Select
-                                name="selectSeed"
-                                value={
-                                  bed?.grid?.[i]?.seed?.id as unknown as string
-                                }
-                                defaultOpen
-                                onValueChange={(value) => {
-                                  handleSelectChange({
-                                    name: "grid",
-                                    index: i,
-                                    value: value,
-                                  });
-                                }}
-                              >
-                                <SelectTrigger className="w-full">
-                                  <SelectValue
-                                    placeholder={`${t("core.select")} ${t("seeds.seed")}`}
-                                  />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectGroup>
-                                    <SelectItem
-                                      value={null as unknown as string}
-                                    >
-                                      None
-                                    </SelectItem>
-                                    {seeds.map((seed) => (
-                                      <SelectItem
-                                        key={seed.name}
-                                        value={seed as unknown as string}
-                                      >
-                                        {seed.name}{" "}
-                                        {seed.variety && (
-                                          <span> - {seed.variety}</span>
-                                        )}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectGroup>
-                                </SelectContent>
-                              </Select>
+                              <div className="flex justify-center items-center">
+                                {!bed?.grid?.[i]?.seed?.id && <Plus />}
+
+                                {bed?.grid?.[i]?.seed?.id && (
+                                  <span className=" text-white text-sm truncate">
+                                    {bed?.grid?.[i]?.seed?.name}
+                                  </span>
+                                )}
+                              </div>
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="grid gap-4">
+                              <div className="space-y-2">
+                                <h4 className="font-medium leading-none">
+                                  {t("seeds.seed")}
+                                </h4>
+                                <p className="text-sm text-muted-foreground">
+                                  {t("beds.plantSeedInCell")}
+                                </p>
+                              </div>
+                              <div className="grid gap-2">
+                                <div className="flex gap-2">
+                                  <Label
+                                    htmlFor="selectSeed"
+                                    className="sr-only"
+                                  >
+                                    {t("core.select")} {t("seeds.seed")}
+                                  </Label>
+                                  <Select
+                                    name="selectSeed"
+                                    value={
+                                      bed?.grid?.[i]?.seed
+                                        ?.id as unknown as string
+                                    }
+                                    defaultOpen
+                                    onValueChange={(value) => {
+                                      handleSelectChange({
+                                        name: "grid",
+                                        index: i,
+                                        value: value,
+                                      });
+                                    }}
+                                  >
+                                    <SelectTrigger className="w-full">
+                                      <SelectValue
+                                        placeholder={`${t("core.select")} ${t("seeds.seed")}`}
+                                      />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectGroup>
+                                        <SelectItem
+                                          value={null as unknown as string}
+                                        >
+                                          None
+                                        </SelectItem>
+                                        {seeds.map((seed) => (
+                                          <SelectItem
+                                            key={seed.name}
+                                            value={seed as unknown as string}
+                                          >
+                                            {seed.name}{" "}
+                                            {seed.variety && (
+                                              <span> - {seed.variety}</span>
+                                            )}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectGroup>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  );
-                },
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <Button
-                variant="secondary"
-                type="button"
-                className="h-full"
-                title={`${t("core.add")} ${t("beds.column")}`}
-                onClick={addColumn}
-              >
-                <Plus />
-              </Button>
-              <Button
-                variant="secondary"
-                type="button"
-                className="h-full"
-                title={`${t("core.remove")} ${t("beds.column")}`}
-                onClick={removeColumn}
-              >
-                <Minus />
-              </Button>
+                          </PopoverContent>
+                        </Popover>
+                      );
+                    },
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Button
+                  variant="secondary"
+                  type="button"
+                  className="h-full"
+                  title={`${t("core.add")} ${t("beds.column")}`}
+                  onClick={addColumn}
+                >
+                  <Plus />
+                </Button>
+                <Button
+                  variant="secondary"
+                  type="button"
+                  className="h-full"
+                  title={`${t("core.remove")} ${t("beds.column")}`}
+                  onClick={removeColumn}
+                >
+                  <Minus />
+                </Button>
+              </div>
             </div>
           </div>
           <div className="flex gap-1">

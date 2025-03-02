@@ -13,10 +13,14 @@ export const MainLayout = ({ children }: Props) => {
   useBedsQuery();
 
   const { toggleSidebar } = useSidebar();
-  const swipeHandlers = useSwipe({
-    onSwipedLeft: () => {},
-    onSwipedRight: toggleSidebar,
-  });
+  const swipeHandlers = useSwipe(
+    {
+      onSwipedLeft: () => {},
+      onSwipedRight: toggleSidebar,
+    },
+    100,
+    10, // Only swipe the left side of the screen to open the sidebar. (10% of screen width)
+  );
 
   return (
     <div
