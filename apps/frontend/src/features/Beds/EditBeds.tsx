@@ -286,17 +286,25 @@ export const EditBeds = () => {
                                         >
                                           None
                                         </SelectItem>
-                                        {seeds.map((seed) => (
-                                          <SelectItem
-                                            key={seed.name}
-                                            value={seed as unknown as string}
-                                          >
-                                            {seed.name}{" "}
-                                            {seed.variety && (
-                                              <span> - {seed.variety}</span>
-                                            )}
-                                          </SelectItem>
-                                        ))}
+                                        {seeds
+                                          .sort((a: Seed, b: Seed) =>
+                                            a.name
+                                              .toLowerCase()
+                                              .localeCompare(
+                                                b.name.toLowerCase(),
+                                              ),
+                                          )
+                                          .map((seed) => (
+                                            <SelectItem
+                                              key={seed.name}
+                                              value={seed as unknown as string}
+                                            >
+                                              {seed.name}{" "}
+                                              {seed.variety && (
+                                                <span> - {seed.variety}</span>
+                                              )}
+                                            </SelectItem>
+                                          ))}
                                       </SelectGroup>
                                     </SelectContent>
                                   </Select>
