@@ -13,21 +13,7 @@ import { useBedStore } from "./beds.store";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { classNames } from "@/shared/utils";
 import { Minus, Plus } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/shadcdn/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shadcdn/components/ui/select";
 import { SelectChange } from "@/shared/select.model";
-import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { Route } from "@/routes/beds/$bedId.tsx";
 import { Seed } from "@groei/common/src/models/Seed";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
@@ -38,6 +24,7 @@ import {
 } from "@/features/Beds/useBedQuery";
 import { isNumeric } from "@/shared/utils/is-numeric.helper";
 import { useTranslation } from "react-i18next";
+import { GridItem } from "@/features/Beds/grid/GridItem.tsx";
 
 const getEmptyBed = (): Bed =>
   ({
@@ -57,7 +44,6 @@ export const EditBeds = () => {
   const updateBed = useUpdateBedMutation();
   const deleteBed = useDeleteBedMutation();
   const { beds } = useBedStore((state) => state);
-  const { seeds } = useSeedStore((state) => state);
   const [bed, setBed] = useState<Bed>(getEmptyBed());
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { bedId } = Route.useParams();
@@ -218,101 +204,12 @@ export const EditBeds = () => {
                   {Array.from({ length: bed.gridWidth * bed.gridHeight }).map(
                     (_, i) => {
                       return (
-                        <Popover key={i}>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className="p-2 bg-amber-900 text-white hover:text-white hover:bg-amber-800 border rounded-xl relative cursor-pointer"
-                            >
-                              <span className="absolute bottom-1 right-2 text-xs">
-                                <span className="sr-only">
-                                  {t("beds.cell")}
-                                </span>
-                                {i + 1}
-                              </span>
-                              <div className="flex justify-center items-center">
-                                {!bed?.grid?.[i]?.seed?.id && <Plus />}
-
-                                {bed?.grid?.[i]?.seed?.id && (
-                                  <span className=" text-white text-sm truncate">
-                                    {bed?.grid?.[i]?.seed?.name}
-                                  </span>
-                                )}
-                              </div>
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-80">
-                            <div className="grid gap-4">
-                              <div className="space-y-2">
-                                <h4 className="font-medium leading-none">
-                                  {t("seeds.seed")}
-                                </h4>
-                                <p className="text-sm text-muted-foreground">
-                                  {t("beds.plantSeedInCell")}
-                                </p>
-                              </div>
-                              <div className="grid gap-2">
-                                <div className="flex gap-2">
-                                  <Label
-                                    htmlFor="selectSeed"
-                                    className="sr-only"
-                                  >
-                                    {t("core.select")} {t("seeds.seed")}
-                                  </Label>
-                                  <Select
-                                    name="selectSeed"
-                                    value={
-                                      bed?.grid?.[i]?.seed
-                                        ?.id as unknown as string
-                                    }
-                                    defaultOpen
-                                    onValueChange={(value) => {
-                                      handleSelectChange({
-                                        name: "grid",
-                                        index: i,
-                                        value: value,
-                                      });
-                                    }}
-                                  >
-                                    <SelectTrigger className="w-full">
-                                      <SelectValue
-                                        placeholder={`${t("core.select")} ${t("seeds.seed")}`}
-                                      />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectGroup>
-                                        <SelectItem
-                                          value={null as unknown as string}
-                                        >
-                                          None
-                                        </SelectItem>
-                                        {seeds
-                                          .sort((a: Seed, b: Seed) =>
-                                            a.name
-                                              .toLowerCase()
-                                              .localeCompare(
-                                                b.name.toLowerCase(),
-                                              ),
-                                          )
-                                          .map((seed) => (
-                                            <SelectItem
-                                              key={seed.name}
-                                              value={seed as unknown as string}
-                                            >
-                                              {seed.name}{" "}
-                                              {seed.variety && (
-                                                <span> - {seed.variety}</span>
-                                              )}
-                                            </SelectItem>
-                                          ))}
-                                      </SelectGroup>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                              </div>
-                            </div>
-                          </PopoverContent>
-                        </Popover>
+                        <GridItem
+                          key={i}
+                          handleSelectChange={handleSelectChange}
+                          seed={bed?.grid?.[i]?.seed}
+                          index={i}
+                        />
                       );
                     },
                   )}
