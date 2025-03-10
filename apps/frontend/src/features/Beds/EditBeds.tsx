@@ -187,6 +187,7 @@ export const EditBeds = () => {
             value={bed.gridWidth}
             onChange={handleInputChange}
             required
+            disabled={!isCreate}
           />
         </div>
         <div>
@@ -198,6 +199,7 @@ export const EditBeds = () => {
             value={bed.gridHeight}
             onChange={handleInputChange}
             required
+            disabled={!isCreate}
           />
         </div>
         <div>
@@ -315,6 +317,7 @@ export const EditBeds = () => {
                   className="h-full"
                   title={`${t("core.add")} ${t("beds.column")}`}
                   onClick={addColumn}
+                  disabled={!isCreate}
                 >
                   <Plus />
                 </Button>
@@ -324,6 +327,7 @@ export const EditBeds = () => {
                   className="h-full"
                   title={`${t("core.remove")} ${t("beds.column")}`}
                   onClick={removeColumn}
+                  disabled={!isCreate}
                 >
                   <Minus />
                 </Button>
@@ -337,6 +341,7 @@ export const EditBeds = () => {
               className="w-full mt-2"
               title={`${t("core.add")} ${t("beds.row")}`}
               onClick={addRow}
+              disabled={!isCreate}
             >
               <Plus />
             </Button>
@@ -346,6 +351,7 @@ export const EditBeds = () => {
               className="w-full mt-2"
               title={`${t("core.remove")} ${t("beds.row")}`}
               onClick={removeRow}
+              disabled={!isCreate}
             >
               <Minus />
             </Button>
