@@ -73,10 +73,9 @@ export const GridItem = ({ seed, index, handleSelectChange }: Props) => {
               </Label>
               <Select
                 name="selectSeed"
-                value={seed?.id as unknown as string}
+                value={seed as unknown as string}
                 defaultOpen
                 onValueChange={(value) => {
-                  console.log({ value });
                   if (value && value !== seed?.id)
                     handleSelectChange({
                       name: "grid",
