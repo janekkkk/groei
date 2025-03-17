@@ -101,6 +101,7 @@ export const EditBeds = () => {
       createBed.mutate(bed);
       setBed(getEmptyBed());
       nameInputRef?.current?.focus();
+      router.navigate({ to: "/beds" });
     } else {
       updateBed.mutate(bed);
     }
