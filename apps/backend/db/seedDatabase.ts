@@ -1,6 +1,6 @@
 import { bedTable, gridItemTable, seedsTable, usersTable } from "./schema.ts";
 import { db } from "./index.ts";
-import { User } from "@groei/common/src/models/user.ts";
+import { User } from "@groei/common/src/models/User.ts";
 import { Month, PlantHeight, SeedDTO } from "@groei/common/src/models/Seed.ts";
 import { BedDTO, GridItemDTO } from "@groei/common/src/models/Bed.ts";
 
