@@ -53,7 +53,14 @@ export const GridItem = ({ seed, index, handleSelectChange }: Props) => {
             {!seed?.id && <Plus />}
 
             {seed?.id && (
-              <span className=" text-white text-sm truncate">{seed?.name}</span>
+              <div className="flex flex-col items-center w-full">
+                <span className=" text-white text-sm truncate">
+                  {seed?.name}
+                </span>
+                <span className=" text-white text-xs truncate w-9/12">
+                  {seed?.variety}
+                </span>
+              </div>
             )}
           </div>
         </Button>
