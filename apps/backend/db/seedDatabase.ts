@@ -12,7 +12,7 @@ const main = async () => {
     avatar: "https://example.com/avatar.jpg",
   };
 
-  const seeds: SeedDTO[] = [
+  const februarySeeds: SeedDTO[] = [
     {
       id: crypto.randomUUID(),
       name: "Tomaat",
@@ -190,6 +190,233 @@ const main = async () => {
     },
   ] as SeedDTO[];
 
+  const marchSeeds: SeedDTO[] = [
+    {
+      id: crypto.randomUUID(),
+      name: "Kamille",
+      variety: "",
+      sowFrom: Month.March,
+      sowTill: Month.June,
+      plantFrom: Month.March,
+      plantTill: Month.June,
+      harvestFrom: Month.April,
+      harvestTill: Month.October,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Aubergine",
+      variety: "Black Beauty",
+      sowFrom: Month.March,
+      sowTill: Month.April,
+      plantFrom: Month.March,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Prei",
+      variety: "Winterreuzen 3",
+      sowFrom: Month.March,
+      sowTill: Month.May,
+      plantFrom: Month.March,
+      plantTill: Month.May,
+      plantHeight: PlantHeight.MEDIUM,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Basilicum",
+      variety: "Bascuro Darkgreen",
+      sowFrom: Month.March,
+      sowTill: Month.July,
+      plantFrom: Month.May,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Majoraan",
+      variety: "Majorana Hortensis",
+      sowFrom: Month.March,
+      sowTill: Month.July,
+      plantFrom: Month.May,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Wortel",
+      variety: "Zomer Nantes 2",
+      sowFrom: Month.March,
+      sowTill: Month.July,
+      plantFrom: Month.March,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Tatsoi",
+      variety: "Brassica Narinosa",
+      sowFrom: Month.March,
+      sowTill: Month.August,
+      plantFrom: Month.March,
+      plantTill: Month.August,
+      plantHeight: PlantHeight.MEDIUM,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Spinazie",
+      variety: "Viking",
+      sowFrom: Month.March,
+      sowTill: Month.October,
+      plantFrom: Month.March,
+      plantTill: Month.October,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Wintersla",
+      variety: "Merveile D'hiver",
+      sowFrom: Month.March,
+      sowTill: Month.October,
+      plantFrom: Month.March,
+      plantTill: Month.October,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Rucola",
+      variety: "Eruca Sativa",
+      sowFrom: Month.March,
+      sowTill: Month.October,
+      plantFrom: Month.March,
+      plantTill: Month.October,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Bindsla",
+      variety: "Mini Little Gem",
+      sowFrom: Month.March,
+      sowTill: Month.September,
+      plantFrom: Month.March,
+      plantTill: Month.September,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Marjolein",
+      variety: "Wilde / Oregano",
+      sowFrom: Month.March,
+      sowTill: Month.June,
+      plantFrom: Month.March,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 2,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Salie",
+      variety: "Salvia officinialis",
+      sowFrom: Month.March,
+      sowTill: Month.June,
+      plantFrom: Month.March,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.SHORT,
+      perennial: true,
+      numberOfSeedsPerGridCell: 2,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Maggikruid Lavas",
+      variety: "Levisticum Officinale",
+      sowFrom: Month.March,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.TALL,
+      perennial: true,
+      numberOfSeedsPerGridCell: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Afrikaan Tagetes",
+      variety: "Bonita",
+      sowFrom: Month.March,
+      sowTill: Month.May,
+      plantFrom: Month.April,
+      plantTill: Month.May,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Winterpostelein",
+      variety: "Purslain",
+      sowFrom: Month.March,
+      sowTill: Month.October,
+      plantFrom: Month.March,
+      plantTill: Month.October,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Pluksla",
+      variety: "Australische gele",
+      sowFrom: Month.March,
+      sowTill: Month.October,
+      plantFrom: Month.March,
+      plantTill: Month.October,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Bleekselderij",
+      variety: "Goudgele zelfblekende 2",
+      sowFrom: Month.February,
+      sowTill: Month.May,
+      plantFrom: Month.March,
+      plantTill: Month.May,
+      plantHeight: PlantHeight.MEDIUM,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Radijs",
+      variety: "Ronde soorten gemengd",
+      sowFrom: Month.March,
+      sowTill: Month.August,
+      plantFrom: Month.March,
+      plantTill: Month.August,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Snijbiet",
+      variety: "Bright Lights",
+      sowFrom: Month.March,
+      sowTill: Month.August,
+      plantFrom: Month.March,
+      plantTill: Month.August,
+      plantHeight: PlantHeight.MEDIUM,
+      numberOfSeedsPerGridCell: 4,
+    },
+  ] as SeedDTO[];
+
   const bed: BedDTO = {
     id: crypto.randomUUID(),
     name: "Voorbeeldbed",
@@ -200,23 +427,28 @@ const main = async () => {
 
   const gridItem: GridItemDTO = {
     index: 1,
-    seedId: seeds[0].id,
+    seedId: februarySeeds[0].id,
     bedId: bed.id,
   };
 
-  await db.delete(usersTable).where(eq(usersTable.email, user.email));
-  console.log("User deleted!");
+  // await db.delete(usersTable).where(eq(usersTable.email, user.email));
+  // console.log("User deleted!");
+  //
+  // await db.delete(seedsTable).where(eq(seedsTable.id, seeds[0].id));
+  // console.log("Seed deleted!");
+  //
+  // await db.insert(usersTable).values(user);
+  // console.log("New user created!");
 
-  await db.delete(seedsTable).where(eq(seedsTable.id, seeds[0].id));
-  console.log("Seed deleted!");
+  // for (const seed of februarySeeds) {
+  //   await db.insert(seedsTable).values(seed);
+  // }
+  // console.log("February seeds created!");
 
-  await db.insert(usersTable).values(user);
-  console.log("New user created!");
-
-  for (const seed of seeds) {
+  for (const seed of marchSeeds) {
     await db.insert(seedsTable).values(seed);
   }
-  console.log("New seeds created!");
+  console.log("March seeds created!");
 
   // await db.insert(bedTable).values(bed);
   // console.log("New bed created!");

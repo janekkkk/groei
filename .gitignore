@@ -130,3 +130,5 @@ dev-dist/
 vite.config.ts.timestamp*
 
 tsconfig.tsbuildinfo
+
+apps/backend/db.sqlite
