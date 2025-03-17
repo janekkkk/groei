@@ -1,4 +1,3 @@
-import { eq } from "drizzle-orm";
 import { bedTable, gridItemTable, seedsTable, usersTable } from "./schema.ts";
 import { db } from "./index.ts";
 import { User } from "@groei/common/src/models/user.ts";
@@ -431,30 +430,24 @@ const main = async () => {
     bedId: bed.id,
   };
 
-  // await db.delete(usersTable).where(eq(usersTable.email, user.email));
-  // console.log("User deleted!");
-  //
-  // await db.delete(seedsTable).where(eq(seedsTable.id, seeds[0].id));
-  // console.log("Seed deleted!");
-  //
-  // await db.insert(usersTable).values(user);
-  // console.log("New user created!");
+  await db.insert(usersTable).values(user);
+  console.log("New user created!");
 
-  // for (const seed of februarySeeds) {
-  //   await db.insert(seedsTable).values(seed);
-  // }
-  // console.log("February seeds created!");
+  for (const seed of februarySeeds) {
+    await db.insert(seedsTable).values(seed);
+  }
+  console.log("February seeds created!");
 
   for (const seed of marchSeeds) {
     await db.insert(seedsTable).values(seed);
   }
   console.log("March seeds created!");
 
-  // await db.insert(bedTable).values(bed);
-  // console.log("New bed created!");
-  //
-  // await db.insert(gridItemTable).values(gridItem);
-  // console.log("New grid item created!");
+  await db.insert(bedTable).values(bed);
+  console.log("New bed created!");
+
+  await db.insert(gridItemTable).values(gridItem);
+  console.log("New grid item created!");
 };
 
 main();
