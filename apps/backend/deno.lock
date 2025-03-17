@@ -20,6 +20,7 @@
         "npm:@jsr/hono__hono@^4.6.1",
         "npm:@libsql/client@0.14",
         "npm:better-sqlite3@^11.8.1",
+        "npm:cross-env@^7.0.3",
         "npm:dotenv@^16.4.7",
         "npm:drizzle-kit@~0.30.4",
         "npm:drizzle-orm@~0.39.1",
