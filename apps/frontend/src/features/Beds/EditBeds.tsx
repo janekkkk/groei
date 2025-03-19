@@ -25,6 +25,7 @@ import {
 import { isNumeric } from "@/shared/utils/is-numeric.helper";
 import { useTranslation } from "react-i18next";
 import { GridItem } from "@/features/Beds/grid/GridItem.tsx";
+import { useToast } from "@/shadcdn/hooks/use-toast.ts";
 
 const getEmptyBed = (): Bed =>
   ({
@@ -50,6 +51,7 @@ export const EditBeds = () => {
   const isCreate = Number(bedId) === -1;
   const router = useRouter();
   const { t } = useTranslation();
+  const { toast } = useToast();
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -98,11 +100,17 @@ export const EditBeds = () => {
 
   const handleSubmit = () => {
     if (isCreate) {
+      toast({
+        title: `${t("beds.bed")} ${t("core.created")}`,
+      });
       createBed.mutate(bed);
       setBed(getEmptyBed());
       nameInputRef?.current?.focus();
       router.navigate({ to: "/beds" });
     } else {
+      toast({
+        title: `${t("beds.bed")} ${t("core.updated")}`,
+      });
       updateBed.mutate(bed);
     }
   };

@@ -19,7 +19,10 @@
     "search": "zoeken",
     "create": "aanmaken",
     "update": "bijwerken",
-    "remove": "verwijderen"
+    "remove": "verwijderen",
+    "created": "aangemaakt",
+    "updated": "bijgewerkt",
+    "removed": "verwijderd"
   },
   "months": {
     "january": "januari",
@@ -58,6 +61,7 @@
   },
   "beds": {
     "title": "bedden",
+    "bed": "bed",
     "name": "naam",
     "sowDate": "zaaidatum",
     "gridWidth": "rasterbreedte",

@@ -19,7 +19,10 @@
     "search": "search",
     "create": "create",
     "update": "update",
-    "remove": "remove"
+    "remove": "remove",
+    "created": "created",
+    "updated": "updated",
+    "removed": "removed"
   },
   "months": {
     "january": "january",
@@ -58,6 +61,7 @@
   },
   "beds": {
     "title": "beds",
+    "bed": "bed",
     "name": "name",
     "sowDate": "sow date",
     "gridWidth": "grid width",

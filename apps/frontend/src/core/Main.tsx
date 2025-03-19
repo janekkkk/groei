@@ -10,6 +10,7 @@ import { ThemeToggle } from "@/core/theme/ThemeToggle.tsx";
 import { Outlet } from "@tanstack/react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { Toaster } from "@/shadcdn/components/ui/toaster.tsx";
 
 export const Main = () => {
   const queryClient = new QueryClient();
@@ -20,7 +21,8 @@ export const Main = () => {
       <ThemeProvider>
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full ">
+          <main className="w-full">
+            <Toaster />
             <MainLayout>
               <SidebarTrigger className="absolute left-2 top-2" />
               <ThemeToggle className="absolute right-2 top-2" />

@@ -37,6 +37,7 @@ import { Checkbox } from "@/shadcdn/components/ui/checkbox.tsx";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { isNumeric } from "@/shared/utils/is-numeric.helper.ts";
 import { useTranslation } from "react-i18next";
+import { useToast } from "@/shadcdn/hooks/use-toast.ts";
 
 const getEmptySeed = (): Seed => ({
   id: crypto.randomUUID(),
@@ -72,6 +73,7 @@ export const EditSeeds = () => {
   const isCreate = Number(seedId) === -1;
   const router = useRouter();
   const { t } = useTranslation();
+  const { toast } = useToast();
 
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -98,11 +100,17 @@ export const EditSeeds = () => {
 
   const handleSubmit = () => {
     if (isCreate && seed) {
+      toast({
+        title: `${t("seeds.seed")} ${t("core.created")}`,
+      });
       createSeed.mutate(seed);
       setSeed(getEmptySeed());
       nameInputRef?.current?.focus();
     } else {
       if (seed) {
+        toast({
+          title: `${t("seeds.seed")} ${t("core.updated")}`,
+        });
         updateSeed.mutate(seed);
       }
     }
