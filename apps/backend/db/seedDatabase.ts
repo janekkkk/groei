@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// noinspection ES6UnusedImports
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { bedTable, gridItemTable, seedsTable, usersTable } from "./schema.ts";
 import { db } from "./index.ts";
 import { User } from "@groei/common/src/models/User.ts";
@@ -416,6 +421,240 @@ const main = async () => {
     },
   ] as SeedDTO[];
 
+  const aprilSeeds = [
+    {
+      id: crypto.randomUUID(),
+      name: "Eetbare bloemen",
+      variety: "Mix",
+      sowFrom: Month.March,
+      sowTill: Month.June,
+      plantFrom: Month.March,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.MEDIUM,
+      numberOfSeedsPerGridCell: 30,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Courgette",
+      variety: "Black Beauty",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Kalletes",
+      variety: "Boerenkool Spruiten F1",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.TALL,
+      numberOfSeedsPerGridCell: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Dille",
+      variety: "",
+      sowFrom: Month.April,
+      sowTill: Month.July,
+      plantFrom: Month.April,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Stoksnijbonen",
+      variety: "Helda",
+      sowFrom: Month.April,
+      sowTill: Month.July,
+      plantFrom: Month.April,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.CLIMBER,
+      numberOfSeedsPerGridCell: 2,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Veldsla",
+      variety: "Verte a couer plein 2",
+      sowFrom: Month.April,
+      sowTill: Month.July,
+      plantFrom: Month.April,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Koolrapen",
+      variety: "Champion",
+      sowFrom: Month.April,
+      sowTill: Month.July,
+      plantFrom: Month.April,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Koolrapen",
+      variety: "Champion",
+      sowFrom: Month.April,
+      sowTill: Month.July,
+      plantFrom: Month.April,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Spruiten",
+      variety: "Groninger",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.TALL,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Koriander",
+      variety: "",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.TALL,
+      numberOfSeedsPerGridCell: 9,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Rode Biet",
+      variety: "Kogel 5 Loki",
+      sowFrom: Month.April,
+      sowTill: Month.July,
+      plantFrom: Month.April,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Zonnebloem",
+      variety: "Evening Sun",
+      sowFrom: Month.April,
+      sowTill: Month.July,
+      plantFrom: Month.April,
+      plantTill: Month.July,
+      plantHeight: PlantHeight.TALL,
+      numberOfSeedsPerGridCell: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Witte Kool",
+      variety: "Langedijker Bewaar",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.MEDIUM,
+      numberOfSeedsPerGridCell: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Komkommer",
+      variety: "Marketmore",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.CLIMBER,
+      numberOfSeedsPerGridCell: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Bieslook",
+      variety: "Commune",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 20,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Basilicum",
+      variety: "Kaneel, Cinnamon",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "NZ Spinazie",
+      variety: "",
+      sowFrom: Month.April,
+      sowTill: Month.May,
+      plantFrom: Month.April,
+      plantTill: Month.May,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 2,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Prei",
+      variety: "De Carentan 2",
+      sowFrom: Month.April,
+      sowTill: Month.May,
+      plantFrom: Month.April,
+      plantTill: Month.May,
+      plantHeight: PlantHeight.SHORT,
+      numberOfSeedsPerGridCell: 4,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Mais",
+      variety: "Suikermais Tasty Sweet F1",
+      sowFrom: Month.May,
+      sowTill: Month.June,
+      plantFrom: Month.May,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.TALL,
+      numberOfSeedsPerGridCell: 2,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Bloemkool",
+      variety: "HerfstReuzen 2",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.MEDIUM,
+      numberOfSeedsPerGridCell: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Palmkool",
+      variety: "Nero di Toscana",
+      sowFrom: Month.April,
+      sowTill: Month.June,
+      plantFrom: Month.April,
+      plantTill: Month.June,
+      plantHeight: PlantHeight.MEDIUM,
+      numberOfSeedsPerGridCell: 1,
+    },
+  ] as SeedDTO[];
+
   const bed: BedDTO = {
     id: crypto.randomUUID(),
     name: "Voorbeeldbed",
@@ -430,24 +669,29 @@ const main = async () => {
     bedId: bed.id,
   };
 
-  await db.insert(usersTable).values(user);
-  console.log("New user created!");
+  // await db.insert(usersTable).values(user);
+  // console.log("New user created!");
+  //
+  // for (const seed of februarySeeds) {
+  //   await db.insert(seedsTable).values(seed);
+  // }
+  // console.log("February seeds created!");
+  //
+  // for (const seed of marchSeeds) {
+  //   await db.insert(seedsTable).values(seed);
+  // }
+  // console.log("March seeds created!");
 
-  for (const seed of februarySeeds) {
+  for (const seed of aprilSeeds) {
     await db.insert(seedsTable).values(seed);
   }
-  console.log("February seeds created!");
+  console.log("April seeds created!");
 
-  for (const seed of marchSeeds) {
-    await db.insert(seedsTable).values(seed);
-  }
-  console.log("March seeds created!");
-
-  await db.insert(bedTable).values(bed);
-  console.log("New bed created!");
-
-  await db.insert(gridItemTable).values(gridItem);
-  console.log("New grid item created!");
+  // await db.insert(bedTable).values(bed);
+  // console.log("New bed created!");
+  //
+  // await db.insert(gridItemTable).values(gridItem);
+  // console.log("New grid item created!");
 };
 
 main();
