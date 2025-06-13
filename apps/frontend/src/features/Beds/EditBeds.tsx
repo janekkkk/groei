@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   ChangeEventHandler,
   useCallback,
@@ -13,9 +12,7 @@ import { Bed } from "@groei/common/src/models/Bed";
 import { useBedStore } from "./beds.store";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { classNames } from "@/shared/utils";
-import { SelectChange } from "@/shared/select.model";
 import { Route } from "@/routes/beds/$bedId.tsx";
-import { Seed } from "@groei/common/src/models/Seed";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import {
   useCreateBedMutation,
@@ -106,15 +103,15 @@ export const EditBeds = () => {
     debouncedSave(updatedBed);
   };
 
-  const handleSelectChange = (e: SelectChange) => {
-    if (e.index !== undefined) {
-      const grid = bed.grid || [];
-      grid[e.index] = { index: e.index, seed: e.value as Seed };
-      const updatedBed = { ...bed, grid, updatedAt: new Date() };
-      setBed(updatedBed);
-      debouncedSave(updatedBed);
-    }
-  };
+  // const handleSelectChange = (e: SelectChange) => {
+  //   if (e.index !== undefined) {
+  //     const grid = bed.grid || [];
+  //     grid[e.index] = { index: e.index, seed: e.value as Seed };
+  //     const updatedBed = { ...bed, grid, updatedAt: new Date() };
+  //     setBed(updatedBed);
+  //     debouncedSave(updatedBed);
+  //   }
+  // };
 
   const handleBedChange = (updatedBed: Bed) => {
     setBed(updatedBed);
@@ -128,29 +125,29 @@ export const EditBeds = () => {
     }
   };
 
-  const addRow = () => {
-    const updatedBed = { ...bed, gridHeight: bed.gridHeight + 1 };
-    setBed(updatedBed);
-    debouncedSave(updatedBed);
-  };
-
-  const removeRow = () => {
-    const updatedBed = { ...bed, gridHeight: bed.gridHeight - 1 };
-    setBed(updatedBed);
-    debouncedSave(updatedBed);
-  };
-
-  const addColumn = () => {
-    const updatedBed = { ...bed, gridWidth: bed.gridWidth + 1 };
-    setBed(updatedBed);
-    debouncedSave(updatedBed);
-  };
-
-  const removeColumn = () => {
-    const updatedBed = { ...bed, gridWidth: bed.gridWidth - 1 };
-    setBed(updatedBed);
-    debouncedSave(updatedBed);
-  };
+  // const addRow = () => {
+  //   const updatedBed = { ...bed, gridHeight: bed.gridHeight + 1 };
+  //   setBed(updatedBed);
+  //   debouncedSave(updatedBed);
+  // };
+  //
+  // const removeRow = () => {
+  //   const updatedBed = { ...bed, gridHeight: bed.gridHeight - 1 };
+  //   setBed(updatedBed);
+  //   debouncedSave(updatedBed);
+  // };
+  //
+  // const addColumn = () => {
+  //   const updatedBed = { ...bed, gridWidth: bed.gridWidth + 1 };
+  //   setBed(updatedBed);
+  //   debouncedSave(updatedBed);
+  // };
+  //
+  // const removeColumn = () => {
+  //   const updatedBed = { ...bed, gridWidth: bed.gridWidth - 1 };
+  //   setBed(updatedBed);
+  //   debouncedSave(updatedBed);
+  // };
 
   const handleSubmit = () => {
     if (isCreate) {
