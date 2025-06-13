@@ -11,6 +11,7 @@ import { Outlet } from "@tanstack/react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { Toaster } from "@/shadcdn/components/ui/toaster.tsx";
+import { useSyncService } from "@/core/store/syncService";
 
 export const Main = () => {
   const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ export const Main = () => {
               <SidebarTrigger className="absolute left-2 top-2" />
               <ThemeToggle className="absolute right-2 top-2" />
               <div className="pt-14 pb-4">
+                <SyncInitializer />
                 <Outlet />
               </div>
             </MainLayout>
@@ -42,4 +44,13 @@ export const Main = () => {
       )}
     </QueryClientProvider>
   );
+};
+
+// Component to initialize the sync service
+const SyncInitializer = () => {
+  // This hook initializes the sync service and sets up periodic sync
+  useSyncService();
+
+  // This component doesn't render anything
+  return null;
 };
