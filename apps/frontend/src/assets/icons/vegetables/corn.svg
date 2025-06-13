@@ -1,0 +1,6 @@
+<!-- Mais (Corn) -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M11 7C9 7 8 9 8 12C8 15 9 19 11 19C13 19 14 15 14 12C14 9 13 7 11 7Z" fill="#F1C40F"/>
+  <path d="M14 7C12 7 11 9 11 12C11 15 12 19 14 19C16 19 17 15 17 12C17 9 16 7 14 7Z" fill="#F1C40F"/>
+  <path d="M12 7C12 7 12 4 12 3M12 3L10 1M12 3L14 1" stroke="#27AE60" stroke-width="1"/>
+</svg>

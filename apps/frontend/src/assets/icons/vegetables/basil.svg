@@ -1,0 +1,6 @@
+<!-- Basilicum (Basil) -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 6C9 6 7 8 7 11C7 14 9 16 12 16C15 16 17 14 17 11C17 8 15 6 12 6Z" fill="#27AE60"/>
+  <path d="M10 10L14 10M10 13L14 13" stroke="#2ECC71" stroke-width="1"/>
+  <path d="M12 6C12 6 12 4 12 3M11 4L13 4" stroke="#27AE60" stroke-width="1"/>
+</svg>

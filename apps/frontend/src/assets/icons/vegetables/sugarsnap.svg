@@ -1,0 +1,6 @@
+<!-- Sugarsnap -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 6C10 6 9 8 9 11C9 14 10 18 12 18C14 18 15 14 15 11C15 8 14 6 12 6Z" fill="#27AE60"/>
+  <path d="M10 9L14 9M10 12L14 12M10 15L14 15" stroke="#2ECC71" stroke-width="1"/>
+  <path d="M12 6C12 6 13 3 13 3M12 6C12 6 11 3 11 3" stroke="#27AE60" stroke-width="1"/>
+</svg>

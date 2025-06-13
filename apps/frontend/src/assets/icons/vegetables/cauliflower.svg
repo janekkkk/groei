@@ -1,0 +1,8 @@
+<!-- Bloemkool (Cauliflower) -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 6C8 6 5 8 5 11C5 14 8 16 12 16C16 16 19 14 19 11C19 8 16 6 12 6Z" fill="#ECF0F1"/>
+  <path d="M12 16L12 20" stroke="#27AE60" stroke-width="1"/>
+  <circle cx="10" cy="10" r="1.5" fill="#ECF0F1" stroke="#BDC3C7" stroke-width="0.5"/>
+  <circle cx="14" cy="10" r="1.5" fill="#ECF0F1" stroke="#BDC3C7" stroke-width="0.5"/>
+  <circle cx="12" cy="13" r="1.5" fill="#ECF0F1" stroke="#BDC3C7" stroke-width="0.5"/>
+</svg>

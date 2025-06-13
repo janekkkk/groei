@@ -1,0 +1,8 @@
+<!-- Wintererwt (Winter Pea) -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 6C10 6 9 8 9 11C9 14 10 18 12 18C14 18 15 14 15 11C15 8 14 6 12 6Z" fill="#27AE60"/>
+  <circle cx="10.5" cy="9.5" r="1.5" fill="#2ECC71"/>
+  <circle cx="13.5" cy="9.5" r="1.5" fill="#2ECC71"/>
+  <circle cx="10.5" cy="14.5" r="1.5" fill="#2ECC71"/>
+  <circle cx="13.5" cy="14.5" r="1.5" fill="#2ECC71"/>
+</svg>

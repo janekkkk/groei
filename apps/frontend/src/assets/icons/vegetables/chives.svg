@@ -1,0 +1,7 @@
+<!-- Bieslook (Chives) -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 20L8 8M12 20L12 5M16 20L16 8" stroke="#27AE60" stroke-width="2"/>
+  <path d="M8 8C8 8 7 5 8 4C9 3 10 4 10 5C10 6 8 8 8 8Z" fill="#9B59B6"/>
+  <path d="M12 5C12 5 11 2 12 1C13 0 14 1 14 2C14 3 12 5 12 5Z" fill="#9B59B6"/>
+  <path d="M16 8C16 8 15 5 16 4C17 3 18 4 18 5C18 6 16 8 16 8Z" fill="#9B59B6"/>
+</svg>

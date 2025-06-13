@@ -1,0 +1,6 @@
+<!-- Courgette (Zucchini) -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5 12C5 9 7 7 12 7C17 7 19 9 19 12C19 15 17 17 12 17C7 17 5 15 5 12Z" fill="#27AE60"/>
+  <path d="M5 12L3 12M19 12L21 12" stroke="#2ECC71" stroke-width="1"/>
+  <path d="M12 7C12 7 13 5 13 4M12 7C12 7 11 5 11 4" stroke="#27AE60" stroke-width="1"/>
+</svg>

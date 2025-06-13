@@ -1,0 +1,5 @@
+<!-- Broccoli -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 5C9 5 7 7 7 10C7 13 9 15 12 15C15 15 17 13 17 10C17 7 15 5 12 5Z" fill="#27AE60"/>
+  <path d="M10 15L9 19M14 15L15 19M12 15L12 19" stroke="#27AE60" stroke-width="1"/>
+</svg>
