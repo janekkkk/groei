@@ -1,31 +1,60 @@
 // Vegetable SVG Icons
 // Export all vegetable icons for easy importing
 
-export { default as BasilIcon } from "./basil.svg";
-export { default as BeetrootIcon } from "./beetroot.svg";
-export { default as BroadBeanIcon } from "./broad-bean.svg";
-export { default as BroccoliIcon } from "./broccoli.svg";
-export { default as CarrotIcon } from "./carrot.svg";
-export { default as CauliflowerIcon } from "./cauliflower.svg";
-export { default as ChivesIcon } from "./chives.svg";
-export { default as CornIcon } from "./corn.svg";
-export { default as CornSaladIcon } from "./corn-salad.svg";
-export { default as CucumberIcon } from "./cucumber.svg";
-export { default as EggplantIcon } from "./eggplant.svg";
-export { default as KaleIcon } from "./kale.svg";
-export { default as LeekIcon } from "./leek.svg";
-export { default as ParsleyIcon } from "./parsley.svg";
-export { default as PointedCabbageIcon } from "./pointed-cabbage.svg";
-export { default as RadishIcon } from "./radish.svg";
-export { default as SpinachIcon } from "./spinach.svg";
-export { default as SugarsnapIcon } from "./sugarsnap.svg";
-export { default as SunflowerIcon } from "./sunflower.svg";
-export { default as SwissChardIcon } from "./swiss-chard.svg";
-export { default as TomatoIcon } from "./tomato.svg";
-export { default as TuscanKaleIcon } from "./tuscan-kale.svg";
-export { default as WhiteCabbageIcon } from "./white-cabbage.svg";
-export { default as WinterPeaIcon } from "./winter-pea.svg";
-export { default as ZucchiniIcon } from "./zucchini.svg";
+import BasilIcon from "./basil.svg";
+import BeetrootIcon from "./beetroot.svg";
+import BroadBeanIcon from "./broad-bean.svg";
+import BroccoliIcon from "./broccoli.svg";
+import CarrotIcon from "./carrot.svg";
+import CauliflowerIcon from "./cauliflower.svg";
+import ChivesIcon from "./chives.svg";
+import CornIcon from "./corn.svg";
+import CornSaladIcon from "./corn-salad.svg";
+import CucumberIcon from "./cucumber.svg";
+import EggplantIcon from "./eggplant.svg";
+import KaleIcon from "./kale.svg";
+import LeekIcon from "./leek.svg";
+import ParsleyIcon from "./parsley.svg";
+import PointedCabbageIcon from "./pointed-cabbage.svg";
+import RadishIcon from "./radish.svg";
+import SpinachIcon from "./spinach.svg";
+import SugarsnapIcon from "./sugarsnap.svg";
+import SunflowerIcon from "./sunflower.svg";
+import SwissChardIcon from "./swiss-chard.svg";
+import TomatoIcon from "./tomato.svg";
+import TuscanKaleIcon from "./tuscan-kale.svg";
+import WhiteCabbageIcon from "./white-cabbage.svg";
+import WinterPeaIcon from "./winter-pea.svg";
+import ZucchiniIcon from "./zucchini.svg";
+
+// Re-export all icons for external use
+export {
+  BasilIcon,
+  BeetrootIcon,
+  BroadBeanIcon,
+  BroccoliIcon,
+  CarrotIcon,
+  CauliflowerIcon,
+  ChivesIcon,
+  CornIcon,
+  CornSaladIcon,
+  CucumberIcon,
+  EggplantIcon,
+  KaleIcon,
+  LeekIcon,
+  ParsleyIcon,
+  PointedCabbageIcon,
+  RadishIcon,
+  SpinachIcon,
+  SugarsnapIcon,
+  SunflowerIcon,
+  SwissChardIcon,
+  TomatoIcon,
+  TuscanKaleIcon,
+  WhiteCabbageIcon,
+  WinterPeaIcon,
+  ZucchiniIcon,
+};
 
 // Type for all available vegetable icons
 export type VegetableIconType =
