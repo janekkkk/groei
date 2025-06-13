@@ -1,1 +1,15 @@
-/db.sqlite
+# SQLite database files
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Backup files that might be created
+*.sqlite-backup
+*.sqlite3-backup
+*.db-backup
+
+# SQLite temporary files
+.sqlite_history

@@ -669,18 +669,18 @@ const main = async () => {
     bedId: bed.id,
   };
 
-  // await db.insert(usersTable).values(user);
-  // console.log("New user created!");
-  //
-  // for (const seed of februarySeeds) {
-  //   await db.insert(seedsTable).values(seed);
-  // }
-  // console.log("February seeds created!");
-  //
-  // for (const seed of marchSeeds) {
-  //   await db.insert(seedsTable).values(seed);
-  // }
-  // console.log("March seeds created!");
+  await db.insert(usersTable).values(user);
+  console.log("New user created!");
+
+  for (const seed of februarySeeds) {
+    await db.insert(seedsTable).values(seed);
+  }
+  console.log("February seeds created!");
+
+  for (const seed of marchSeeds) {
+    await db.insert(seedsTable).values(seed);
+  }
+  console.log("March seeds created!");
 
   for (const seed of aprilSeeds) {
     await db.insert(seedsTable).values(seed);

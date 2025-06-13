@@ -8,14 +8,9 @@ export const timestamps = {
   createdAt: text()
     .notNull()
     .default(sql`(current_timestamp)`),
-  // .$onUpdate(() => new Date())
-  // .$type<Date>(),
   updatedAt: text()
     .notNull()
-    .default(sql`(current_timestamp)`),
-  // .$onUpdate(() => new Date())
-  // .$type<Date>(),
+    .default(sql`(current_timestamp)`)
+    .$onUpdate(() => sql`(current_timestamp)`),
   deletedAt: text(),
-  // .$onUpdate(() => new Date())
-  // .$type<Date>(),
 };

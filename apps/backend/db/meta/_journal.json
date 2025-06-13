@@ -8,6 +8,13 @@
       "when": 1739709603933,
       "tag": "0000_shocking_hannibal_king",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1749819520766,
+      "tag": "0001_sloppy_ghost_rider",
+      "breakpoints": true
     }
   ]
 }

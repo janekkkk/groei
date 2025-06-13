@@ -33,10 +33,10 @@ export const seedsTable = sqliteTable("seeds_table", {
 
 export const gridItemTable = sqliteTable("grid_item_table", {
   id: integer().notNull().primaryKey({ autoIncrement: true }),
-  seedId: text(),
+  seedId: text().references(() => seedsTable.id, { onDelete: "set null" }),
   bedId: text()
     .notNull()
-    .references(() => bedTable.id),
+    .references(() => bedTable.id, { onDelete: "cascade" }),
 });
 
 export const bedTable = sqliteTable("bed_table", {

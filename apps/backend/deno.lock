@@ -1,5 +1,5 @@
 {
-  "version": "4",
+  "version": "5",
   "redirects": {
     "https://deno.land/x/cors/mod.ts": "https://deno.land/x/cors@v1.2.2/mod.ts"
   },
@@ -18,12 +18,12 @@
       "dependencies": [
         "npm:@groei/common@*",
         "npm:@jsr/hono__hono@^4.6.1",
-        "npm:@libsql/client@0.14",
+        "npm:@libsql/client@~0.15.5",
         "npm:better-sqlite3@^11.8.1",
         "npm:cross-env@^7.0.3",
         "npm:dotenv@^16.4.7",
         "npm:drizzle-kit@~0.30.4",
-        "npm:drizzle-orm@~0.39.1",
+        "npm:drizzle-orm@~0.43.1",
         "npm:hono@^4.6.20",
         "npm:idb-keyval@^6.2.1",
         "npm:tsx@^4.19.2"
