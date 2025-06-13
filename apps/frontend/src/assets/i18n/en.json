@@ -22,7 +22,9 @@
     "remove": "remove",
     "created": "created",
     "updated": "updated",
-    "removed": "removed"
+    "removed": "removed",
+    "applyChanges": "apply changes",
+    "saving": "saving changes..."
   },
   "months": {
     "january": "january",
@@ -57,7 +59,8 @@
     "month": "month",
     "plantHeight": "plant height",
     "notes": "notes",
-    "height": "height (roughly)"
+    "height": "height (roughly)",
+    "chooseSeed": "choose a seed"
   },
   "beds": {
     "title": "beds",
@@ -73,6 +76,14 @@
     "plantSeedInCell": "plant seed in this grid cell",
     "column": "column",
     "row": "row",
-    "notes": "notes"
+    "notes": "notes",
+    "gridSize": "grid size",
+    "customizeGridSize": "customize grid size",
+    "moveMode": "move mode",
+    "dragModeActive": "drag mode active",
+    "planted": "planted",
+    "rows": "rows",
+    "columns": "columns",
+    "totalCells": "total cells"
   }
 }

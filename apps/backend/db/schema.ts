@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { timestamps } from "./helpers.ts";
 import { relations } from "drizzle-orm";
 
@@ -37,6 +37,7 @@ export const gridItemTable = sqliteTable("grid_item_table", {
   bedId: text()
     .notNull()
     .references(() => bedTable.id, { onDelete: "cascade" }),
+  position: integer(), // Store the position index for grid cells
 });
 
 export const bedTable = sqliteTable("bed_table", {

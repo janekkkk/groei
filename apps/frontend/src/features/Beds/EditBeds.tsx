@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   ChangeEventHandler,
   useCallback,
@@ -12,7 +13,6 @@ import { Bed } from "@groei/common/src/models/Bed";
 import { useBedStore } from "./beds.store";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { classNames } from "@/shared/utils";
-import { Minus, Plus } from "lucide-react";
 import { SelectChange } from "@/shared/select.model";
 import { Route } from "@/routes/beds/$bedId.tsx";
 import { Seed } from "@groei/common/src/models/Seed";
@@ -24,8 +24,9 @@ import {
 } from "@/features/Beds/useBedQuery";
 import { isNumeric } from "@/shared/utils/is-numeric.helper";
 import { useTranslation } from "react-i18next";
-import { GridItem } from "@/features/Beds/grid/GridItem.tsx";
 import { useToast } from "@/shadcdn/hooks/use-toast.ts";
+import { BedPlanner } from "./grid/BedPlanner";
+import { RefreshCw } from "lucide-react";
 
 const getEmptyBed = (): Bed =>
   ({
@@ -52,7 +53,38 @@ export const EditBeds = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const { toast } = useToast();
+  const [isSaving, setIsSaving] = useState(false);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Debounced auto-save function
+  const debouncedSave = useCallback(
+    (bedToSave: Bed) => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+
+      autoSaveTimeoutRef.current = setTimeout(() => {
+        setIsSaving(true);
+
+        // Only auto-save if this is an update (not create)
+        if (!isCreate && bedToSave.name.trim()) {
+          updateBed.mutate(bedToSave, {
+            onSuccess: () => {
+              setIsSaving(false);
+            },
+            onError: () => {
+              setIsSaving(false);
+            },
+          });
+        } else {
+          setIsSaving(false);
+        }
+      }, 1000); // 1 second debounce
+    },
+    [isCreate, updateBed],
+  );
+
+  // Handle input changes with auto-save
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
@@ -64,15 +96,29 @@ export const EditBeds = () => {
       if (isNaN(numberValue)) numberValue = undefined;
     }
 
-    setBed({ ...bed, [name]: numberValue ?? value, updatedAt: new Date() });
+    const updatedBed = {
+      ...bed,
+      [name]: numberValue ?? value,
+      updatedAt: new Date(),
+    };
+
+    setBed(updatedBed);
+    debouncedSave(updatedBed);
   };
 
   const handleSelectChange = (e: SelectChange) => {
     if (e.index !== undefined) {
-      const grid = bed.grid;
+      const grid = bed.grid || [];
       grid[e.index] = { index: e.index, seed: e.value as Seed };
-      setBed({ ...bed, grid, updatedAt: new Date() });
+      const updatedBed = { ...bed, grid, updatedAt: new Date() };
+      setBed(updatedBed);
+      debouncedSave(updatedBed);
     }
+  };
+
+  const handleBedChange = (updatedBed: Bed) => {
+    setBed(updatedBed);
+    debouncedSave(updatedBed);
   };
 
   const handleDeleteBed = () => {
@@ -83,19 +129,27 @@ export const EditBeds = () => {
   };
 
   const addRow = () => {
-    setBed({ ...bed, gridHeight: bed.gridHeight + 1 });
+    const updatedBed = { ...bed, gridHeight: bed.gridHeight + 1 };
+    setBed(updatedBed);
+    debouncedSave(updatedBed);
   };
 
   const removeRow = () => {
-    setBed({ ...bed, gridHeight: bed.gridHeight - 1 });
+    const updatedBed = { ...bed, gridHeight: bed.gridHeight - 1 };
+    setBed(updatedBed);
+    debouncedSave(updatedBed);
   };
 
   const addColumn = () => {
-    setBed({ ...bed, gridWidth: bed.gridWidth + 1 });
+    const updatedBed = { ...bed, gridWidth: bed.gridWidth + 1 };
+    setBed(updatedBed);
+    debouncedSave(updatedBed);
   };
 
   const removeColumn = () => {
-    setBed({ ...bed, gridWidth: bed.gridWidth - 1 });
+    const updatedBed = { ...bed, gridWidth: bed.gridWidth - 1 };
+    setBed(updatedBed);
+    debouncedSave(updatedBed);
   };
 
   const handleSubmit = () => {
@@ -169,107 +223,49 @@ export const EditBeds = () => {
             onChange={handleInputChange}
             required
           />
+        </div>
 
-          {/*ToDo show how many days ago the bed was sown*/}
-          {/*ToDO show how may weeks ago the bed was sown*/}
-        </div>
-        <div>
-          <Label htmlFor="gridWidth">{t("beds.gridWidth")}</Label>
-          <p className="text-sm text-muted-foreground">{t("beds.gridHelp")}</p>
-          <Input
-            type="number"
-            name="gridWidth"
-            value={bed.gridWidth}
-            onChange={handleInputChange}
-            required
-            disabled={!isCreate}
-          />
-        </div>
-        <div>
-          <Label htmlFor="gridWidth">{t("beds.gridHeight")}</Label>
-          <p className="text-sm text-muted-foreground">{t("beds.gridHelp")}</p>
-          <Input
-            type="number"
-            name="gridHeight"
-            value={bed.gridHeight}
-            onChange={handleInputChange}
-            required
-            disabled={!isCreate}
-          />
-        </div>
-        <div>
-          <Label htmlFor="grid">{t("beds.grid")}</Label>
-          <p className="text-sm text-muted-foreground">{t("beds.gridHelp2")}</p>
-          <div className="relative mt-2">
-            <div className="flex">
-              <div className="overflow-x-auto max-w-full grow">
-                <div
-                  className="grid gap-1 w-max min-w-full pr-2"
-                  style={{
-                    gridTemplateColumns: `repeat(${bed.gridWidth}, minmax(120px, max-content))`,
-                    gridTemplateRows: `repeat(${bed.gridHeight}, 1fr)`,
-                  }}
-                >
-                  {Array.from({ length: bed.gridWidth * bed.gridHeight }).map(
-                    (_, i) => {
-                      return (
-                        <GridItem
-                          key={i}
-                          handleSelectChange={handleSelectChange}
-                          seed={bed?.grid?.[i]?.seed}
-                          index={i}
-                        />
-                      );
-                    },
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col gap-1">
-                <Button
-                  variant="secondary"
-                  type="button"
-                  className="h-full"
-                  title={`${t("core.add")} ${t("beds.column")}`}
-                  onClick={addColumn}
-                  disabled={!isCreate}
-                >
-                  <Plus />
-                </Button>
-                <Button
-                  variant="secondary"
-                  type="button"
-                  className="h-full"
-                  title={`${t("core.remove")} ${t("beds.column")}`}
-                  onClick={removeColumn}
-                  disabled={!isCreate}
-                >
-                  <Minus />
-                </Button>
-              </div>
+        {/* Grid Size Inputs (only visible for create mode) */}
+        {isCreate && (
+          <>
+            <div>
+              <Label htmlFor="gridWidth">{t("beds.gridWidth")}</Label>
+              <p className="text-sm text-muted-foreground">
+                {t("beds.gridHelp")}
+              </p>
+              <Input
+                type="number"
+                name="gridWidth"
+                value={bed.gridWidth}
+                onChange={handleInputChange}
+                required
+                disabled={!isCreate}
+              />
             </div>
-          </div>
-          <div className="flex gap-1">
-            <Button
-              variant="secondary"
-              type="button"
-              className="w-full mt-2"
-              title={`${t("core.add")} ${t("beds.row")}`}
-              onClick={addRow}
-              disabled={!isCreate}
-            >
-              <Plus />
-            </Button>
-            <Button
-              variant="secondary"
-              type="button"
-              className="w-full mt-2"
-              title={`${t("core.remove")} ${t("beds.row")}`}
-              onClick={removeRow}
-              disabled={!isCreate}
-            >
-              <Minus />
-            </Button>
-          </div>
+            <div>
+              <Label htmlFor="gridWidth">{t("beds.gridHeight")}</Label>
+              <p className="text-sm text-muted-foreground">
+                {t("beds.gridHelp")}
+              </p>
+              <Input
+                type="number"
+                name="gridHeight"
+                value={bed.gridHeight}
+                onChange={handleInputChange}
+                required
+                disabled={!isCreate}
+              />
+            </div>
+          </>
+        )}
+
+        {/* New BedPlanner Component */}
+        <div>
+          <BedPlanner
+            bed={bed}
+            onBedChange={handleBedChange}
+            isCreate={isCreate}
+          />
         </div>
 
         <div>
@@ -304,6 +300,14 @@ export const EditBeds = () => {
           </Button>
         </div>
       </form>
+
+      {/* Saving Indicator */}
+      {isSaving && (
+        <div className="mt-4 text-sm text-muted-foreground flex items-center">
+          <RefreshCw className="animate-spin mr-2" />
+          {t("core.saving")}
+        </div>
+      )}
     </div>
   );
 };

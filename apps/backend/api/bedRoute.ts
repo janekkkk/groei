@@ -83,8 +83,8 @@ router.get("/:id", async (c) => {
     // Transform the data to match the expected frontend format
     const transformedBed = {
       ...result,
-      grid: result.grid.map((gridItem, index) => ({
-        index,
+      grid: result.grid.map((gridItem) => ({
+        index: gridItem.position ?? gridItem.id, // Use position if available, fall back to id
         seed: gridItem.seed || undefined,
         bedId: gridItem.bedId,
         seedId: gridItem.seedId,
@@ -209,11 +209,12 @@ router.put("/:id", async (c) => {
         // Delete existing grid items
         await tx.delete(gridItemTable).where(eq(gridItemTable.bedId, id));
 
-        // Insert new grid items
+        // Insert new grid items - with position index
         const gridItems = grid
           .map((gridItem: GridItem) => ({
             bedId: id,
             seedId: gridItem?.seed?.id || null,
+            position: gridItem.index, // Store the position index
           }))
           .filter((item) => item.seedId); // Only insert items with actual seeds
 
@@ -242,14 +243,18 @@ router.put("/:id", async (c) => {
     }
 
     // Transform the data to match the expected frontend format
+    // Use the stored position index instead of array index
     const transformedBed = {
       ...result,
-      grid: result.grid.map((gridItem, index) => ({
-        index,
-        seed: gridItem.seed || undefined,
-        bedId: gridItem.bedId,
-        seedId: gridItem.seedId,
-      })),
+      grid: result.grid.map((gridItem) => {
+        console.log("Grid item from database:", gridItem); // Debug log to see the actual structure
+        return {
+          index: gridItem.position ?? gridItem.id, // Fallback to id if position is null
+          seed: gridItem.seed || undefined,
+          bedId: gridItem.bedId,
+          seedId: gridItem.seedId,
+        };
+      }),
     };
 
     return c.json(transformedBed);

@@ -22,7 +22,9 @@
     "remove": "verwijderen",
     "created": "aangemaakt",
     "updated": "bijgewerkt",
-    "removed": "verwijderd"
+    "removed": "verwijderd",
+    "applyChanges": "wijzigingen toepassen",
+    "saving": "wijzigingen opslaan..."
   },
   "months": {
     "january": "januari",
@@ -57,7 +59,8 @@
     "month": "maand",
     "plantHeight": "planthoogte",
     "notes": "notities",
-    "height": "hoogte (ongeveer)"
+    "height": "hoogte (ongeveer)",
+    "chooseSeed": "kies een zaad"
   },
   "beds": {
     "title": "bedden",
@@ -73,6 +76,14 @@
     "plantSeedInCell": "zaad planten in deze rastercel",
     "column": "kolom",
     "row": "rij",
-    "notes": "notities"
+    "notes": "notities",
+    "gridSize": "rastergrootte",
+    "customizeGridSize": "rastergrootte aanpassen",
+    "moveMode": "verplaatsingsmodus",
+    "dragModeActive": "sleeptmodus actief",
+    "planted": "geplant",
+    "rows": "rijen",
+    "columns": "kolommen",
+    "totalCells": "totaal aantal cellen"
   }
 }
