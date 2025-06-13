@@ -12,10 +12,15 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/shadcdn/components/ui/button";
 import { Seed } from "@groei/common/src/models/Seed";
 import { useTranslation } from "react-i18next";
+import { useSeedsQuery } from "@/features/Seeds/useSeedQuery";
+import { Skeleton } from "@/shadcdn/components/ui/skeleton";
 
 export const SeedOverview = () => {
   const { seeds } = useSeedStore((state) => state);
   const { t } = useTranslation();
+
+  // This will fetch seeds from the server and merge with local store
+  const { isLoading, isError } = useSeedsQuery();
 
   return (
     <div>
@@ -28,6 +33,13 @@ export const SeedOverview = () => {
           </Button>
         </Link>
       </div>
+
+      {isError && (
+        <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+          {t("seeds.errorLoading")}
+        </div>
+      )}
+
       <Table>
         <TableCaption>{t("seeds.title")}</TableCaption>
         <TableHeader>
@@ -44,21 +56,57 @@ export const SeedOverview = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {seeds.map((seed: Seed) => (
-            <TableRow key={seed.name}>
-              <TableCell>
-                <Link to={seed.id.toString()}>{seed.name}</Link>
+          {isLoading ? (
+            // Show loading skeletons while fetching
+            Array(3)
+              .fill(0)
+              .map((_, index) => (
+                <TableRow key={`loading-${index}`}>
+                  <TableCell>
+                    <Skeleton className="h-5 w-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-20" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-20" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-24" />
+                  </TableCell>
+                </TableRow>
+              ))
+          ) : seeds.length > 0 ? (
+            // Show actual seeds
+            seeds.map((seed: Seed) => (
+              <TableRow key={seed.id}>
+                <TableCell>
+                  <Link to={seed.id.toString()}>{seed.name}</Link>
+                </TableCell>
+                <TableCell>{seed.variety}</TableCell>
+                <TableCell className="text-right">
+                  {seed.numberOfSeedsPerGridCell}
+                </TableCell>
+                <TableCell className="text-right">
+                  {seed.daysToMaturity}
+                </TableCell>
+                <TableCell>{seed.expirationDate}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            // Show empty state
+            <TableRow>
+              <TableCell
+                colSpan={5}
+                className="text-center py-6 text-muted-foreground"
+              >
+                {t("seeds.noSeeds")}
               </TableCell>
-              <TableCell>{seed.variety}</TableCell>
-              <TableCell className="text-right">
-                {seed.numberOfSeedsPerGridCell}
-              </TableCell>
-              <TableCell className="text-right">
-                {seed.daysToMaturity}
-              </TableCell>
-              <TableCell>{seed.expirationDate}</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </div>
