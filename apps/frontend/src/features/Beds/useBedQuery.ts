@@ -4,7 +4,7 @@ import { bedService } from "@/features/Beds/bed.service";
 import { useBedStore } from "@/features/Beds/beds.store";
 import { mergeItems } from "@/shared/merge.helper";
 
-// Fetch beds
+// Fetch beds with consistent prioritization of server data
 export const useBedsQuery = () => {
   const { setBeds, beds } = useBedStore((state) => state);
 
@@ -13,48 +13,83 @@ export const useBedsQuery = () => {
     queryFn: async () => {
       try {
         const fetchedBeds = await bedService.fetchBeds();
-        console.log("fetch beds");
 
-        // Merge local with external beds so no data is lost
-        // Priority given to server data (fetchedBeds)
-        const merged = mergeItems([...fetchedBeds, ...beds]);
+        if (!Array.isArray(fetchedBeds)) {
+          throw Error("Invalid response from server");
+        }
 
-        if (Array.isArray(fetchedBeds)) {
-          console.log(
-            `Setting ${merged.length} beds after merging ${beds.length} local and ${fetchedBeds.length} server beds`,
-          );
-          setBeds(merged);
-          return merged;
-        } else throw Error("Invalid response");
+        // Important: Convert dates properly for correct comparison in mergeItems
+        const normalizedServerBeds = fetchedBeds.map((bed) => ({
+          ...bed,
+          createdAt: new Date(bed.createdAt),
+          updatedAt: new Date(bed.updatedAt),
+          deletedAt: bed.deletedAt ? new Date(bed.deletedAt) : undefined,
+        }));
+
+        // When merging, mergeItems will select the most recently updated version of each item
+        const merged = mergeItems([...normalizedServerBeds, ...beds]);
+
+        console.log(
+          `Merged beds: server=${fetchedBeds.length}, local=${beds.length}, result=${merged.length}`,
+        );
+
+        // Update the store with the merged results
+        setBeds(merged);
+
+        return merged;
       } catch (error) {
-        console.error("Error fetching beds", error);
-        // Return local beds if server fetch fails
+        console.error("Error fetching beds:", error);
+        // Return current beds on error to avoid disrupting the UI
         return beds;
       }
     },
-    // Refresh every 30 seconds in the background
-    refetchInterval: 30000,
-    // Important: this ensures initial fetch on page load
+    // Force refresh on component mount and window focus
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    // Prefer server data but show stale data while refreshing
-    staleTime: 10000,
+    // More frequent refetching for better sync (every minute)
+    refetchInterval: 60000,
   });
 };
 
 // Fetch a single bed
 export const useBedQuery = (id: string) => {
-  const { updateBedInStore } = useBedStore((state) => state);
+  const { updateBedInStore, beds } = useBedStore();
+  const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: ["bed", id],
     queryFn: async () => {
-      const bed = await bedService.fetchBed(id);
-      if (bed.id) {
-        updateBedInStore(bed);
-        return bed;
+      try {
+        const bed = await bedService.fetchBed(id);
+
+        if (bed && bed.id) {
+          // Normalize dates for proper comparison
+          const normalizedBed = {
+            ...bed,
+            createdAt: new Date(bed.createdAt),
+            updatedAt: new Date(bed.updatedAt),
+            deletedAt: bed.deletedAt ? new Date(bed.deletedAt) : undefined,
+          };
+
+          // Update in store
+          updateBedInStore(normalizedBed);
+
+          // Also update in query cache to ensure consistency
+          queryClient.setQueryData(["beds"], (oldData: Bed[] = []) => {
+            return mergeItems([normalizedBed, ...oldData]);
+          });
+
+          return normalizedBed;
+        }
+
+        // If server fetch fails, return from local store
+        const localBed = beds.find((b) => b.id === id);
+        return localBed || null;
+      } catch (error) {
+        console.error(`Error fetching bed ${id}:`, error);
+        // Return from local store on error
+        return beds.find((b) => b.id === id) || null;
       }
-      return null;
     },
     enabled: !!id,
   });
@@ -63,28 +98,40 @@ export const useBedQuery = (id: string) => {
 // Create a bed
 export const useCreateBedMutation = () => {
   const queryClient = useQueryClient();
-  const { addBedToStore } = useBedStore((state) => state);
+  const { addBedToStore } = useBedStore();
 
   return useMutation({
     mutationFn: async (newBed: Bed) => {
-      console.log("create bed", { newBed });
+      // Ensure dates are properly set
+      const bedToCreate = {
+        ...newBed,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
-      // First add to store for immediate UI update
-      addBedToStore(newBed);
+      // First update local store for immediate UI response
+      addBedToStore(bedToCreate);
 
-      // Then persist to server
       try {
-        const createdBed = await bedService.createBed(newBed);
+        // Then persist to server
+        const createdBed = await bedService.createBed(bedToCreate);
         return createdBed;
       } catch (error) {
-        console.error("Failed to save bed to server", error);
-        // We still return the local bed to keep the UI working
-        return newBed;
+        console.error("Failed to create bed on server:", error);
+        // Still return the local version so UI remains functional
+        return bedToCreate;
       }
     },
-    onSuccess: () => {
-      // Invalidate to trigger a refresh of the beds data
-      queryClient.invalidateQueries({ queryKey: ["beds"] });
+    meta: {
+      onSuccess: (createdBed: Bed) => {
+        // Update query cache
+        queryClient.setQueryData(["beds"], (oldData: Bed[] = []) => {
+          return mergeItems([createdBed, ...oldData]);
+        });
+
+        // Invalidate to trigger a refresh
+        queryClient.invalidateQueries({ queryKey: ["beds"] });
+      },
     },
   });
 };
@@ -92,24 +139,44 @@ export const useCreateBedMutation = () => {
 // Update a bed
 export const useUpdateBedMutation = () => {
   const queryClient = useQueryClient();
-  const { updateBedInStore } = useBedStore((state) => state);
+  const { updateBedInStore } = useBedStore();
 
   return useMutation({
     mutationFn: async (updatedBed: Bed) => {
-      // Update local store first for immediate UI feedback
-      updateBedInStore(updatedBed);
+      // Always update the timestamp when making changes
+      const bedToUpdate = {
+        ...updatedBed,
+        updatedAt: new Date(),
+      };
 
-      // Then update on server
+      // Update local store first
+      updateBedInStore(bedToUpdate);
+
       try {
-        const result = await bedService.updateBed(updatedBed);
+        // Then update on server
+        const result = await bedService.updateBed(bedToUpdate);
         return result;
       } catch (error) {
-        console.error("Failed to update bed on server", error);
-        return updatedBed;
+        console.error("Failed to update bed on server:", error);
+        return bedToUpdate;
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["beds"] });
+    meta: {
+      onSuccess: (updatedBed: Bed) => {
+        // Update query cache
+        queryClient.setQueryData(["beds"], (oldData: Bed[] = []) => {
+          return mergeItems([
+            updatedBed,
+            ...oldData.filter((bed) => bed.id !== updatedBed.id),
+          ]);
+        });
+
+        // Also update the individual bed query if it exists
+        queryClient.setQueryData(["bed", updatedBed.id], updatedBed);
+
+        // Invalidate to ensure consistency
+        queryClient.invalidateQueries({ queryKey: ["beds"] });
+      },
     },
   });
 };
@@ -117,23 +184,35 @@ export const useUpdateBedMutation = () => {
 // Delete a bed
 export const useDeleteBedMutation = () => {
   const queryClient = useQueryClient();
-  const { deleteBedFromStore } = useBedStore((state) => state);
+  const { deleteBedFromStore } = useBedStore();
 
   return useMutation({
     mutationFn: async (id: string) => {
       // Delete from local store first
       deleteBedFromStore(id);
 
-      // Then delete from server
       try {
+        // Then delete from server
         await bedService.deleteBed(id);
+        return id;
       } catch (error) {
-        console.error("Failed to delete bed from server", error);
-        // We don't restore the bed locally as that could be confusing
+        console.error("Failed to delete bed from server:", error);
+        return id;
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["beds"] });
+    meta: {
+      onSuccess: (id: string) => {
+        // Remove from query cache
+        queryClient.setQueryData(["beds"], (oldData: Bed[] = []) => {
+          return oldData.filter((bed) => bed.id !== id);
+        });
+
+        // Remove the individual bed query if it exists
+        queryClient.removeQueries({ queryKey: ["bed", id] });
+
+        // Invalidate to ensure consistency
+        queryClient.invalidateQueries({ queryKey: ["beds"] });
+      },
     },
   });
 };
