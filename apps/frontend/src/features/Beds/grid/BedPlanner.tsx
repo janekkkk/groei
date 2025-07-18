@@ -113,7 +113,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
           }),
       );
     setGrid(newGrid);
-  }, [bed.gridHeight, bed.gridWidth]);
+  }, [bed.grid, bed.gridHeight, bed.gridWidth]);
 
   // Update grid seeds when bed.grid changes (but skip on initial render)
   const initialRenderRef = useRef(true);
@@ -147,7 +147,8 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
 
       setGrid(newGrid);
     }
-  }, [bed.grid]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bed.grid, gridSize.cols]);
 
   // Update bed when grid changes - using a debounced approach
   const gridUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
