@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Context } from "hono";
+import type { Context } from "hono";
 
 // Define log entry interfaces
 interface RequestLogEntry {

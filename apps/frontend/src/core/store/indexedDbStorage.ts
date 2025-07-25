@@ -1,5 +1,5 @@
 import { del, get, set } from "idb-keyval";
-import { StorageValue } from "zustand/middleware";
+import type { StorageValue } from "zustand/middleware";
 
 export interface SyncInfo {
   lastSyncTimestamp: number;

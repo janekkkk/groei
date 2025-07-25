@@ -1,8 +1,8 @@
+import type { SeedDTO } from "@groei/common/src/models/Seed.ts";
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
-import { SeedDTO } from "@groei/common/src/models/Seed.ts";
 import { db } from "../db/index.ts";
 import { seedsTable } from "../db/schema.ts";
-import { eq } from "drizzle-orm";
 import {
   logCriticalError,
   logDatabaseOperation,

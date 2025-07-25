@@ -1,4 +1,9 @@
+import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { useBedStore } from "@/features/Beds/beds.store";
+import { useBedsQuery } from "@/features/Beds/useBedQuery";
+import { Button } from "@/shadcdn/components/ui/button";
+import { Skeleton } from "@/shadcdn/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -8,11 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcdn/components/ui/table";
-import { Link } from "@tanstack/react-router";
-import { Button } from "@/shadcdn/components/ui/button";
-import { useTranslation } from "react-i18next";
-import { useBedsQuery } from "@/features/Beds/useBedQuery";
-import { Skeleton } from "@/shadcdn/components/ui/skeleton";
 
 export const BedOverview = () => {
   const { beds } = useBedStore((state) => state);
@@ -23,7 +23,7 @@ export const BedOverview = () => {
 
   return (
     <div>
-      <div className="w-full flex justify-end mb-2">
+      <div className="mb-2 flex w-full justify-end">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore*/}
         <Link to={"/beds/-1"}>
@@ -34,7 +34,7 @@ export const BedOverview = () => {
       </div>
 
       {isError && (
-        <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+        <div className="mb-4 rounded-lg bg-red-100 p-4 text-red-700 text-sm">
           {t("beds.errorLoading")}
         </div>
       )}
@@ -52,7 +52,7 @@ export const BedOverview = () => {
             Array(3)
               .fill(0)
               .map((_, index) => (
-                <TableRow key={`loading-${index}`}>
+                <TableRow key={crypto.randomUUID()}>
                   <TableCell>
                     <Skeleton className="h-5 w-full" />
                   </TableCell>
@@ -72,7 +72,7 @@ export const BedOverview = () => {
             <TableRow>
               <TableCell
                 colSpan={1}
-                className="text-center py-6 text-muted-foreground"
+                className="py-6 text-center text-muted-foreground"
               >
                 {t("beds.noBeds")}
               </TableCell>

@@ -1,3 +1,12 @@
+import { Link } from "@tanstack/react-router";
+import { Grid2x2, Home, type LucideIcon, Sprout } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Username } from "@/core/authentication/Username";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/shadcdn/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -12,16 +21,7 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/shadcdn/components/ui/sidebar";
-import { Home, LucideIcon, Sprout, Grid2x2 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/shadcdn/components/ui/collapsible";
-import { Username } from "@/core/authentication/Username";
 import { useSwipe } from "@/shared/use-swipe.hook.ts";
-import { useTranslation } from "react-i18next";
 
 interface NavigationItem {
   title: string;
@@ -94,7 +94,7 @@ export const AppSidebar = () => {
                         <SidebarMenuButton asChild>
                           <Link
                             to={item.routeTo}
-                            className="flex text-lg md:text-sm [&.active]:font-bold capitalize"
+                            className="flex text-lg capitalize md:text-sm [&.active]:font-bold"
                           >
                             {item.icon && (
                               <item.icon className="text-lg md:text-sm" />
@@ -112,7 +112,7 @@ export const AppSidebar = () => {
                               <SidebarMenuSubItem key={subItem.title}>
                                 <Link
                                   to={subItem.routeTo}
-                                  className="[&.active]:font-bold text-lg md:text-sm capitalize"
+                                  className="text-lg capitalize md:text-sm [&.active]:font-bold"
                                 >
                                   <span>{subItem.title}</span>
                                 </Link>

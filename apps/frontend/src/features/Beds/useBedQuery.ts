@@ -1,5 +1,5 @@
+import type { Bed } from "@groei/common/src/models/Bed";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bed } from "@groei/common/src/models/Bed";
 import { bedService } from "@/features/Beds/bed.service";
 import { useBedStore } from "@/features/Beds/beds.store";
 import { mergeItems } from "@/shared/merge.helper";
@@ -62,7 +62,7 @@ export const useBedQuery = (id: string) => {
       try {
         const bed = await bedService.fetchBed(id);
 
-        if (bed && bed.id) {
+        if (bed?.id) {
           // Normalize dates for proper comparison
           const normalizedBed = {
             ...bed,

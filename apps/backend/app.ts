@@ -1,8 +1,8 @@
 import { Hono } from "hono";
-import { secureHeaders } from "hono/secure-headers";
 import { compress } from "hono/compress";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { secureHeaders } from "hono/secure-headers";
 import api from "./api/index.ts";
 import { customLogger } from "./logger.ts";
 import middlewares from "./middleware.ts";

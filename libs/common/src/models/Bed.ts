@@ -1,4 +1,4 @@
-import { Seed } from "./Seed.ts";
+import type { Seed } from "./Seed.ts";
 
 export interface Bed {
   notes: string | readonly string[] | number | undefined;

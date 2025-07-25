@@ -1,8 +1,8 @@
-import { Bed, BedDTO } from "@groei/common/src/models/Bed";
+import type { Bed, BedDTO } from "@groei/common/src/models/Bed";
 import { dateService } from "@/shared/date.service";
 
 class BedService {
-  private static readonly baseUrl = import.meta.env.VITE_API_URI + "/beds";
+  private static readonly baseUrl = `${import.meta.env.VITE_API_URI}/beds`;
 
   async fetchBeds(): Promise<Bed[]> {
     const response = await fetch(BedService.baseUrl);

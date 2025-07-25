@@ -1,11 +1,30 @@
 import {
-  ChangeEventHandler,
+  GerminationType,
+  Month,
+  PlantHeight,
+  type Seed,
+} from "@groei/common/src/models/Seed";
+import type { CheckedState } from "@radix-ui/react-checkbox";
+import { useCanGoBack, useRouter } from "@tanstack/react-router";
+import {
+  type ChangeEventHandler,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
+import { useSeedStore } from "@/features/Seeds/seeds.store";
+import {
+  useCreateSeedMutation,
+  useDeleteSeedMutation,
+  useUpdateSeedMutation,
+} from "@/features/Seeds/useSeedQuery";
+import { Route } from "@/routes/seeds/$seedId.tsx";
+import { Button } from "@/shadcdn/components/ui/button";
+import { Checkbox } from "@/shadcdn/components/ui/checkbox.tsx";
 import { Input } from "@/shadcdn/components/ui/input";
+import { Label } from "@/shadcdn/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -14,30 +33,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shadcdn/components/ui/select";
-import { Label } from "@/shadcdn/components/ui/label";
-import { Button } from "@/shadcdn/components/ui/button";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
-import { useSeedStore } from "@/features/Seeds/seeds.store";
-import { SelectChange } from "@/shared/select.model";
-import { Route } from "@/routes/seeds/$seedId.tsx";
-import {
-  GerminationType,
-  Month,
-  PlantHeight,
-  Seed,
-} from "@groei/common/src/models/Seed";
-import {
-  useCreateSeedMutation,
-  useDeleteSeedMutation,
-  useUpdateSeedMutation,
-} from "@/features/Seeds/useSeedQuery";
-import { classNames } from "@/shared/utils";
-import { useRouter, useCanGoBack } from "@tanstack/react-router";
-import { Checkbox } from "@/shadcdn/components/ui/checkbox.tsx";
-import { CheckedState } from "@radix-ui/react-checkbox";
-import { isNumeric } from "@/shared/utils/is-numeric.helper.ts";
-import { useTranslation } from "react-i18next";
 import { useToast } from "@/shadcdn/hooks/use-toast.ts";
+import type { SelectChange } from "@/shared/select.model";
+import { classNames } from "@/shared/utils";
+import { isNumeric } from "@/shared/utils/is-numeric.helper.ts";
 
 const getEmptySeed = (): Seed => ({
   id: crypto.randomUUID(),
@@ -79,11 +79,11 @@ export const EditSeeds = () => {
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    let numberValue;
+    let numberValue: number | undefined;
 
     if (isNumeric(value)) {
       numberValue = parseInt(value, 10);
-      if (isNaN(numberValue)) numberValue = undefined;
+      if (Number.isNaN(numberValue)) numberValue = undefined;
     }
 
     if (seed)
@@ -117,7 +117,7 @@ export const EditSeeds = () => {
   };
 
   const handleDeleteSeed = () => {
-    if (seed && seed.id) {
+    if (seed?.id) {
       deleteSeed.mutate(seed?.id);
       router.history.back();
     }
@@ -216,7 +216,7 @@ export const EditSeeds = () => {
         <div className="flex items-center space-x-2">
           <label
             htmlFor="preSprout"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {t("seeds.preSprout")}
           </label>

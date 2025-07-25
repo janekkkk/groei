@@ -1,29 +1,29 @@
+import type { Bed } from "@groei/common/src/models/Bed";
+import { useCanGoBack, useRouter } from "@tanstack/react-router";
+import { RefreshCw } from "lucide-react";
 import {
-  ChangeEventHandler,
+  type ChangeEventHandler,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { Input } from "@/shadcdn/components/ui/input";
-import { Label } from "@/shadcdn/components/ui/label";
-import { Button } from "@/shadcdn/components/ui/button";
-import { Bed } from "@groei/common/src/models/Bed";
-import { useBedStore } from "./beds.store";
-import { Textarea } from "@/shadcdn/components/ui/textarea";
-import { classNames } from "@/shared/utils";
-import { Route } from "@/routes/beds/$bedId.tsx";
-import { useCanGoBack, useRouter } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import {
   useCreateBedMutation,
   useDeleteBedMutation,
   useUpdateBedMutation,
 } from "@/features/Beds/useBedQuery";
-import { isNumeric } from "@/shared/utils/is-numeric.helper";
-import { useTranslation } from "react-i18next";
+import { Route } from "@/routes/beds/$bedId.tsx";
+import { Button } from "@/shadcdn/components/ui/button";
+import { Input } from "@/shadcdn/components/ui/input";
+import { Label } from "@/shadcdn/components/ui/label";
+import { Textarea } from "@/shadcdn/components/ui/textarea";
 import { useToast } from "@/shadcdn/hooks/use-toast.ts";
+import { classNames } from "@/shared/utils";
+import { isNumeric } from "@/shared/utils/is-numeric.helper";
+import { useBedStore } from "./beds.store";
 import { BedPlanner } from "./grid/BedPlanner";
-import { RefreshCw } from "lucide-react";
 
 const getEmptyBed = (): Bed =>
   ({
@@ -86,11 +86,11 @@ export const EditBeds = () => {
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    let numberValue;
+    let numberValue: number | undefined;
 
     if (isNumeric(value)) {
       numberValue = parseInt(value, 10);
-      if (isNaN(numberValue)) numberValue = undefined;
+      if (Number.isNaN(numberValue)) numberValue = undefined;
     }
 
     const updatedBed = {
@@ -119,7 +119,7 @@ export const EditBeds = () => {
   };
 
   const handleDeleteBed = () => {
-    if (bed && bed.id) {
+    if (bed?.id) {
       deleteBed.mutate(bed?.id);
       router.history.back();
     }
@@ -178,7 +178,7 @@ export const EditBeds = () => {
 
   useEffect(() => {
     initExistingBed();
-  }, [bedId, beds, initExistingBed]);
+  }, [initExistingBed]);
 
   return (
     <div>
@@ -227,7 +227,7 @@ export const EditBeds = () => {
           <>
             <div>
               <Label htmlFor="gridWidth">{t("beds.gridWidth")}</Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {t("beds.gridHelp")}
               </p>
               <Input
@@ -241,7 +241,7 @@ export const EditBeds = () => {
             </div>
             <div>
               <Label htmlFor="gridWidth">{t("beds.gridHeight")}</Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {t("beds.gridHelp")}
               </p>
               <Input
@@ -300,8 +300,8 @@ export const EditBeds = () => {
 
       {/* Saving Indicator */}
       {isSaving && (
-        <div className="mt-4 text-sm text-muted-foreground flex items-center">
-          <RefreshCw className="animate-spin mr-2" />
+        <div className="mt-4 flex items-center text-muted-foreground text-sm">
+          <RefreshCw className="mr-2 animate-spin" />
           {t("core.saving")}
         </div>
       )}

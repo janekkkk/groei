@@ -1,8 +1,8 @@
+import type { BedDTO, GridItem } from "@groei/common/src/models/Bed.ts";
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db/index.ts";
-import { eq } from "drizzle-orm";
 import { bedTable, gridItemTable } from "../db/schema.ts";
-import { BedDTO, GridItem } from "@groei/common/src/models/Bed.ts";
 
 const router = new Hono();
 
@@ -41,8 +41,8 @@ router.get("/", async (c) => {
     // Transform the data to match the expected frontend format
     const transformedBeds = result.map((bed) => ({
       ...bed,
-      grid: bed.grid.map((gridItem, index) => ({
-        index,
+      grid: bed.grid.map((gridItem) => ({
+        index: gridItem.position, // Use the stored position value
         seed: gridItem.seed || undefined,
         bedId: gridItem.bedId,
         seedId: gridItem.seedId,
@@ -84,7 +84,7 @@ router.get("/:id", async (c) => {
     const transformedBed = {
       ...result,
       grid: result.grid.map((gridItem) => ({
-        index: gridItem.position ?? gridItem.id, // Use position if available, fall back to id
+        index: gridItem.position, // Use the stored position value consistently
         seed: gridItem.seed || undefined,
         bedId: gridItem.bedId,
         seedId: gridItem.seedId,

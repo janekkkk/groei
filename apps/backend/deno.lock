@@ -23,7 +23,7 @@
         "npm:cross-env@^7.0.3",
         "npm:dotenv@^16.4.7",
         "npm:drizzle-kit@~0.30.4",
-        "npm:drizzle-orm@~0.43.1",
+        "npm:drizzle-orm@~0.44.1",
         "npm:hono@^4.6.20",
         "npm:idb-keyval@^6.2.1",
         "npm:tsx@^4.19.2"
