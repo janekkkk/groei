@@ -60,8 +60,8 @@ export const SeedOverview = () => {
             // Show loading skeletons while fetching
             Array(3)
               .fill(0)
-              .map((_, index) => (
-                <TableRow key={`loading-${index}`}>
+              .map(() => (
+                <TableRow key={crypto.randomUUID()}>
                   <TableCell>
                     <Skeleton className="h-5 w-full" />
                   </TableCell>

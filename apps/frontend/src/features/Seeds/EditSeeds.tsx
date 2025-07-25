@@ -79,7 +79,7 @@ export const EditSeeds = () => {
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const { name, value } = e.target;
-    let numberValue;
+    let numberValue: number | undefined;
 
     if (isNumeric(value)) {
       numberValue = parseInt(value, 10);

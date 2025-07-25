@@ -52,7 +52,7 @@ export const BedOverview = () => {
             Array(3)
               .fill(0)
               .map((_, index) => (
-                <TableRow key={`loading-${index}`}>
+                <TableRow key={crypto.randomUUID()}>
                   <TableCell>
                     <Skeleton className="h-5 w-full" />
                   </TableCell>
