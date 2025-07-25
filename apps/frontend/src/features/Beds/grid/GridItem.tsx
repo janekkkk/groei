@@ -36,7 +36,6 @@ export const GridItem = ({ seed, index, handleSelectChange }: Props) => {
       open={isSeedSelectPopoverOpen}
       defaultOpen={isSeedSelectPopoverOpen}
       onOpenChange={(isOpen: boolean) => {
-        console.log(isOpen);
         setIsSeedSelectPopoverOpen(isOpen);
       }}
     >
@@ -103,11 +102,12 @@ export const GridItem = ({ seed, index, handleSelectChange }: Props) => {
                       None
                     </SelectItem>
                     {seeds
-                      .sort((a: Seed, b: Seed) =>
-                        a.name
+                      .sort((a: Seed, b: Seed) => {
+                        console.log({ seeds });
+                        return a.name
                           .toLowerCase()
-                          .localeCompare(b.name.toLowerCase()),
-                      )
+                          .localeCompare(b.name.toLowerCase());
+                      })
                       .map((seed) => (
                         <SelectItem
                           key={seed.id}
