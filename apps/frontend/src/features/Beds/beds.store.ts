@@ -1,6 +1,6 @@
+import type { Bed } from "@groei/common/src/models/Bed";
 import { create } from "zustand";
-import { persist, devtools, PersistStorage } from "zustand/middleware";
-import { Bed } from "@groei/common/src/models/Bed";
+import { devtools, type PersistStorage, persist } from "zustand/middleware";
 import { indexedDBStorage } from "@/core/store/indexedDbStorage";
 
 interface BedStore {

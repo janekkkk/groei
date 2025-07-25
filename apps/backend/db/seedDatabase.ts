@@ -1,13 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection ES6UnusedImports
 
+import type { BedDTO, GridItemDTO } from "@groei/common/src/models/Bed.ts";
+import {
+  Month,
+  PlantHeight,
+  type SeedDTO,
+} from "@groei/common/src/models/Seed.ts";
+import type { User } from "@groei/common/src/models/User.ts";
+import { db } from "./index.ts";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { bedTable, gridItemTable, seedsTable, usersTable } from "./schema.ts";
-import { db } from "./index.ts";
-import { User } from "@groei/common/src/models/User.ts";
-import { Month, PlantHeight, SeedDTO } from "@groei/common/src/models/Seed.ts";
-import { BedDTO, GridItemDTO } from "@groei/common/src/models/Bed.ts";
+import { seedsTable, usersTable } from "./schema.ts";
 
 const main = async () => {
   const user: User = {
@@ -663,7 +667,7 @@ const main = async () => {
     gridHeight: 5,
   } as BedDTO;
 
-  const gridItem: GridItemDTO = {
+  const _gridItem: GridItemDTO = {
     index: 1,
     seedId: februarySeeds[0].id,
     bedId: bed.id,

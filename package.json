@@ -18,26 +18,19 @@
     "dev": "pnpm exec nx run-many -t dev",
     "build": "pnpm exec nx run-many -t build",
     "lint:all": "pnpm exec nx run-many -t lint",
-    "lint": "eslint .",
-    "format": "prettier --write .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
     "prepare": "husky"
   },
-  "dependencies": {
-    "@eslint/js": "^9.22.0",
-    "eslint": "^9.22.0",
-    "globals": "^15.15.0",
-    "typescript-eslint": "^8.26.1"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@biomejs/biome": "2.1.2",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
-    "@nx/eslint": "20.8.2",
     "@nx/vite": "20.8.2",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-react": "^7.37.4",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "nx": "20.8.2",
@@ -46,9 +39,11 @@
     "typescript": "5.7.3"
   },
   "lint-staged": {
-    "**/*.{js,ts,tsx}": [
-      "eslint --fix"
+    "**/*.{js,ts,tsx,jsx}": [
+      "biome check --write"
     ],
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }

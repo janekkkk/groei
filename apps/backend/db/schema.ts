@@ -1,6 +1,6 @@
+import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { timestamps } from "./helpers.ts";
-import { relations } from "drizzle-orm";
 
 export const usersTable = sqliteTable("users_table", {
   name: text().notNull(),

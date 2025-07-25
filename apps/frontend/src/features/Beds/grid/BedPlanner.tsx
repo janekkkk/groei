@@ -1,5 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import type { Bed } from "@groei/common/src/models/Bed";
+import type { Seed } from "@groei/common/src/models/Seed";
 import { Grid, Minus, Plus, Sprout, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { Button } from "@/shadcdn/components/ui/button";
 import {
   Card,
@@ -15,10 +19,6 @@ import {
 } from "@/shadcdn/components/ui/dialog";
 import { Slider } from "@/shadcdn/components/ui/slider";
 import { cn } from "@/shadcdn/lib/utils";
-import { useTranslation } from "react-i18next";
-import { Bed } from "@groei/common/src/models/Bed";
-import { Seed } from "@groei/common/src/models/Seed";
-import { useSeedStore } from "@/features/Seeds/seeds.store";
 
 interface GridCell {
   row: number;
@@ -107,8 +107,9 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
           .fill(null)
           .map((_, col) => {
             const index = row * bed.gridWidth + col;
-            const existingSeed =
-              bed.grid && bed.grid[index] ? bed.grid[index].seed : undefined;
+            const existingSeed = bed.grid?.[index]
+              ? bed.grid[index].seed
+              : undefined;
             return { row, col, seed: existingSeed };
           }),
       );
@@ -148,7 +149,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
       setGrid(newGrid);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bed.grid, gridSize.cols]);
+  }, [bed.grid, gridSize.cols, grid]);
 
   // Update bed when grid changes - using a debounced approach
   const gridUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -197,7 +198,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
         clearTimeout(gridUpdateTimeoutRef.current);
       }
     };
-  }, [grid, debouncedUpdateBed]);
+  }, [debouncedUpdateBed]);
 
   const handleCellClick = (row: number, col: number) => {
     if (dragMode) return;
@@ -482,7 +483,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
         <CardHeader className="py-3">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-1 text-lg">
-              <Sprout className="w-5 h-5 text-green-600" />
+              <Sprout className="h-5 w-5 text-green-600" />
               {t("beds.grid")}
             </CardTitle>
             <div className="flex items-center gap-2">
@@ -493,12 +494,12 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                 onClick={() => setIsGridDialogOpen(true)}
                 disabled={!isCreate}
               >
-                <Grid className="w-4 h-4" />
+                <Grid className="h-4 w-4" />
                 <span className="hidden sm:inline">{t("beds.gridSize")}</span>
               </Button>
             </div>
           </div>
-          <div className="flex gap-3 text-xs text-muted-foreground">
+          <div className="flex gap-3 text-muted-foreground text-xs">
             <span>
               {t("beds.grid")}: {gridSize.rows} × {gridSize.cols}
             </span>
@@ -514,7 +515,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
       <Card>
         <CardContent className="p-6">
           <div
-            className="grid gap-1 sm:gap-2 mx-auto"
+            className="mx-auto grid gap-1 sm:gap-2"
             style={{
               gridTemplateColumns: `repeat(${gridSize.cols}, minmax(0, 1fr))`,
               maxWidth: "fit-content",
@@ -528,12 +529,12 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                   data-row={rowIndex}
                   data-col={colIndex}
                   className={cn(
-                    "relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 border-2 border-dashed border-gray-300",
-                    "rounded-lg cursor-pointer transition-all duration-200 hover:border-green-400",
+                    "relative h-10 w-10 border-2 border-gray-300 border-dashed sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16",
+                    "cursor-pointer rounded-lg transition-all duration-200 hover:border-green-400",
                     cell.seed ? "border-solid" : "hover:bg-green-50",
                     dragOverCell?.row === rowIndex &&
                       dragOverCell?.col === colIndex &&
-                      "bg-green-100 border-green-500",
+                      "border-green-500 bg-green-100",
                     draggedItem?.row === rowIndex &&
                       draggedItem?.col === colIndex &&
                       "opacity-50",
@@ -547,7 +548,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                 >
                   {cell.seed ? (
                     <div
-                      className="relative w-full h-full"
+                      className="relative h-full w-full"
                       draggable={dragMode}
                       onDragStart={(e) =>
                         handleDragStart(e, rowIndex, colIndex, cell.seed!)
@@ -558,30 +559,30 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                       }
                     >
                       <div
-                        className={`w-full h-full rounded-md bg-emerald-500 opacity-80 flex items-center justify-center`}
+                        className={`flex h-full w-full items-center justify-center rounded-md bg-emerald-500 opacity-80`}
                       >
-                        <Sprout className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-white" />
+                        <Sprout className="h-3 w-3 text-white sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
                       </div>
                       {!dragMode && (
                         <Button
                           size="sm"
                           variant="destructive"
-                          className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-5 sm:h-5 p-0 rounded-full"
+                          className="-top-1 -right-1 sm:-top-2 sm:-right-2 absolute h-4 w-4 rounded-full p-0 sm:h-5 sm:w-5"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleRemoveSeed(rowIndex, colIndex);
                           }}
                         >
-                          <X className="w-2 h-2 sm:w-3 sm:h-3" />
+                          <X className="h-2 w-2 sm:h-3 sm:w-3" />
                         </Button>
                       )}
-                      <div className="absolute -bottom-5 sm:-bottom-6 left-0 right-0 text-[10px] sm:text-xs text-center font-medium truncate">
+                      <div className="-bottom-5 sm:-bottom-6 absolute right-0 left-0 truncate text-center font-medium text-[10px] sm:text-xs">
                         {cell.seed.name}
                       </div>
                     </div>
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Plus className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
+                    <div className="flex h-full w-full items-center justify-center">
+                      <Plus className="h-3 w-3 text-gray-400 sm:h-4 sm:w-4" />
                     </div>
                   )}
                 </div>
@@ -599,24 +600,24 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
               {t("seeds.chooseSeed")}
             </DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[60vh] overflow-y-auto">
+          <div className="grid max-h-[60vh] grid-cols-1 gap-2 overflow-y-auto md:grid-cols-2">
             {availableSeeds.map((seed) => (
               <Button
                 key={seed.id}
                 variant="outline"
-                className="h-auto p-3 justify-start"
+                className="h-auto justify-start p-3"
                 onClick={() => handleSeedSelect(seed)}
               >
-                <div className="flex items-center gap-2 w-full">
+                <div className="flex w-full items-center gap-2">
                   <div
-                    className={`w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center`}
+                    className={`flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500`}
                   >
-                    <Sprout className="w-3 h-3 text-white" />
+                    <Sprout className="h-3 w-3 text-white" />
                   </div>
-                  <div className="text-left flex-1">
+                  <div className="flex-1 text-left">
                     <div className="font-medium text-sm">{seed.name}</div>
                     {seed.variety && (
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-muted-foreground text-xs">
                         {seed.variety}
                       </div>
                     )}
@@ -639,8 +640,8 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
           <div className="space-y-6 py-4">
             <div className="space-y-4">
               <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="font-medium text-sm">
                     {t("beds.rows")}: {gridSize.rows}
                   </span>
                   <div className="flex items-center gap-2">
@@ -686,8 +687,8 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
               </div>
 
               <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="font-medium text-sm">
                     {t("beds.columns")}: {gridSize.cols}
                   </span>
                   <div className="flex items-center gap-2">
@@ -733,8 +734,8 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
               </div>
             </div>
 
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-muted-foreground">
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground text-sm">
                 {t("beds.totalCells")}: {gridSize.rows * gridSize.cols}
               </div>
               <Button

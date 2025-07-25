@@ -1,5 +1,5 @@
+import type { Seed } from "@groei/common/src/models/Seed";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Seed } from "@groei/common/src/models/Seed";
 import { seedService } from "@/features/Seeds/seed.service";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import { mergeItems } from "@/shared/merge.helper";
@@ -62,7 +62,7 @@ export const useSeedQuery = (id: string) => {
       try {
         const seed = await seedService.fetchSeed(id);
 
-        if (seed && seed.id) {
+        if (seed?.id) {
           // Normalize dates for proper comparison
           const normalizedSeed = {
             ...seed,

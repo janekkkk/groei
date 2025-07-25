@@ -30,7 +30,7 @@ class DateService {
       const result = new Date(isoDateString);
 
       // Check if the result is a valid date
-      if (isNaN(result.getTime())) {
+      if (Number.isNaN(result.getTime())) {
         console.warn(
           `Invalid date created from: ${dateString}, using current date instead`,
         );

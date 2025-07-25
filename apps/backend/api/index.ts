@@ -1,7 +1,7 @@
 import { Hono } from "hono";
+import bedRoute from "./bedRoute.ts";
 import seedRoute from "./seedRoute.ts";
 import userRoute from "./userRoute.ts";
-import bedRoute from "./bedRoute.ts";
 
 const router = new Hono();
 

@@ -1,11 +1,15 @@
+import type { Seed } from "@groei/common/src/models/Seed.ts";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useSeedStore } from "@/features/Seeds/seeds.store.ts";
+import { Button } from "@/shadcdn/components/ui/button.tsx";
+import { Label } from "@/shadcdn/components/ui/label.tsx";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/shadcdn/components/ui/popover.tsx";
-import { Button } from "@/shadcdn/components/ui/button.tsx";
-import { Plus } from "lucide-react";
-import { Label } from "@/shadcdn/components/ui/label.tsx";
 import {
   Select,
   SelectContent,
@@ -14,11 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shadcdn/components/ui/select.tsx";
-import { Seed } from "@groei/common/src/models/Seed.ts";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useSeedStore } from "@/features/Seeds/seeds.store.ts";
-import { SelectChange } from "@/shared/select.model.ts";
+import type { SelectChange } from "@/shared/select.model.ts";
 
 interface Props {
   seed: Seed | undefined;
@@ -43,21 +43,21 @@ export const GridItem = ({ seed, index, handleSelectChange }: Props) => {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="p-2 bg-amber-900 text-white hover:text-white hover:bg-amber-800 border rounded-xl relative cursor-pointer"
+          className="relative cursor-pointer rounded-xl border bg-amber-900 p-2 text-white hover:bg-amber-800 hover:text-white"
         >
-          <span className="absolute bottom-1 right-2 text-xs">
+          <span className="absolute right-2 bottom-1 text-xs">
             <span className="sr-only">{t("beds.cell")}</span>
             {index + 1}
           </span>
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             {!seed?.id && <Plus />}
 
             {seed?.id && (
-              <div className="flex flex-col items-center w-full">
-                <span className=" text-white text-sm truncate">
+              <div className="flex w-full flex-col items-center">
+                <span className=" truncate text-sm text-white">
                   {seed?.name}
                 </span>
-                <span className=" text-white text-xs truncate w-9/12">
+                <span className=" w-9/12 truncate text-white text-xs">
                   {seed?.variety}
                 </span>
               </div>
@@ -69,7 +69,7 @@ export const GridItem = ({ seed, index, handleSelectChange }: Props) => {
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">{t("seeds.seed")}</h4>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("beds.plantSeedInCell")}
             </p>
           </div>

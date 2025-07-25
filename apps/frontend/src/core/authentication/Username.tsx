@@ -1,15 +1,12 @@
+import type { User } from "@groei/common/src/models/User";
+import { ChevronsUpDown, LogIn, LogOut } from "lucide-react";
+import { useState } from "react";
+import { useMount } from "react-use";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/shadcdn/components/ui/avatar";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/shadcdn/components/ui/sidebar";
-import { ChevronsUpDown, LogIn, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,9 +15,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcdn/components/ui/dropdown-menu";
-import { useMount } from "react-use";
-import { useState } from "react";
-import { User } from "@groei/common/src/models/User";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/shadcdn/components/ui/sidebar";
 
 export const Username = () => {
   const isLoggedIn = false;
@@ -116,7 +116,7 @@ export const Username = () => {
                 <button
                   type="button"
                   onClick={logout}
-                  className="w-full flex gap-2 items-center "
+                  className="flex w-full items-center gap-2 "
                 >
                   <LogOut />
                   Log out
@@ -126,7 +126,7 @@ export const Username = () => {
                 <button
                   type="button"
                   onClick={login}
-                  className="w-full flex gap-2 items-center "
+                  className="flex w-full items-center gap-2 "
                 >
                   <LogIn />
                   Log In

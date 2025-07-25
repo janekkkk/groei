@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
-import { useSeedsQuery } from "@/features/Seeds/useSeedQuery";
+import type { ReactNode } from "react";
 import { useBedsQuery } from "@/features/Beds/useBedQuery";
-import { useSwipe } from "@/shared/use-swipe.hook.ts";
+import { useSeedsQuery } from "@/features/Seeds/useSeedQuery";
 import { useSidebar } from "@/shadcdn/components/ui/sidebar.tsx";
+import { useSwipe } from "@/shared/use-swipe.hook.ts";
 
 interface Props {
   children: ReactNode;

@@ -1,4 +1,10 @@
+import type { Seed } from "@groei/common/src/models/Seed";
+import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
+import { useSeedsQuery } from "@/features/Seeds/useSeedQuery";
+import { Button } from "@/shadcdn/components/ui/button";
+import { Skeleton } from "@/shadcdn/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -8,12 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcdn/components/ui/table";
-import { Link } from "@tanstack/react-router";
-import { Button } from "@/shadcdn/components/ui/button";
-import { Seed } from "@groei/common/src/models/Seed";
-import { useTranslation } from "react-i18next";
-import { useSeedsQuery } from "@/features/Seeds/useSeedQuery";
-import { Skeleton } from "@/shadcdn/components/ui/skeleton";
 
 export const SeedOverview = () => {
   const { seeds } = useSeedStore((state) => state);
@@ -24,7 +24,7 @@ export const SeedOverview = () => {
 
   return (
     <div>
-      <div className="w-full flex justify-end mb-2">
+      <div className="mb-2 flex w-full justify-end">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore*/}
         <Link to={"/seeds/-1"}>
@@ -35,7 +35,7 @@ export const SeedOverview = () => {
       </div>
 
       {isError && (
-        <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+        <div className="mb-4 rounded-lg bg-red-100 p-4 text-red-700 text-sm">
           {t("seeds.errorLoading")}
         </div>
       )}
@@ -101,7 +101,7 @@ export const SeedOverview = () => {
             <TableRow>
               <TableCell
                 colSpan={5}
-                className="text-center py-6 text-muted-foreground"
+                className="py-6 text-center text-muted-foreground"
               >
                 {t("seeds.noSeeds")}
               </TableCell>

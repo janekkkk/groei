@@ -1,8 +1,8 @@
+import type { BedDTO, GridItem } from "@groei/common/src/models/Bed.ts";
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db/index.ts";
-import { eq } from "drizzle-orm";
 import { bedTable, gridItemTable } from "../db/schema.ts";
-import { BedDTO, GridItem } from "@groei/common/src/models/Bed.ts";
 
 const router = new Hono();
 

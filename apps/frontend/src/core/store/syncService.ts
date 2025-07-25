@@ -1,9 +1,10 @@
 // Path: /Users/janekozga/Projects/Personal/groei/apps/frontend/src/core/store/syncService.ts
-import { markStoreSynced, shouldSyncWithBackend } from "./indexedDbStorage";
-import { useBedStore } from "@/features/Beds/beds.store";
-import { useSeedStore } from "@/features/Seeds/seeds.store";
+
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
+import { useBedStore } from "@/features/Beds/beds.store";
+import { useSeedStore } from "@/features/Seeds/seeds.store";
+import { markStoreSynced, shouldSyncWithBackend } from "./indexedDbStorage";
 
 // Base API URL from environment or default
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";

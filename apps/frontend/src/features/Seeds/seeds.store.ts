@@ -1,6 +1,6 @@
+import type { Seed } from "@groei/common/src/models/Seed";
 import { create } from "zustand";
-import { persist, devtools, PersistStorage } from "zustand/middleware";
-import { Seed } from "@groei/common/src/models/Seed";
+import { devtools, type PersistStorage, persist } from "zustand/middleware";
 import { indexedDBStorage } from "@/core/store/indexedDbStorage";
 
 interface SeedStore {

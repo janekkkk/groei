@@ -1,7 +1,7 @@
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db/index.ts";
 import { usersTable } from "../db/schema.ts";
-import { eq } from "drizzle-orm";
 
 const router = new Hono();
 

@@ -1,8 +1,8 @@
-import { Seed, SeedDTO } from "@groei/common/src/models/Seed";
+import type { Seed, SeedDTO } from "@groei/common/src/models/Seed";
 import { dateService } from "@/shared/date.service";
 
 class SeedService {
-  private static readonly baseUrl = import.meta.env.VITE_API_URI + "/seeds";
+  private static readonly baseUrl = `${import.meta.env.VITE_API_URI}/seeds`;
 
   async fetchSeeds(): Promise<Seed[]> {
     const response = await fetch(SeedService.baseUrl);
