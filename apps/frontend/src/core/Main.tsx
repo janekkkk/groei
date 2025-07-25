@@ -4,7 +4,6 @@ import { Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { MainLayout } from "@/core/layouts/main.layout.tsx";
 import { AppSidebar } from "@/core/sidebar/AppSidebar.tsx";
-import { useSyncService } from "@/core/store/syncService";
 import { ThemeProvider } from "@/core/theme/ThemeProvider.tsx";
 import { ThemeToggle } from "@/core/theme/ThemeToggle.tsx";
 import {
@@ -39,7 +38,6 @@ export const Main = () => {
               <SidebarTrigger className="absolute top-2 left-2" />
               <ThemeToggle className="absolute top-2 right-2" />
               <div className="pt-14 pb-4">
-                <SyncInitializer />
                 <Outlet />
               </div>
             </MainLayout>
@@ -55,13 +53,4 @@ export const Main = () => {
       )}
     </QueryClientProvider>
   );
-};
-
-// Component to initialize the sync service
-const SyncInitializer = () => {
-  // This hook initializes the sync service and sets up periodic sync
-  useSyncService();
-
-  // This component doesn't render anything
-  return null;
 };
