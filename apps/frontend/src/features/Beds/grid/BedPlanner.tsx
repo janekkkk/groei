@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
 import type { Bed } from "@groei/common/src/models/Bed";
 import type { Seed } from "@groei/common/src/models/Seed";
 import { Grid, Minus, Plus, Sprout, X } from "lucide-react";
@@ -276,7 +274,42 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     if (e.dataTransfer.setDragImage) {
       const dragPreview = document.createElement("div");
       dragPreview.className = `w-12 h-12 rounded-md bg-emerald-500 opacity-80 flex items-center justify-center`;
-      dragPreview.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M7 17.259V12a5 5 0 0 1 10 0v5.259"></path><path d="M12 22v-3"></path><path d="M3 14c.83.643 1.983 1 3.5 1s2.67-.357 3.5-1c.83.643 1.983 1 3.5 1s2.67-.357 3.5-1"></path></svg>`;
+
+      // Create SVG element properly to avoid attribute issues
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", "24");
+      svg.setAttribute("height", "24");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("fill", "none");
+      svg.setAttribute("stroke", "white");
+      svg.setAttribute("stroke-width", "2");
+
+      const path1 = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
+      path1.setAttribute("d", "M7 17.259V12a5 5 0 0 1 10 0v5.259");
+
+      const path2 = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
+      path2.setAttribute("d", "M12 22v-3");
+
+      const path3 = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
+      path3.setAttribute(
+        "d",
+        "M3 14c.83.643 1.983 1 3.5 1s2.67-.357 3.5-1c.83.643 1.983 1 3.5 1s2.67-.357 3.5-1",
+      );
+
+      svg.appendChild(path1);
+      svg.appendChild(path2);
+      svg.appendChild(path3);
+      dragPreview.appendChild(svg);
+
       document.body.appendChild(dragPreview);
       e.dataTransfer.setDragImage(dragPreview, 24, 24);
       setTimeout(() => document.body.removeChild(dragPreview), 0);
@@ -524,71 +557,81 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
             }}
           >
             {grid.map((row, rowIndex) =>
-              row.map((cell, colIndex) => (
-                <div
-                  key={`${rowIndex}-${crypto.randomUUID()}`}
-                  data-cell="true"
-                  data-row={rowIndex}
-                  data-col={colIndex}
-                  className={cn(
-                    "relative h-10 w-10 border-2 border-gray-300 border-dashed sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16",
-                    "cursor-pointer rounded-lg transition-all duration-200 hover:border-green-400",
-                    cell.seed ? "border-solid" : "hover:bg-green-50",
-                    dragOverCell?.row === rowIndex &&
-                      dragOverCell?.col === colIndex &&
-                      "border-green-500 bg-green-100",
-                    draggedItem?.row === rowIndex &&
-                      draggedItem?.col === colIndex &&
-                      "opacity-50",
-                  )}
-                  onClick={() => handleCellClick(rowIndex, colIndex)}
-                  onDragOver={(e) => handleDragOver(e, rowIndex, colIndex)}
-                  onDragLeave={handleDragLeave}
-                  onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleTouchEnd}
-                >
-                  {cell.seed ? (
-                    <div
-                      className="relative h-full w-full"
-                      draggable={dragMode}
-                      onDragStart={(e) =>
-                        handleDragStart(e, rowIndex, colIndex, cell.seed!)
-                      }
-                      onDragEnd={handleDragEnd}
-                      onTouchStart={(e) =>
-                        handleTouchStart(rowIndex, colIndex, cell.seed!, e)
-                      }
-                    >
-                      <div
-                        className={`flex h-full w-full items-center justify-center rounded-md bg-emerald-500 opacity-80`}
-                      >
-                        <Sprout className="h-3 w-3 text-white sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
-                      </div>
-                      {!dragMode && (
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          className="-top-1 -right-1 sm:-top-2 sm:-right-2 absolute h-4 w-4 rounded-full p-0 sm:h-5 sm:w-5"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveSeed(rowIndex, colIndex);
-                          }}
+              row.map((cell, colIndex) => {
+                const cellId = `cell-${cell.row * gridSize.cols + cell.col}`;
+                return (
+                  <button
+                    key={cellId}
+                    type="button"
+                    data-cell="true"
+                    data-row={rowIndex}
+                    data-col={colIndex}
+                    draggable={dragMode && !!cell.seed}
+                    className={cn(
+                      "relative h-10 w-10 border-2 border-gray-300 border-dashed sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16",
+                      "cursor-pointer rounded-lg transition-all duration-200 hover:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500",
+                      cell.seed ? "border-solid" : "hover:bg-green-50",
+                      dragOverCell?.row === rowIndex &&
+                        dragOverCell?.col === colIndex &&
+                        "border-green-500 bg-green-100",
+                      draggedItem?.row === rowIndex &&
+                        draggedItem?.col === colIndex &&
+                        "opacity-50",
+                    )}
+                    onClick={() => handleCellClick(rowIndex, colIndex)}
+                    onDragStart={(e) =>
+                      cell.seed &&
+                      handleDragStart(e, rowIndex, colIndex, cell.seed)
+                    }
+                    onDragOver={(e) => handleDragOver(e, rowIndex, colIndex)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
+                    onDragEnd={handleDragEnd}
+                    onTouchStart={(e) =>
+                      cell.seed &&
+                      handleTouchStart(rowIndex, colIndex, cell.seed, e)
+                    }
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    aria-label={
+                      cell.seed
+                        ? `${cell.seed.name} planted at row ${rowIndex + 1}, column ${colIndex + 1}`
+                        : `Empty cell at row ${rowIndex + 1}, column ${colIndex + 1}. Click to plant seed.`
+                    }
+                  >
+                    {cell.seed ? (
+                      <div className="relative h-full w-full">
+                        <div
+                          className={`flex h-full w-full items-center justify-center rounded-md bg-emerald-500 opacity-80`}
                         >
-                          <X className="h-2 w-2 sm:h-3 sm:w-3" />
-                        </Button>
-                      )}
-                      <div className="-bottom-5 sm:-bottom-6 absolute right-0 left-0 truncate text-center font-medium text-[10px] sm:text-xs">
-                        {cell.seed.name}
+                          <Sprout className="h-3 w-3 text-white sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
+                        </div>
+                        {!dragMode && (
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            className="-top-1 -right-1 sm:-top-2 sm:-right-2 absolute h-4 w-4 rounded-full p-0 sm:h-5 sm:w-5"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveSeed(rowIndex, colIndex);
+                            }}
+                            aria-label={`Remove ${cell.seed.name}`}
+                          >
+                            <X className="h-2 w-2 sm:h-3 sm:w-3" />
+                          </Button>
+                        )}
+                        <div className="-bottom-5 sm:-bottom-6 absolute right-0 left-0 truncate text-center font-medium text-[10px] sm:text-xs">
+                          {cell.seed.name}
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center">
-                      <Plus className="h-3 w-3 text-gray-400 sm:h-4 sm:w-4" />
-                    </div>
-                  )}
-                </div>
-              )),
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Plus className="h-3 w-3 text-gray-400 sm:h-4 sm:w-4" />
+                      </div>
+                    )}
+                  </button>
+                );
+              }),
             )}
           </div>
         </CardContent>
