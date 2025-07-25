@@ -612,30 +612,34 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
             </DialogTitle>
           </DialogHeader>
           <div className="grid max-h-[60vh] grid-cols-1 gap-2 overflow-y-auto md:grid-cols-2">
-            {availableSeeds.map((seed) => (
-              <Button
-                key={seed.id}
-                variant="outline"
-                className="h-auto justify-start p-3"
-                onClick={() => handleSeedSelect(seed)}
-              >
-                <div className="flex w-full items-center gap-2">
-                  <div
-                    className={`flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500`}
-                  >
-                    <Sprout className="h-3 w-3 text-white" />
+            {availableSeeds
+              .sort((a: Seed, b: Seed) =>
+                a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+              )
+              .map((seed) => (
+                <Button
+                  key={seed.id}
+                  variant="outline"
+                  className="h-auto justify-start p-3"
+                  onClick={() => handleSeedSelect(seed)}
+                >
+                  <div className="flex w-full items-center gap-2">
+                    <div
+                      className={`flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500`}
+                    >
+                      <Sprout className="h-3 w-3 text-white" />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium text-sm">{seed.name}</div>
+                      {seed.variety && (
+                        <div className="text-muted-foreground text-xs">
+                          {seed.variety}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex-1 text-left">
-                    <div className="font-medium text-sm">{seed.name}</div>
-                    {seed.variety && (
-                      <div className="text-muted-foreground text-xs">
-                        {seed.variety}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Button>
-            ))}
+                </Button>
+              ))}
           </div>
         </DialogContent>
       </Dialog>
