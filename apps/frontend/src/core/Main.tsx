@@ -12,16 +12,17 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { Toaster } from "@/shadcdn/components/ui/toaster.tsx";
 import { useSyncService } from "@/core/store/syncService";
-import { ServiceWorkerUpdater } from "@/core/ServiceWorkerUpdater";
 
 export const Main = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        // Set some sensible defaults for queries
-        refetchOnWindowFocus: true,
+        staleTime: 0,
+        gcTime: 0, // Previously cacheTime
+        refetchOnWindowFocus: false,
         refetchOnMount: true,
-        staleTime: 5 * 60 * 1000, // 5 minutes
+        refetchOnReconnect: false,
+        retry: false,
       },
     },
   });
@@ -34,8 +35,6 @@ export const Main = () => {
           <AppSidebar />
           <main className="w-full">
             <Toaster />
-            {/* Add ServiceWorkerUpdater to handle app updates */}
-            <ServiceWorkerUpdater />
             <MainLayout>
               <SidebarTrigger className="absolute left-2 top-2" />
               <ThemeToggle className="absolute right-2 top-2" />

@@ -3,23 +3,16 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["{projectRoot}/dist"],
-      "cache": true
+      "outputs": ["{projectRoot}/dist"]
     },
     "test": {
-      "outputs": ["{projectRoot}/coverage"],
-      "cache": true
+      "outputs": ["{projectRoot}/coverage"]
     },
     "test:ui": {
-      "outputs": ["{projectRoot}/coverage"],
-      "cache": true
+      "outputs": ["{projectRoot}/coverage"]
     },
-    "lint": {
-      "cache": true
-    },
-    "typecheck": {
-      "cache": true
-    }
+    "lint": {},
+    "typecheck": {}
   },
   "defaultBase": "main",
   "plugins": [
