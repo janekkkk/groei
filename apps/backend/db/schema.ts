@@ -46,9 +46,9 @@ export const bedTable = sqliteTable("bed_table", {
     .$default(() => crypto.randomUUID()),
   name: text().notNull(),
   description: text(),
-  sowDate: text(),
-  gridWidth: integer(),
-  gridHeight: integer(),
+  sowDate: text("sow_date"),
+  gridWidth: integer("grid_width"),
+  gridHeight: integer("grid_height"),
   ...timestamps,
 });
 

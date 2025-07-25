@@ -98,6 +98,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
   // Update grid when bed grid size changes
   useEffect(() => {
     setGridSize({ rows: bed.gridHeight, cols: bed.gridWidth });
+    console.log("Updating grid size:", bed.gridHeight, bed.gridWidth);
 
     // Update grid with new dimensions
     const newGrid = Array(bed.gridHeight)
@@ -107,49 +108,14 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
           .fill(null)
           .map((_, col) => {
             const index = row * bed.gridWidth + col;
-            const existingSeed = bed.grid?.[index]
-              ? bed.grid[index].seed
-              : undefined;
+            // Look for seed at this specific index position
+            const gridItem = bed.grid?.find((item) => item.index === index);
+            const existingSeed = gridItem?.seed;
             return { row, col, seed: existingSeed };
           }),
       );
     setGrid(newGrid);
   }, [bed.grid, bed.gridHeight, bed.gridWidth]);
-
-  // Update grid seeds when bed.grid changes (but skip on initial render)
-  const initialRenderRef = useRef(true);
-  useEffect(() => {
-    if (initialRenderRef.current) {
-      initialRenderRef.current = false;
-      return;
-    }
-
-    // Only update seeds in the grid, not recreating the whole grid
-    if (bed.grid) {
-      const newGrid = [...grid];
-
-      // Clear existing seeds first
-      for (let row = 0; row < newGrid.length; row++) {
-        for (let col = 0; col < newGrid[row].length; col++) {
-          delete newGrid[row][col].seed;
-        }
-      }
-
-      // Add seeds from bed.grid
-      bed.grid.forEach((item) => {
-        if (item.seed) {
-          const row = Math.floor(item.index / gridSize.cols);
-          const col = item.index % gridSize.cols;
-          if (row < newGrid.length && col < newGrid[row].length) {
-            newGrid[row][col].seed = item.seed;
-          }
-        }
-      });
-
-      setGrid(newGrid);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bed.grid, gridSize.cols, grid]);
 
   // Update bed when grid changes - using a debounced approach
   const gridUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
