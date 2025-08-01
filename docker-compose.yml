@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  frontend:
+    build: ./apps/frontend
+    ports:
+      - "4001:80"
+    depends_on:
+      - backend
+    networks:
+      - groeinet
+  backend:
+    build: ./apps/backend
+    ports:
+      - "4000:8000"
+    networks:
+      - groeinet
+    environment:
+      - DENO_ENV=production
+    volumes:
+      - groeidb:/app/db.sqlite
+networks:
+  groeinet:
+    driver: bridge
+volumes:
+  groeidb:
