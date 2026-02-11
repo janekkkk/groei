@@ -401,8 +401,14 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     );
 
     if (cellElement) {
-      const row = Number.parseInt(cellElement.getAttribute("data-row") || "-1");
-      const col = Number.parseInt(cellElement.getAttribute("data-col") || "-1");
+      const row = Number.parseInt(
+        cellElement.getAttribute("data-row") || "-1",
+        10,
+      );
+      const col = Number.parseInt(
+        cellElement.getAttribute("data-col") || "-1",
+        10,
+      );
 
       if (row >= 0 && col >= 0) {
         setDragOverCell({ row, col });
@@ -533,9 +539,11 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
               row.map((cell, colIndex) => {
                 const cellId = `cell-${cell.row * gridSize.cols + cell.col}`;
                 return (
-                  <button
+                  // biome-ignore lint/a11y/useSemanticElements: Cannot use button element as it contains a button (remove seed)
+                  <div
                     key={cellId}
-                    type="button"
+                    role="button"
+                    tabIndex={0}
                     data-cell="true"
                     data-row={rowIndex}
                     data-col={colIndex}
@@ -552,6 +560,12 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                         "opacity-50",
                     )}
                     onClick={() => handleCellClick(rowIndex, colIndex)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleCellClick(rowIndex, colIndex);
+                      }
+                    }}
                     onDragStart={(e) =>
                       cell.seed &&
                       handleDragStart(e, rowIndex, colIndex, cell.seed)
@@ -583,7 +597,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                           <Button
                             size="sm"
                             variant="destructive"
-                            className="-top-1 -right-1 sm:-top-2 sm:-right-2 absolute h-4 w-4 rounded-full p-0 sm:h-5 sm:w-5"
+                            className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 sm:-top-2 sm:-right-2 sm:h-5 sm:w-5"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleRemoveSeed(rowIndex, colIndex);
@@ -593,7 +607,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                             <X className="h-2 w-2 sm:h-3 sm:w-3" />
                           </Button>
                         )}
-                        <div className="-bottom-5 sm:-bottom-6 absolute right-0 left-0 truncate text-center font-medium text-[10px] sm:text-xs">
+                        <div className="absolute right-0 -bottom-5 left-0 truncate text-center font-medium text-[10px] sm:-bottom-6 sm:text-xs">
                           {cell.seed.name}
                         </div>
                       </div>
@@ -602,7 +616,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                         <Plus className="h-3 w-3 text-gray-400 sm:h-4 sm:w-4" />
                       </div>
                     )}
-                  </button>
+                  </div>
                 );
               }),
             )}

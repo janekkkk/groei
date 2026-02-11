@@ -16,12 +16,12 @@ export const Main = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 0,
-        gcTime: 0, // Previously cacheTime
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        refetchOnReconnect: false,
-        retry: false,
+        staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh longer
+        gcTime: 10 * 60 * 1000, // 10 minutes - keep in cache when unused
+        refetchOnWindowFocus: true, // ✓ Refetch when returning to app
+        refetchOnMount: true, // Refetch on component mount (respects staleTime)
+        refetchOnReconnect: true, // ✓ Good for mobile use in garden
+        retry: 1,
       },
     },
   });

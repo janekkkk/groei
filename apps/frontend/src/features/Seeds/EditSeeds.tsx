@@ -137,6 +137,7 @@ export const EditSeeds = () => {
   const hasReceivedFetchedSeedRef = useRef(false);
 
   // Reset on seedId change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: seedId is intentionally the only dependency
   useEffect(() => {
     initializedSeedIdRef.current = null;
     hasReceivedFetchedSeedRef.current = false;
@@ -177,7 +178,7 @@ export const EditSeeds = () => {
       }
       // If not in store and fetch not arrived, keep waiting for fetchedSeed
     }
-  }, [seedId, isCreate, fetchedSeed]);
+  }, [seedId, isCreate, fetchedSeed, seeds]);
 
   return (
     <div>
@@ -495,4 +496,4 @@ export const EditSeeds = () => {
       </form>
     </div>
   );
-};;;;;;
+};
