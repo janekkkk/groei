@@ -35,19 +35,14 @@ export const ThemeProvider = ({
   useEffect(() => {
     const root = window.document.documentElement;
 
-    root.classList.remove("light", "dark");
-
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
-
-      root.classList.add(systemTheme);
+      // Let the browser use its native color-scheme detection
+      root.style.colorScheme = "";
       return;
     }
 
-    root.classList.add(theme);
+    // Set color-scheme for Tailwind v4's light-dark() function
+    root.style.colorScheme = theme;
   }, [theme]);
 
   const value = {
