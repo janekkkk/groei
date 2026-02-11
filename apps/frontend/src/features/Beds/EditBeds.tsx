@@ -10,8 +10,10 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  useBedsQuery,
   useCreateBedMutation,
   useDeleteBedMutation,
+  useBedQuery,
   useUpdateBedMutation,
 } from "@/features/Beds/useBedQuery";
 import { Route } from "@/routes/beds/$bedId.tsx";
@@ -54,6 +56,12 @@ export const EditBeds = () => {
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Fetch bed from server if not in create mode
+  const { data: fetchedBed } = useBedQuery(isCreate ? "" : bedId);
+
+  // Also ensure beds list is loaded for fallback to store
+  useBedsQuery();
 
   // Debounced auto-save function
   const debouncedSave = useCallback(
@@ -168,16 +176,52 @@ export const EditBeds = () => {
     }
   };
 
-  // Only load from store on initial mount or when bedId changes
+  // Track which bedId we've initialized data for
+  const initializedBedIdRef = useRef<string | null>(null);
+  const hasReceivedFetchedBedRef = useRef(false);
+
+  // Reset on bedId change
   useEffect(() => {
-    const existingBed = beds.find((b) => b.id === bedId);
-    if (bedId && !isCreate && existingBed) {
-      setBed(existingBed as unknown as Bed);
-    } else {
+    initializedBedIdRef.current = null;
+    hasReceivedFetchedBedRef.current = false;
+  }, [bedId]);
+
+  // Load bed data once it arrives or from fallback
+  useEffect(() => {
+    // Skip if we've already loaded this bedId
+    if (
+      initializedBedIdRef.current === bedId &&
+      initializedBedIdRef.current !== null
+    ) {
+      return;
+    }
+
+    // Prefer fetched data from server (only use first time)
+    if (fetchedBed && !hasReceivedFetchedBedRef.current) {
+      setBed(fetchedBed);
+      initializedBedIdRef.current = bedId;
+      hasReceivedFetchedBedRef.current = true;
+      return;
+    }
+
+    // For create mode, load empty bed
+    if (isCreate && initializedBedIdRef.current !== bedId) {
       setBed(getEmptyBed());
       nameInputRef?.current?.focus();
+      initializedBedIdRef.current = bedId;
+      return;
     }
-  }, [bedId, isCreate]);
+
+    // For existing beds, try fallback to store if fetch hasn't arrived yet
+    if (!isCreate && !fetchedBed && initializedBedIdRef.current !== bedId) {
+      const existingBed = beds.find((b) => b.id === bedId);
+      if (existingBed) {
+        setBed(existingBed as unknown as Bed);
+        initializedBedIdRef.current = bedId;
+      }
+      // If not in store and fetch not arrived, keep waiting for fetchedBed
+    }
+  }, [bedId, isCreate, fetchedBed]);
 
   return (
     <div>
@@ -306,4 +350,4 @@ export const EditBeds = () => {
       )}
     </div>
   );
-};
+};;;;;;;;;

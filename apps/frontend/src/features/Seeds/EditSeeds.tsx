@@ -12,6 +12,8 @@ import { useSeedStore } from "@/features/Seeds/seeds.store";
 import {
   useCreateSeedMutation,
   useDeleteSeedMutation,
+  useSeedQuery,
+  useSeedsQuery,
   useUpdateSeedMutation,
 } from "@/features/Seeds/useSeedQuery";
 import { Route } from "@/routes/seeds/$seedId.tsx";
@@ -72,6 +74,12 @@ export const EditSeeds = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
 
+  // Fetch seed from server if not in create mode
+  const { data: fetchedSeed } = useSeedQuery(isCreate ? "" : seedId);
+
+  // Also ensure seeds list is loaded for fallback to store
+  useSeedsQuery();
+
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
@@ -124,16 +132,52 @@ export const EditSeeds = () => {
     }
   };
 
-  // Only load from store on initial mount or when seedId changes
+  // Track which seedId we've initialized data for
+  const initializedSeedIdRef = useRef<string | null>(null);
+  const hasReceivedFetchedSeedRef = useRef(false);
+
+  // Reset on seedId change
   useEffect(() => {
-    const existingSeed = seeds.find((s) => s.id === seedId);
-    if (seedId && !isCreate && existingSeed) {
-      setSeed(existingSeed as unknown as Seed);
-    } else {
+    initializedSeedIdRef.current = null;
+    hasReceivedFetchedSeedRef.current = false;
+  }, [seedId]);
+
+  // Load seed data once it arrives or from fallback
+  useEffect(() => {
+    // Skip if we've already loaded this seedId
+    if (
+      initializedSeedIdRef.current === seedId &&
+      initializedSeedIdRef.current !== null
+    ) {
+      return;
+    }
+
+    // Prefer fetched data from server (only use first time)
+    if (fetchedSeed && !hasReceivedFetchedSeedRef.current) {
+      setSeed(fetchedSeed);
+      initializedSeedIdRef.current = seedId;
+      hasReceivedFetchedSeedRef.current = true;
+      return;
+    }
+
+    // For create mode, load empty seed
+    if (isCreate && initializedSeedIdRef.current !== seedId) {
       setSeed(getEmptySeed());
       nameInputRef?.current?.focus();
+      initializedSeedIdRef.current = seedId;
+      return;
     }
-  }, [isCreate, seedId]);
+
+    // For existing seeds, try fallback to store if fetch hasn't arrived yet
+    if (!isCreate && !fetchedSeed && initializedSeedIdRef.current !== seedId) {
+      const existingSeed = seeds.find((s) => s.id === seedId);
+      if (existingSeed) {
+        setSeed(existingSeed as unknown as Seed);
+        initializedSeedIdRef.current = seedId;
+      }
+      // If not in store and fetch not arrived, keep waiting for fetchedSeed
+    }
+  }, [seedId, isCreate, fetchedSeed]);
 
   return (
     <div>
@@ -451,4 +495,4 @@ export const EditSeeds = () => {
       </form>
     </div>
   );
-};
+};;;;;;

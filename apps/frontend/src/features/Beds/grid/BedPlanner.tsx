@@ -119,6 +119,12 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
 
   // Update bed when grid changes - using a debounced approach
   const gridUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const bedRef = useRef(bed);
+
+  // Keep bed ref up to date
+  useEffect(() => {
+    bedRef.current = bed;
+  }, [bed]);
 
   // Function to update the bed (outside of useEffect)
   const updateBedFromGrid = useCallback(() => {
@@ -135,14 +141,15 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
       .filter((item) => item.seed); // Only include cells with seeds
 
     // Only update if grid has changed
-    if (JSON.stringify(flatGrid) !== JSON.stringify(bed.grid)) {
+    const currentBed = bedRef.current;
+    if (JSON.stringify(flatGrid) !== JSON.stringify(currentBed.grid)) {
       onBedChange({
-        ...bed,
+        ...currentBed,
         grid: flatGrid,
         updatedAt: new Date().toISOString(),
       });
     }
-  }, [grid, gridSize.cols, bed, onBedChange]);
+  }, [grid, gridSize.cols, onBedChange]);
 
   // Use this function after any grid changes
   const debouncedUpdateBed = useCallback(() => {

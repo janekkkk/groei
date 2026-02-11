@@ -188,7 +188,7 @@ router.put("/:id", async (c) => {
 
     // Convert grid to JSON array of seedIds
     let gridData = existing.gridData;
-    if (grid && Array.isArray(grid) && grid.length > 0) {
+    if (grid !== undefined && Array.isArray(grid)) {
       const gridWidth = bedData.gridWidth || existing.gridWidth;
       const gridHeight = bedData.gridHeight || existing.gridHeight;
       const gridSize =
