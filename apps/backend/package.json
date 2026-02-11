@@ -15,18 +15,18 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@groei/common": "*",
-    "@hono/hono": "npm:@jsr/hono__hono@^4.6.1",
-    "@libsql/client": "^0.15.5",
-    "better-sqlite3": "^11.8.1",
-    "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.44.1",
-    "hono": "^4.6.20",
-    "idb-keyval": "^6.2.1"
+    "@groei/common": "^0.0.0",
+    "@hono/hono": "npm:@jsr/hono__hono@^4.11.9",
+    "@libsql/client": "^0.17.0",
+    "better-sqlite3": "^12.6.2",
+    "dotenv": "^17.2.4",
+    "drizzle-orm": "^0.45.1",
+    "hono": "^4.11.9",
+    "idb-keyval": "^6.2.2"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
-    "drizzle-kit": "^0.30.4",
-    "tsx": "^4.19.2"
+    "cross-env": "^10.1.0",
+    "drizzle-kit": "^0.31.9",
+    "tsx": "^4.21.0"
   }
 }
