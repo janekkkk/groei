@@ -73,7 +73,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
           // Make sure the position is within our grid bounds
           if (row < gridSize.rows && col < gridSize.cols) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+            // @ts-expect-error
             grid2D[row][col].seed = gridItem.seed;
           }
         }
@@ -139,7 +139,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
       onBedChange({
         ...bed,
         grid: flatGrid,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
       });
     }
   }, [grid, gridSize.cols, bed, onBedChange]);
@@ -219,7 +219,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
       ...bed,
       gridWidth: newCols,
       gridHeight: newRows,
-      updatedAt: new Date(),
+      updatedAt: new Date().toISOString(),
     });
 
     setIsGridDialogOpen(false);
@@ -334,7 +334,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     const updatedBed = {
       ...bed,
       grid: flatGrid,
-      updatedAt: new Date(),
+      updatedAt: new Date().toISOString(),
     };
 
     // Update the parent component first, then update the local grid
@@ -455,7 +455,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     const updatedBed = {
       ...bed,
       grid: flatGrid,
-      updatedAt: new Date(),
+      updatedAt: new Date().toISOString(),
     };
 
     // Update the parent component first, then update the local grid

@@ -1,53 +1,59 @@
 import type { BedDTO, GridItem } from "@groei/common/src/models/Bed.ts";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db/index.ts";
-import { bedTable, gridItemTable } from "../db/schema.ts";
+import { bedTable, seedsTable } from "../db/schema.ts";
+import { validateBedData } from "./utils.ts";
 
 const router = new Hono();
 
-// Helper function to validate bed data
-function validateBedData(bedData: BedDTO) {
-  if (!bedData.name || typeof bedData.name !== "string") {
-    throw new Error("Bed name is required and must be a string");
+// Helper function to convert gridData JSON to GridItem array with seed objects
+async function parseGridData(
+  gridData: string | null,
+  gridWidth?: number | null,
+  gridHeight?: number | null,
+) {
+  if (!gridData) {
+    return [];
   }
-  if (
-    bedData.gridWidth !== undefined &&
-    (!Number.isInteger(bedData.gridWidth) || bedData.gridWidth <= 0)
-  ) {
-    throw new Error("Grid width must be a positive integer");
-  }
-  if (
-    bedData.gridHeight !== undefined &&
-    (!Number.isInteger(bedData.gridHeight) || bedData.gridHeight <= 0)
-  ) {
-    throw new Error("Grid height must be a positive integer");
+
+  try {
+    const seedIds: (string | null)[] = JSON.parse(gridData);
+
+    // Fetch all seeds referenced in the grid
+    const nonNullSeedIds = seedIds.filter((id): id is string => !!id);
+    let seedMap = new Map<string, unknown>();
+
+    if (nonNullSeedIds.length > 0) {
+      const seeds = await db
+        .select()
+        .from(seedsTable)
+        .where(inArray(seedsTable.id, nonNullSeedIds));
+      seedMap = new Map(seeds.map((seed) => [seed.id, seed]));
+    }
+
+    // Convert to GridItem array
+    return seedIds.map((seedId, index) => ({
+      index,
+      seed: seedId ? seedMap.get(seedId) : undefined,
+    }));
+  } catch {
+    return [];
   }
 }
 
-// Get all beds with their grid items and their seeds
+// Get all beds with their grid data
 router.get("/", async (c) => {
   try {
-    const result = await db.query.bedTable.findMany({
-      with: {
-        grid: {
-          with: {
-            seed: true,
-          },
-        },
-      },
-    });
+    const beds = await db.select().from(bedTable).all();
 
     // Transform the data to match the expected frontend format
-    const transformedBeds = result.map((bed) => ({
-      ...bed,
-      grid: bed.grid.map((gridItem) => ({
-        index: gridItem.position, // Use the stored position value
-        seed: gridItem.seed || undefined,
-        bedId: gridItem.bedId,
-        seedId: gridItem.seedId,
+    const transformedBeds = await Promise.all(
+      beds.map(async (bed) => ({
+        ...bed,
+        grid: await parseGridData(bed.gridData, bed.gridWidth, bed.gridHeight),
       })),
-    }));
+    );
 
     return c.json(transformedBeds);
   } catch (error) {
@@ -56,39 +62,27 @@ router.get("/", async (c) => {
   }
 });
 
-// Get a single bed by ID with its grid items their seeds
+// Get a single bed by ID with grid data
 router.get("/:id", async (c) => {
+  const id = c.req.param("id");
+
+  if (!id) {
+    return c.json({ error: "Bed ID is required" }, 400);
+  }
+
   try {
-    const { id } = c.req.param();
-
-    if (!id) {
-      return c.json({ error: "Bed ID is required" }, 400);
-    }
-
-    const result = await db.query.bedTable.findFirst({
+    const bed = await db.query.bedTable.findFirst({
       where: eq(bedTable.id, id),
-      with: {
-        grid: {
-          with: {
-            seed: true,
-          },
-        },
-      },
     });
 
-    if (!result) {
+    if (!bed) {
       return c.json({ error: "Bed not found" }, 404);
     }
 
     // Transform the data to match the expected frontend format
     const transformedBed = {
-      ...result,
-      grid: result.grid.map((gridItem) => ({
-        index: gridItem.position, // Use the stored position value consistently
-        seed: gridItem.seed || undefined,
-        bedId: gridItem.bedId,
-        seedId: gridItem.seedId,
-      })),
+      ...bed,
+      grid: await parseGridData(bed.gridData, bed.gridWidth, bed.gridHeight),
     };
 
     return c.json(transformedBed);
@@ -98,10 +92,12 @@ router.get("/:id", async (c) => {
   }
 });
 
-// Create a new bed with grid items
+// Create a new bed with grid data
 router.post("/", async (c) => {
   try {
-    const { grid, ...bedData } = await c.req.json();
+    const { grid, ...bedData } = await c.req.json<
+      BedDTO & { grid?: GridItem[] }
+    >();
 
     // Validate bed data
     validateBedData(bedData);
@@ -116,190 +112,149 @@ router.post("/", async (c) => {
     bedData.createdAt = now;
     bedData.updatedAt = now;
 
-    // Use transaction to ensure data consistency
-    const result = await db.transaction(async (tx) => {
-      // Insert the bed
-      const [newBed] = await tx.insert(bedTable).values(bedData).returning();
+    // Convert grid to JSON array of seedIds
+    let gridData: string | undefined;
+    if (grid && Array.isArray(grid) && grid.length > 0) {
+      const gridSize =
+        bedData.gridWidth && bedData.gridHeight
+          ? bedData.gridWidth * bedData.gridHeight
+          : grid.length;
+      const seedIdArray: (string | null)[] = Array(gridSize).fill(null);
 
-      // Insert grid items if provided
-      if (grid && Array.isArray(grid) && grid.length > 0) {
-        const gridItems = grid
-          .map((gridItem: GridItem) => ({
-            bedId: newBed.id,
-            seedId: gridItem?.seed?.id || null,
-          }))
-          .filter((item) => item.seedId); // Only insert items with actual seeds
-
-        if (gridItems.length > 0) {
-          await tx.insert(gridItemTable).values(gridItems);
+      for (const gridItem of grid) {
+        if (gridItem.index >= 0 && gridItem.index < gridSize) {
+          seedIdArray[gridItem.index] = gridItem.seed?.id || null;
         }
       }
 
-      // Fetch the complete bed with grid items
-      const completeBed = await tx.query.bedTable.findFirst({
-        where: eq(bedTable.id, newBed.id),
-        with: {
-          grid: {
-            with: {
-              seed: true,
-            },
-          },
-        },
-      });
-
-      return completeBed;
-    });
-
-    if (!result) {
-      return c.json({ error: "Failed to create bed" }, 500);
+      gridData = JSON.stringify(seedIdArray);
     }
 
-    // Transform the data to match the expected frontend format
+    const [newBed] = await db
+      .insert(bedTable)
+      .values({
+        ...bedData,
+        gridData,
+      })
+      .returning();
+
+    // Return the created bed with parsed grid
     const transformedBed = {
-      ...result,
-      grid: result.grid.map((gridItem, index) => ({
-        index,
-        seed: gridItem.seed || undefined,
-        bedId: gridItem.bedId,
-        seedId: gridItem.seedId,
-      })),
+      ...newBed,
+      grid: await parseGridData(
+        newBed.gridData,
+        newBed.gridWidth,
+        newBed.gridHeight,
+      ),
     };
 
     return c.json(transformedBed, 201);
   } catch (error) {
-    console.error("Error creating bed:", error);
     if (error instanceof Error) {
       return c.json({ error: error.message }, 400);
     }
+    console.error("Error creating bed:", error);
     return c.json({ error: "Failed to create bed" }, 500);
   }
 });
 
 // Update a bed by ID
 router.put("/:id", async (c) => {
-  try {
-    const { id } = c.req.param();
-    const { grid, ...bedData } = await c.req.json();
+  const id = c.req.param("id");
 
-    if (!id) {
-      return c.json({ error: "Bed ID is required" }, 400);
-    }
+  if (!id) {
+    return c.json({ error: "Bed ID is required" }, 400);
+  }
+
+  try {
+    const { grid, ...bedData } = await c.req.json<
+      BedDTO & { grid?: GridItem[] }
+    >();
 
     // Validate bed data
     validateBedData(bedData);
 
-    // Set updated timestamp
-    bedData.updatedAt = new Date().toISOString();
-
-    // Use transaction to ensure data consistency
-    const result = await db.transaction(async (tx) => {
-      // Update the bed
-      const [updatedBed] = await tx
-        .update(bedTable)
-        .set(bedData)
-        .where(eq(bedTable.id, id))
-        .returning();
-
-      if (!updatedBed) {
-        throw new Error("Bed not found");
-      }
-
-      // Update grid items if provided
-      if (grid && Array.isArray(grid)) {
-        // Delete existing grid items
-        await tx.delete(gridItemTable).where(eq(gridItemTable.bedId, id));
-
-        // Insert new grid items - with position index
-        const gridItems = grid
-          .map((gridItem: GridItem) => ({
-            bedId: id,
-            seedId: gridItem?.seed?.id || null,
-            position: gridItem.index, // Store the position index
-          }))
-          .filter((item) => item.seedId); // Only insert items with actual seeds
-
-        if (gridItems.length > 0) {
-          await tx.insert(gridItemTable).values(gridItems);
-        }
-      }
-
-      // Fetch the complete updated bed with grid items
-      const completeBed = await tx.query.bedTable.findFirst({
-        where: eq(bedTable.id, id),
-        with: {
-          grid: {
-            with: {
-              seed: true,
-            },
-          },
-        },
-      });
-
-      return completeBed;
+    // Check if bed exists
+    const existing = await db.query.bedTable.findFirst({
+      where: eq(bedTable.id, id),
     });
 
-    if (!result) {
+    if (!existing) {
       return c.json({ error: "Bed not found" }, 404);
     }
 
-    // Transform the data to match the expected frontend format
-    // Use the stored position index instead of array index
+    // Set updated timestamp
+    bedData.updatedAt = new Date().toISOString();
+
+    // Convert grid to JSON array of seedIds
+    let gridData = existing.gridData;
+    if (grid && Array.isArray(grid) && grid.length > 0) {
+      const gridWidth = bedData.gridWidth || existing.gridWidth;
+      const gridHeight = bedData.gridHeight || existing.gridHeight;
+      const gridSize =
+        gridWidth && gridHeight ? gridWidth * gridHeight : grid.length;
+      const seedIdArray: (string | null)[] = Array(gridSize).fill(null);
+
+      for (const gridItem of grid) {
+        if (gridItem.index >= 0 && gridItem.index < gridSize) {
+          seedIdArray[gridItem.index] = gridItem.seed?.id || null;
+        }
+      }
+
+      gridData = JSON.stringify(seedIdArray);
+    }
+
+    const [updatedBed] = await db
+      .update(bedTable)
+      .set({
+        ...bedData,
+        gridData,
+      })
+      .where(eq(bedTable.id, id))
+      .returning();
+
+    // Return the updated bed with parsed grid
     const transformedBed = {
-      ...result,
-      grid: result.grid.map((gridItem) => {
-        console.log("Grid item from database:", gridItem); // Debug log to see the actual structure
-        return {
-          index: gridItem.position ?? gridItem.id, // Fallback to id if position is null
-          seed: gridItem.seed || undefined,
-          bedId: gridItem.bedId,
-          seedId: gridItem.seedId,
-        };
-      }),
+      ...updatedBed,
+      grid: await parseGridData(
+        updatedBed.gridData,
+        updatedBed.gridWidth,
+        updatedBed.gridHeight,
+      ),
     };
 
     return c.json(transformedBed);
   } catch (error) {
-    console.error("Error updating bed:", error);
     if (error instanceof Error) {
       return c.json({ error: error.message }, 400);
     }
+    console.error("Error updating bed:", error);
     return c.json({ error: "Failed to update bed" }, 500);
   }
 });
 
-// Delete a bed by ID along with its grid items
+// Delete a bed by ID
 router.delete("/:id", async (c) => {
+  const id = c.req.param("id");
+
+  if (!id) {
+    return c.json({ error: "Bed ID is required" }, 400);
+  }
+
   try {
-    const { id } = c.req.param();
-
-    if (!id) {
-      return c.json({ error: "Bed ID is required" }, 400);
-    }
-
-    // Use transaction to ensure data consistency
-    await db.transaction(async (tx) => {
-      // First check if bed exists
-      const existingBed = await tx.query.bedTable.findFirst({
-        where: eq(bedTable.id, id),
-      });
-
-      if (!existingBed) {
-        throw new Error("Bed not found");
-      }
-
-      // Delete grid items first (foreign key constraint)
-      await tx.delete(gridItemTable).where(eq(gridItemTable.bedId, id));
-
-      // Then delete the bed
-      await tx.delete(bedTable).where(eq(bedTable.id, id));
+    const bed = await db.query.bedTable.findFirst({
+      where: eq(bedTable.id, id),
     });
 
-    return c.json({ message: "Bed deleted successfully", id }, 200);
-  } catch (error) {
-    console.error("Error deleting bed:", error);
-    if (error instanceof Error && error.message === "Bed not found") {
+    if (!bed) {
       return c.json({ error: "Bed not found" }, 404);
     }
+
+    await db.delete(bedTable).where(eq(bedTable.id, id));
+
+    return c.json({ message: "Bed deleted successfully", id });
+  } catch (error) {
+    console.error("Error deleting bed:", error);
     return c.json({ error: "Failed to delete bed" }, 500);
   }
 });

@@ -6,13 +6,7 @@ import {
 } from "@groei/common/src/models/Seed";
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
-import {
-  type ChangeEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import {
@@ -39,28 +33,31 @@ import type { SelectChange } from "@/shared/select.model";
 import { classNames } from "@/shared/utils";
 import { isNumeric } from "@/shared/utils/is-numeric.helper.ts";
 
-const getEmptySeed = (): Seed => ({
-  id: crypto.randomUUID(),
-  name: "",
-  variety: "",
-  sowFrom: undefined,
-  sowTill: undefined,
-  germinationType: GerminationType.DARK,
-  preSprout: false,
-  plantFrom: undefined,
-  plantTill: undefined,
-  harvestFrom: undefined,
-  harvestTill: undefined,
-  daysToMaturity: undefined,
-  plantHeight: undefined,
-  numberOfSeedsPerGridCell: 1,
-  notes: "",
-  url: "",
-  expirationDate: undefined, // new Date().toISOString().substring(0, 10)
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  deletedAt: undefined,
-});
+const getEmptySeed = (): Seed => {
+  const now = new Date().toISOString();
+  return {
+    id: crypto.randomUUID(),
+    name: "",
+    variety: "",
+    sowFrom: undefined,
+    sowTill: undefined,
+    germinationType: GerminationType.DARK,
+    preSprout: false,
+    plantFrom: undefined,
+    plantTill: undefined,
+    harvestFrom: undefined,
+    harvestTill: undefined,
+    daysToMaturity: undefined,
+    plantHeight: undefined,
+    numberOfSeedsPerGridCell: 1,
+    notes: "",
+    url: "",
+    expirationDate: undefined, // new Date().toISOString().substring(0, 10)
+    createdAt: now,
+    updatedAt: now,
+    deletedAt: undefined,
+  };
+};
 
 export const EditSeeds = () => {
   const seeds = useSeedStore((state) => state.seeds);
@@ -87,7 +84,11 @@ export const EditSeeds = () => {
     }
 
     if (seed)
-      setSeed({ ...seed, [name]: numberValue ?? value, updatedAt: new Date() });
+      setSeed({
+        ...seed,
+        [name]: numberValue ?? value,
+        updatedAt: new Date().toISOString(),
+      });
   };
 
   const handleCheckboxChange = (checked: CheckedState) => {
@@ -123,7 +124,8 @@ export const EditSeeds = () => {
     }
   };
 
-  const initExistingSeed = useCallback(() => {
+  // Only load from store on initial mount or when seedId changes
+  useEffect(() => {
     const existingSeed = seeds.find((s) => s.id === seedId);
     if (seedId && !isCreate && existingSeed) {
       setSeed(existingSeed as unknown as Seed);
@@ -131,11 +133,7 @@ export const EditSeeds = () => {
       setSeed(getEmptySeed());
       nameInputRef?.current?.focus();
     }
-  }, [isCreate, seedId, seeds]);
-
-  useEffect(() => {
-    initExistingSeed();
-  }, [initExistingSeed]);
+  }, [isCreate, seedId]);
 
   return (
     <div>

@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { timestamps } from "./helpers.ts";
 
@@ -31,15 +30,6 @@ export const seedsTable = sqliteTable("seeds_table", {
   ...timestamps,
 });
 
-export const gridItemTable = sqliteTable("grid_item_table", {
-  id: integer().notNull().primaryKey({ autoIncrement: true }),
-  seedId: text().references(() => seedsTable.id, { onDelete: "set null" }),
-  bedId: text()
-    .notNull()
-    .references(() => bedTable.id, { onDelete: "cascade" }),
-  position: integer(), // Store the position index for grid cells
-});
-
 export const bedTable = sqliteTable("bed_table", {
   id: text()
     .primaryKey()
@@ -49,20 +39,6 @@ export const bedTable = sqliteTable("bed_table", {
   sowDate: text("sow_date"),
   gridWidth: integer("grid_width"),
   gridHeight: integer("grid_height"),
+  gridData: text("grid_data"), // JSON array of seedIds or null for empty cells
   ...timestamps,
 });
-
-export const bedRelations = relations(bedTable, ({ many }) => ({
-  grid: many(gridItemTable),
-}));
-
-export const gridItemRelations = relations(gridItemTable, ({ one }) => ({
-  seed: one(seedsTable, {
-    fields: [gridItemTable.seedId],
-    references: [seedsTable.id],
-  }),
-  bed: one(bedTable, {
-    fields: [gridItemTable.bedId],
-    references: [bedTable.id],
-  }),
-}));

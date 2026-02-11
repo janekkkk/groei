@@ -8,13 +8,13 @@
       "**/*.jsx",
       "**/*.mjs",
       "**/*.cjs",
-      "!**/node_modules/**",
-      "!**/dist/**",
-      "!**/build/**",
-      "!**/coverage/**",
-      "!**/public/**",
-      "!**/shadcdn/**",
-      "!**/dev-dist/**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/build",
+      "!**/coverage",
+      "!**/public",
+      "!**/shadcdn",
+      "!**/dev-dist",
       "!**/routeTree.gen.ts",
       "!**/pnpm-lock.yaml",
       "!**/pnpm-workspace.yaml"
@@ -50,7 +50,7 @@
         "useExhaustiveDependencies": "warn"
       },
       "nursery": {
-        "useSortedClasses": "error"
+        "useSortedClasses": "warn"
       },
       "performance": {
         "recommended": true

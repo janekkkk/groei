@@ -43,7 +43,7 @@ export const BedOverview = () => {
         <TableCaption>{t("beds.title")}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">{t("beds.name")}</TableHead>
+            <TableHead className="w-28">{t("beds.name")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

@@ -25,8 +25,9 @@ import { isNumeric } from "@/shared/utils/is-numeric.helper";
 import { useBedStore } from "./beds.store";
 import { BedPlanner } from "./grid/BedPlanner";
 
-const getEmptyBed = (): Bed =>
-  ({
+const getEmptyBed = (): Bed => {
+  const now = new Date().toISOString();
+  return {
     id: crypto.randomUUID(),
     name: "",
     notes: "",
@@ -34,9 +35,10 @@ const getEmptyBed = (): Bed =>
     gridHeight: 2,
     grid: [],
     sowDate: new Date().toISOString().substring(0, 10),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }) as Bed;
+    createdAt: now,
+    updatedAt: now,
+  };
+};
 
 export const EditBeds = () => {
   const createBed = useCreateBedMutation();
@@ -96,7 +98,7 @@ export const EditBeds = () => {
     const updatedBed = {
       ...bed,
       [name]: numberValue ?? value,
-      updatedAt: new Date(),
+      updatedAt: new Date().toISOString(),
     };
 
     setBed(updatedBed);
@@ -166,7 +168,8 @@ export const EditBeds = () => {
     }
   };
 
-  const initExistingBed = useCallback(() => {
+  // Only load from store on initial mount or when bedId changes
+  useEffect(() => {
     const existingBed = beds.find((b) => b.id === bedId);
     if (bedId && !isCreate && existingBed) {
       setBed(existingBed as unknown as Bed);
@@ -174,11 +177,7 @@ export const EditBeds = () => {
       setBed(getEmptyBed());
       nameInputRef?.current?.focus();
     }
-  }, [bedId, beds, isCreate]);
-
-  useEffect(() => {
-    initExistingBed();
-  }, [initExistingBed]);
+  }, [bedId, isCreate]);
 
   return (
     <div>
