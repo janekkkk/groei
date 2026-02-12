@@ -116,8 +116,8 @@ export const GridCell = ({
             variant="destructive"
             className={cn(
               "absolute -top-1 -right-1 z-20 h-4 w-4 rounded-full p-0 transition-opacity sm:-top-2 sm:-right-2 sm:h-5 sm:w-5",
-              "hidden group-hover:block",
-              isLongPressed && "block!",
+              "hidden group-hover:flex group-hover:items-center group-hover:justify-center",
+              isLongPressed && "flex items-center justify-center",
             )}
             onClick={(e) => {
               e.stopPropagation();
