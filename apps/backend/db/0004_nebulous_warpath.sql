@@ -1,0 +1,1 @@
+ALTER TABLE `bed_table` ADD `notes` text;

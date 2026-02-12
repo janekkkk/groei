@@ -37,6 +37,7 @@ export const bedTable = sqliteTable("bed_table", {
   name: text().notNull(),
   description: text(),
   sowDate: text("sow_date"),
+  notes: text(),
   gridWidth: integer("grid_width"),
   gridHeight: integer("grid_height"),
   gridData: text("grid_data"), // JSON array of seedIds or null for empty cells

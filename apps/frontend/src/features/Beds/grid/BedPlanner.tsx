@@ -32,6 +32,43 @@ interface DragItem {
   seed: Seed;
 }
 
+// Map seed names to their colors for visual distinction
+const getVegetableColor = (seedName: string): string => {
+  const lowerName = seedName.toLowerCase();
+  const colorMap: Record<string, string> = {
+    tomato: "bg-red-500",
+    carrot: "bg-orange-500",
+    cucumber: "bg-green-600",
+    zucchini: "bg-green-600",
+    basil: "bg-green-500",
+    parsley: "bg-green-500",
+    chives: "bg-green-500",
+    spinach: "bg-green-700",
+    kale: "bg-green-700",
+    "tuscan kale": "bg-green-700",
+    "swiss chard": "bg-blue-600",
+    pepper: "bg-yellow-500",
+    bean: "bg-amber-600",
+    "broad bean": "bg-amber-600",
+    "winter pea": "bg-amber-600",
+    sugarsnap: "bg-amber-600",
+    beetroot: "bg-purple-600",
+    radish: "bg-pink-500",
+    lettuce: "bg-lime-500",
+    cabbage: "bg-green-600",
+    "white cabbage": "bg-gray-400",
+    "pointed cabbage": "bg-green-600",
+    broccoli: "bg-green-700",
+    cauliflower: "bg-gray-350",
+    leek: "bg-green-600",
+    corn: "bg-yellow-400",
+    "corn salad": "bg-green-500",
+    sunflower: "bg-yellow-400",
+  };
+
+  return colorMap[lowerName] || "bg-emerald-500";
+};
+
 interface BedPlannerProps {
   bed: Bed;
   onBedChange: (bed: Bed) => void;
@@ -92,6 +129,10 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
   const [touchStartPos, setTouchStartPos] = useState<{
     x: number;
     y: number;
+  } | null>(null);
+  const [longPressedCell, setLongPressedCell] = useState<{
+    row: number;
+    col: number;
   } | null>(null);
   const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -370,7 +411,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     const touch = e.touches[0];
     setTouchStartPos({ x: touch.clientX, y: touch.clientY });
 
-    // Use a timeout to distinguish between tap and drag
+    // Use a timeout to distinguish between tap and drag/long press
     if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
     touchTimeoutRef.current = setTimeout(() => {
       setDraggedItem({ row, col, seed });
@@ -481,6 +522,15 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     setTouchStartPos(null);
   };
 
+  // Handle long press on cells to show remove button on mobile
+  const handleCellLongPress = (row: number, col: number) => {
+    setLongPressedCell({ row, col });
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      setLongPressedCell(null);
+    }, 3000);
+  };
+
   // Clean up any timeouts when component unmounts
   useEffect(() => {
     return () => {
@@ -491,7 +541,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {/* Garden Grid Header */}
       <Card>
         <CardHeader className="py-3">
@@ -550,8 +600,11 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                     draggable={dragMode && !!cell.seed}
                     className={cn(
                       "relative h-10 w-10 border-2 border-gray-300 border-dashed sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16",
-                      "cursor-pointer rounded-lg transition-all duration-200 hover:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500",
-                      cell.seed ? "border-solid" : "hover:bg-green-50",
+                      "cursor-pointer rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500",
+                      rowIndex !== 0 && "hover:border-green-400",
+                      cell.seed
+                        ? "border-solid"
+                        : rowIndex !== 0 && "hover:bg-green-50",
                       dragOverCell?.row === rowIndex &&
                         dragOverCell?.col === colIndex &&
                         "border-green-500 bg-green-100",
@@ -574,10 +627,26 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                     onDragLeave={handleDragLeave}
                     onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
                     onDragEnd={handleDragEnd}
-                    onTouchStart={(e) =>
-                      cell.seed &&
-                      handleTouchStart(rowIndex, colIndex, cell.seed, e)
-                    }
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      handleCellLongPress(rowIndex, colIndex);
+                    }}
+                    onTouchStart={(e) => {
+                      if (cell.seed) {
+                        handleTouchStart(rowIndex, colIndex, cell.seed, e);
+                      } else {
+                        // Long press on empty cell to prepare for planting
+                        const timer = setTimeout(() => {
+                          // Could show planting instructions here
+                        }, 500);
+                        const cleanup = () => {
+                          clearTimeout(timer);
+                        };
+                        e.currentTarget.addEventListener("touchend", cleanup, {
+                          once: true,
+                        });
+                      }
+                    }}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                     aria-label={
@@ -587,27 +656,55 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                     }
                   >
                     {cell.seed ? (
-                      <div className="relative h-full w-full">
+                      <div className="group relative h-full w-full">
                         <div
-                          className={`flex h-full w-full items-center justify-center rounded-md bg-emerald-500 opacity-80`}
+                          className={cn(
+                            "flex h-full w-full items-center justify-center rounded-md opacity-90",
+                            getVegetableColor(cell.seed.name),
+                          )}
                         >
-                          <Sprout className="h-3 w-3 text-white sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
+                          <Sprout className="h-5 w-5 text-white sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8" />
                         </div>
-                        {!dragMode && (
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 sm:-top-2 sm:-right-2 sm:h-5 sm:w-5"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRemoveSeed(rowIndex, colIndex);
-                            }}
-                            aria-label={`Remove ${cell.seed.name}`}
-                          >
-                            <X className="h-2 w-2 sm:h-3 sm:w-3" />
-                          </Button>
-                        )}
-                        <div className="absolute right-0 -bottom-5 left-0 truncate text-center font-medium text-[10px] sm:-bottom-6 sm:text-xs">
+                        {/* Remove button - show on desktop hover or mobile long press */}
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          className={cn(
+                            "absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 sm:-top-2 sm:-right-2 sm:h-5 sm:w-5 transition-opacity",
+                            // Desktop: show on group hover
+                            "hidden group-hover:block",
+                            // Mobile: show if long pressed
+                            longPressedCell?.row === rowIndex &&
+                              longPressedCell?.col === colIndex &&
+                              "!block",
+                          )}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveSeed(rowIndex, colIndex);
+                            setLongPressedCell(null);
+                          }}
+                          onTouchStart={(e) => {
+                            e.stopPropagation();
+                            // Long press detection for remove button
+                            const timer = setTimeout(() => {
+                              handleCellLongPress(rowIndex, colIndex);
+                            }, 500);
+                            const cleanup = () => {
+                              clearTimeout(timer);
+                            };
+                            e.currentTarget.addEventListener(
+                              "touchend",
+                              cleanup,
+                              {
+                                once: true,
+                              },
+                            );
+                          }}
+                          aria-label={`Remove ${cell.seed.name}`}
+                        >
+                          <X className="h-2 w-2 sm:h-3 sm:w-3" />
+                        </Button>
+                        <div className="absolute right-0 -bottom-5 left-0 truncate text-center font-medium text-[10px] sm:-bottom-6 sm:text-xs px-1 py-0.5 sm:px-1.5 sm:py-1 rounded bg-white/90 dark:bg-gray-900/90 shadow-sm z-10 md:hidden md:group-hover:block">
                           {cell.seed.name}
                         </div>
                       </div>
@@ -646,9 +743,12 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
                 >
                   <div className="flex w-full items-center gap-2">
                     <div
-                      className={`flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500`}
+                      className={cn(
+                        `flex h-6 w-6 items-center justify-center rounded-full`,
+                        getVegetableColor(seed.name),
+                      )}
                     >
-                      <Sprout className="h-3 w-3 text-white" />
+                      <Sprout className="h-4 w-4 text-white" />
                     </div>
                     <div className="flex-1 text-left">
                       <div className="font-medium text-sm">{seed.name}</div>
@@ -674,112 +774,110 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-6 py-4">
-            <div className="space-y-4">
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="font-medium text-sm">
-                    {t("beds.rows")}: {gridSize.rows}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        setGridSize((prev) => ({
-                          ...prev,
-                          rows: Math.max(2, prev.rows - 1),
-                        }))
-                      }
-                      disabled={gridSize.rows <= 2}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        setGridSize((prev) => ({
-                          ...prev,
-                          rows: Math.min(12, prev.rows + 1),
-                        }))
-                      }
-                      disabled={gridSize.rows >= 12}
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-                  </div>
+            <div>
+              <div className="mb-2 flex items-center justify-between">
+                <span className="font-medium text-sm">
+                  {t("beds.rows")}: {gridSize.rows}
+                </span>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="h-6 w-6"
+                    onClick={() =>
+                      setGridSize((prev) => ({
+                        ...prev,
+                        rows: Math.max(2, prev.rows - 1),
+                      }))
+                    }
+                    disabled={gridSize.rows <= 2}
+                  >
+                    <Minus className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="h-6 w-6"
+                    onClick={() =>
+                      setGridSize((prev) => ({
+                        ...prev,
+                        rows: Math.min(12, prev.rows + 1),
+                      }))
+                    }
+                    disabled={gridSize.rows >= 12}
+                  >
+                    <Plus className="h-3 w-3" />
+                  </Button>
                 </div>
-                <Slider
-                  value={[gridSize.rows]}
-                  min={2}
-                  max={12}
-                  step={1}
-                  onValueChange={(value) =>
-                    setGridSize((prev) => ({ ...prev, rows: value[0] }))
-                  }
-                />
               </div>
-
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="font-medium text-sm">
-                    {t("beds.columns")}: {gridSize.cols}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        setGridSize((prev) => ({
-                          ...prev,
-                          cols: Math.max(2, prev.cols - 1),
-                        }))
-                      }
-                      disabled={gridSize.cols <= 2}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        setGridSize((prev) => ({
-                          ...prev,
-                          cols: Math.min(16, prev.cols + 1),
-                        }))
-                      }
-                      disabled={gridSize.cols >= 16}
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-                <Slider
-                  value={[gridSize.cols]}
-                  min={2}
-                  max={16}
-                  step={1}
-                  onValueChange={(value) =>
-                    setGridSize((prev) => ({ ...prev, cols: value[0] }))
-                  }
-                />
-              </div>
+              <Slider
+                value={[gridSize.rows]}
+                min={2}
+                max={12}
+                step={1}
+                onValueChange={(value) =>
+                  setGridSize((prev) => ({ ...prev, rows: value[0] }))
+                }
+              />
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="text-muted-foreground text-sm">
-                {t("beds.totalCells")}: {gridSize.rows * gridSize.cols}
+            <div>
+              <div className="mb-2 flex items-center justify-between">
+                <span className="font-medium text-sm">
+                  {t("beds.columns")}: {gridSize.cols}
+                </span>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="h-6 w-6"
+                    onClick={() =>
+                      setGridSize((prev) => ({
+                        ...prev,
+                        cols: Math.max(2, prev.cols - 1),
+                      }))
+                    }
+                    disabled={gridSize.cols <= 2}
+                  >
+                    <Minus className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="h-6 w-6"
+                    onClick={() =>
+                      setGridSize((prev) => ({
+                        ...prev,
+                        cols: Math.min(16, prev.cols + 1),
+                      }))
+                    }
+                    disabled={gridSize.cols >= 16}
+                  >
+                    <Plus className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
-              <Button
-                onClick={() => handleGridResize(gridSize.rows, gridSize.cols)}
-              >
-                {t("core.applyChanges")}
-              </Button>
+              <Slider
+                value={[gridSize.cols]}
+                min={2}
+                max={16}
+                step={1}
+                onValueChange={(value) =>
+                  setGridSize((prev) => ({ ...prev, cols: value[0] }))
+                }
+              />
             </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="text-muted-foreground text-sm">
+              {t("beds.totalCells")}: {gridSize.rows * gridSize.cols}
+            </div>
+            <Button
+              onClick={() => handleGridResize(gridSize.rows, gridSize.cols)}
+            >
+              {t("core.applyChanges")}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

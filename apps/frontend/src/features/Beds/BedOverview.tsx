@@ -42,7 +42,7 @@ export const BedOverview = () => {
       <Table>
         <TableCaption>{t("beds.title")}</TableCaption>
         <TableHeader>
-          <TableRow>
+          <TableRow disableHover>
             <TableHead className="w-28">{t("beds.name")}</TableHead>
           </TableRow>
         </TableHeader>

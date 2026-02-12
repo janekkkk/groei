@@ -82,7 +82,7 @@
 
 @layer base {
   * {
-    border-color: hsl(var(--color-border));
+    text-transform: capitalize;
   }
 
   body {
@@ -91,10 +91,10 @@
   }
 
   input:user-invalid {
-    border-color: hsl(var(--color-destructive));
+    border-color: hsl(var(--color-destructive)) !important;
   }
 
   input:user-valid {
-    border-color: hsl(var(--color-primary));
+    border-color: hsl(var(--color-primary)) !important;
   }
 }

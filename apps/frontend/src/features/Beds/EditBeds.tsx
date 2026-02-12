@@ -1,6 +1,6 @@
 import type { Bed } from "@groei/common/src/models/Bed";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
-import { RefreshCw } from "lucide-react";
+import { CheckCircle, RefreshCw } from "lucide-react";
 import {
   type ChangeEventHandler,
   useCallback,
@@ -55,7 +55,9 @@ export const EditBeds = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"saving" | "saved" | null>(null);
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const saveStatusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Fetch bed from server if not in create mode
   const { data: fetchedBed } = useBedQuery(isCreate ? "" : bedId);
@@ -72,19 +74,31 @@ export const EditBeds = () => {
 
       autoSaveTimeoutRef.current = setTimeout(() => {
         setIsSaving(true);
+        setSaveStatus("saving");
 
         // Only auto-save if this is an update (not create)
         if (!isCreate && bedToSave.name.trim()) {
           updateBed.mutate(bedToSave, {
             onSuccess: () => {
               setIsSaving(false);
+              setSaveStatus("saved");
+
+              // Keep 'saved' status visible for 2 seconds
+              if (saveStatusTimeoutRef.current) {
+                clearTimeout(saveStatusTimeoutRef.current);
+              }
+              saveStatusTimeoutRef.current = setTimeout(() => {
+                setSaveStatus(null);
+              }, 2000);
             },
             onError: () => {
               setIsSaving(false);
+              setSaveStatus(null);
             },
           });
         } else {
           setIsSaving(false);
+          setSaveStatus(null);
         }
       }, 1000); // 1 second debounce
     },
@@ -113,16 +127,6 @@ export const EditBeds = () => {
     debouncedSave(updatedBed);
   };
 
-  // const handleSelectChange = (e: SelectChange) => {
-  //   if (e.index !== undefined) {
-  //     const grid = bed.grid || [];
-  //     grid[e.index] = { index: e.index, seed: e.value as Seed };
-  //     const updatedBed = { ...bed, grid, updatedAt: new Date() };
-  //     setBed(updatedBed);
-  //     debouncedSave(updatedBed);
-  //   }
-  // };
-
   const handleBedChange = (updatedBed: Bed) => {
     setBed(updatedBed);
     debouncedSave(updatedBed);
@@ -134,30 +138,6 @@ export const EditBeds = () => {
       router.history.back();
     }
   };
-
-  // const addRow = () => {
-  //   const updatedBed = { ...bed, gridHeight: bed.gridHeight + 1 };
-  //   setBed(updatedBed);
-  //   debouncedSave(updatedBed);
-  // };
-  //
-  // const removeRow = () => {
-  //   const updatedBed = { ...bed, gridHeight: bed.gridHeight - 1 };
-  //   setBed(updatedBed);
-  //   debouncedSave(updatedBed);
-  // };
-  //
-  // const addColumn = () => {
-  //   const updatedBed = { ...bed, gridWidth: bed.gridWidth + 1 };
-  //   setBed(updatedBed);
-  //   debouncedSave(updatedBed);
-  // };
-  //
-  // const removeColumn = () => {
-  //   const updatedBed = { ...bed, gridWidth: bed.gridWidth - 1 };
-  //   setBed(updatedBed);
-  //   debouncedSave(updatedBed);
-  // };
 
   const handleSubmit = () => {
     if (isCreate) {
@@ -222,6 +202,18 @@ export const EditBeds = () => {
       // If not in store and fetch not arrived, keep waiting for fetchedBed
     }
   }, [bedId, isCreate, fetchedBed]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+      if (saveStatusTimeoutRef.current) {
+        clearTimeout(saveStatusTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div>
@@ -342,12 +334,32 @@ export const EditBeds = () => {
       </form>
 
       {/* Saving Indicator */}
-      {isSaving && (
-        <div className="mt-4 flex items-center text-muted-foreground text-sm">
-          <RefreshCw className="mr-2 animate-spin" />
-          {t("core.saving")}
+      {saveStatus && (
+        <div
+          className={classNames(
+            "fixed bottom-4 right-4 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium",
+            {
+              "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100":
+                saveStatus === "saving",
+              "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-100":
+                saveStatus === "saved",
+            },
+          )}
+        >
+          {saveStatus === "saving" && (
+            <>
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              {t("core.saving")}
+            </>
+          )}
+          {saveStatus === "saved" && (
+            <>
+              <CheckCircle className="h-4 w-4" />
+              {t("core.saved")}
+            </>
+          )}
         </div>
       )}
     </div>
   );
-};;;;;;;;;
+};
