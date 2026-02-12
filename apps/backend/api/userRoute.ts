@@ -7,11 +7,21 @@ const router = new Hono();
 
 router.get("/:email", async (c) => {
   const email = c.req.param("email");
-  const result = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.email, email));
-  return c.json(result[0]);
+
+  if (!email) {
+    return c.json({ error: "Email is required" }, 400);
+  }
+
+  try {
+    const user = await db.query.usersTable.findFirst({
+      where: eq(usersTable.email, email),
+    });
+
+    return user ? c.json(user) : c.json(null);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return c.json({ error: "Failed to fetch user" }, 500);
+  }
 });
 
 export default router;

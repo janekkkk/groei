@@ -24,7 +24,10 @@
     "updated": "bijgewerkt",
     "removed": "verwijderd",
     "applyChanges": "wijzigingen toepassen",
-    "saving": "wijzigingen opslaan..."
+    "saving": "wijzigingen opslaan...",
+    "saved": "wijzigingen opgeslagen",
+    "login": "inloggen",
+    "logout": "uitloggen"
   },
   "months": {
     "january": "januari",

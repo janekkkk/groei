@@ -25,18 +25,6 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         },
       },
     },
-    plugins: [
-      react(),
-      TanStackRouterVite(),
-      tsconfigPaths(),
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      mkcert(),
-    ],
-    test: {
-      globals: true,
-      environment: "jsdom",
-      setupFiles: "./src/test/setup.ts",
-    },
+    plugins: [react(), TanStackRouterVite(), tsconfigPaths(), mkcert()],
   });
 };

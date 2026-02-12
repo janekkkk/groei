@@ -1,6 +1,6 @@
 import type { Bed } from "@groei/common/src/models/Bed";
 import type { Seed } from "@groei/common/src/models/Seed";
-import { Grid, Minus, Plus, Sprout, X } from "lucide-react";
+import { Grid, Sprout } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
@@ -11,16 +11,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shadcdn/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/shadcdn/components/ui/dialog";
-import { Slider } from "@/shadcdn/components/ui/slider";
-import { cn } from "@/shadcdn/lib/utils";
+import { GridCell } from "./GridCell";
+import { GridSettingsDialog } from "./GridSettingsDialog";
+import { SeedSelectionDialog } from "./SeedSelectionDialog";
 
-interface GridCell {
+interface GridCellData {
   row: number;
   col: number;
   seed?: Seed;
@@ -51,7 +46,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     row: number;
     col: number;
   } | null>(null);
-  const [grid, setGrid] = useState<GridCell[][]>(() => {
+  const [grid, setGrid] = useState<GridCellData[][]>(() => {
     // Convert flat grid array to 2D grid
     const grid2D = Array(gridSize.rows)
       .fill(null)
@@ -73,7 +68,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
           // Make sure the position is within our grid bounds
           if (row < gridSize.rows && col < gridSize.cols) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+            // @ts-expect-error
             grid2D[row][col].seed = gridItem.seed;
           }
         }
@@ -92,6 +87,10 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
   const [touchStartPos, setTouchStartPos] = useState<{
     x: number;
     y: number;
+  } | null>(null);
+  const [longPressedCell, setLongPressedCell] = useState<{
+    row: number;
+    col: number;
   } | null>(null);
   const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -119,6 +118,12 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
 
   // Update bed when grid changes - using a debounced approach
   const gridUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const bedRef = useRef(bed);
+
+  // Keep bed ref up to date
+  useEffect(() => {
+    bedRef.current = bed;
+  }, [bed]);
 
   // Function to update the bed (outside of useEffect)
   const updateBedFromGrid = useCallback(() => {
@@ -135,14 +140,15 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
       .filter((item) => item.seed); // Only include cells with seeds
 
     // Only update if grid has changed
-    if (JSON.stringify(flatGrid) !== JSON.stringify(bed.grid)) {
+    const currentBed = bedRef.current;
+    if (JSON.stringify(flatGrid) !== JSON.stringify(currentBed.grid)) {
       onBedChange({
-        ...bed,
+        ...currentBed,
         grid: flatGrid,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
       });
     }
-  }, [grid, gridSize.cols, bed, onBedChange]);
+  }, [grid, gridSize.cols, onBedChange]);
 
   // Use this function after any grid changes
   const debouncedUpdateBed = useCallback(() => {
@@ -219,10 +225,14 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
       ...bed,
       gridWidth: newCols,
       gridHeight: newRows,
-      updatedAt: new Date(),
+      updatedAt: new Date().toISOString(),
     });
 
     setIsGridDialogOpen(false);
+  };
+
+  const handleGridSizeChange = (rows: number, cols: number) => {
+    setGridSize({ rows, cols });
   };
 
   // Drag and drop handlers
@@ -334,7 +344,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     const updatedBed = {
       ...bed,
       grid: flatGrid,
-      updatedAt: new Date(),
+      updatedAt: new Date().toISOString(),
     };
 
     // Update the parent component first, then update the local grid
@@ -363,7 +373,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     const touch = e.touches[0];
     setTouchStartPos({ x: touch.clientX, y: touch.clientY });
 
-    // Use a timeout to distinguish between tap and drag
+    // Use a timeout to distinguish between tap and drag/long press
     if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
     touchTimeoutRef.current = setTimeout(() => {
       setDraggedItem({ row, col, seed });
@@ -394,8 +404,14 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     );
 
     if (cellElement) {
-      const row = Number.parseInt(cellElement.getAttribute("data-row") || "-1");
-      const col = Number.parseInt(cellElement.getAttribute("data-col") || "-1");
+      const row = Number.parseInt(
+        cellElement.getAttribute("data-row") || "-1",
+        10,
+      );
+      const col = Number.parseInt(
+        cellElement.getAttribute("data-col") || "-1",
+        10,
+      );
 
       if (row >= 0 && col >= 0) {
         setDragOverCell({ row, col });
@@ -455,7 +471,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     const updatedBed = {
       ...bed,
       grid: flatGrid,
-      updatedAt: new Date(),
+      updatedAt: new Date().toISOString(),
     };
 
     // Update the parent component first, then update the local grid
@@ -468,6 +484,15 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
     setTouchStartPos(null);
   };
 
+  // Handle long press on cells to show remove button on mobile
+  const handleCellLongPress = (row: number, col: number) => {
+    setLongPressedCell({ row, col });
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      setLongPressedCell(null);
+    }, 3000);
+  };
+
   // Clean up any timeouts when component unmounts
   useEffect(() => {
     return () => {
@@ -478,7 +503,7 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {/* Garden Grid Header */}
       <Card>
         <CardHeader className="py-3">
@@ -523,245 +548,70 @@ export const BedPlanner = ({ bed, onBedChange, isCreate }: BedPlannerProps) => {
             }}
           >
             {grid.map((row, rowIndex) =>
-              row.map((cell, colIndex) => {
-                const cellId = `cell-${cell.row * gridSize.cols + cell.col}`;
-                return (
-                  <button
-                    key={cellId}
-                    type="button"
-                    data-cell="true"
-                    data-row={rowIndex}
-                    data-col={colIndex}
-                    draggable={dragMode && !!cell.seed}
-                    className={cn(
-                      "relative h-10 w-10 border-2 border-gray-300 border-dashed sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16",
-                      "cursor-pointer rounded-lg transition-all duration-200 hover:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-500",
-                      cell.seed ? "border-solid" : "hover:bg-green-50",
-                      dragOverCell?.row === rowIndex &&
-                        dragOverCell?.col === colIndex &&
-                        "border-green-500 bg-green-100",
-                      draggedItem?.row === rowIndex &&
-                        draggedItem?.col === colIndex &&
-                        "opacity-50",
-                    )}
-                    onClick={() => handleCellClick(rowIndex, colIndex)}
-                    onDragStart={(e) =>
-                      cell.seed &&
-                      handleDragStart(e, rowIndex, colIndex, cell.seed)
+              row.map((cell, colIndex) => (
+                <GridCell
+                  key={`cell-${rowIndex}-${
+                    // biome-ignore lint/suspicious/noArrayIndexKey: Using row and column index as key for grid cells is acceptable in this case since the grid structure is stable and doesn't reorder cells.
+                    colIndex
+                  }`}
+                  seed={cell.seed}
+                  row={rowIndex}
+                  col={colIndex}
+                  isDragOverCell={
+                    dragOverCell?.row === rowIndex &&
+                    dragOverCell?.col === colIndex
+                  }
+                  isDraggedItem={
+                    draggedItem?.row === rowIndex &&
+                    draggedItem?.col === colIndex
+                  }
+                  isLongPressed={
+                    longPressedCell?.row === rowIndex &&
+                    longPressedCell?.col === colIndex
+                  }
+                  onCellClick={handleCellClick}
+                  onRemoveSeed={handleRemoveSeed}
+                  onRemoveButtonLongPress={handleCellLongPress}
+                  onDragStart={handleDragStart}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onDragEnd={handleDragEnd}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    handleCellLongPress(rowIndex, colIndex);
+                  }}
+                  onTouchStart={(e) => {
+                    if (cell.seed) {
+                      handleTouchStart(rowIndex, colIndex, cell.seed, e);
                     }
-                    onDragOver={(e) => handleDragOver(e, rowIndex, colIndex)}
-                    onDragLeave={handleDragLeave}
-                    onDrop={(e) => handleDrop(e, rowIndex, colIndex)}
-                    onDragEnd={handleDragEnd}
-                    onTouchStart={(e) =>
-                      cell.seed &&
-                      handleTouchStart(rowIndex, colIndex, cell.seed, e)
-                    }
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    aria-label={
-                      cell.seed
-                        ? `${cell.seed.name} planted at row ${rowIndex + 1}, column ${colIndex + 1}`
-                        : `Empty cell at row ${rowIndex + 1}, column ${colIndex + 1}. Click to plant seed.`
-                    }
-                  >
-                    {cell.seed ? (
-                      <div className="relative h-full w-full">
-                        <div
-                          className={`flex h-full w-full items-center justify-center rounded-md bg-emerald-500 opacity-80`}
-                        >
-                          <Sprout className="h-3 w-3 text-white sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
-                        </div>
-                        {!dragMode && (
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            className="-top-1 -right-1 sm:-top-2 sm:-right-2 absolute h-4 w-4 rounded-full p-0 sm:h-5 sm:w-5"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRemoveSeed(rowIndex, colIndex);
-                            }}
-                            aria-label={`Remove ${cell.seed.name}`}
-                          >
-                            <X className="h-2 w-2 sm:h-3 sm:w-3" />
-                          </Button>
-                        )}
-                        <div className="-bottom-5 sm:-bottom-6 absolute right-0 left-0 truncate text-center font-medium text-[10px] sm:text-xs">
-                          {cell.seed.name}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center">
-                        <Plus className="h-3 w-3 text-gray-400 sm:h-4 sm:w-4" />
-                      </div>
-                    )}
-                  </button>
-                );
-              }),
+                  }}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  dragMode={dragMode}
+                />
+              )),
             )}
           </div>
         </CardContent>
       </Card>
 
       {/* Seed Selection Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-[90vw] sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-lg">
-              {t("seeds.chooseSeed")}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="grid max-h-[60vh] grid-cols-1 gap-2 overflow-y-auto md:grid-cols-2">
-            {availableSeeds
-              .sort((a: Seed, b: Seed) =>
-                a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
-              )
-              .map((seed) => (
-                <Button
-                  key={seed.id}
-                  variant="outline"
-                  className="h-auto justify-start p-3"
-                  onClick={() => handleSeedSelect(seed)}
-                >
-                  <div className="flex w-full items-center gap-2">
-                    <div
-                      className={`flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500`}
-                    >
-                      <Sprout className="h-3 w-3 text-white" />
-                    </div>
-                    <div className="flex-1 text-left">
-                      <div className="font-medium text-sm">{seed.name}</div>
-                      {seed.variety && (
-                        <div className="text-muted-foreground text-xs">
-                          {seed.variety}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </Button>
-              ))}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <SeedSelectionDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        availableSeeds={availableSeeds}
+        onSeedSelect={handleSeedSelect}
+      />
 
       {/* Grid Settings Dialog */}
-      <Dialog open={isGridDialogOpen} onOpenChange={setIsGridDialogOpen}>
-        <DialogContent className="max-w-[90vw] sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-lg">
-              {t("beds.customizeGridSize")}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-6 py-4">
-            <div className="space-y-4">
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="font-medium text-sm">
-                    {t("beds.rows")}: {gridSize.rows}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        setGridSize((prev) => ({
-                          ...prev,
-                          rows: Math.max(2, prev.rows - 1),
-                        }))
-                      }
-                      disabled={gridSize.rows <= 2}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        setGridSize((prev) => ({
-                          ...prev,
-                          rows: Math.min(12, prev.rows + 1),
-                        }))
-                      }
-                      disabled={gridSize.rows >= 12}
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-                <Slider
-                  value={[gridSize.rows]}
-                  min={2}
-                  max={12}
-                  step={1}
-                  onValueChange={(value) =>
-                    setGridSize((prev) => ({ ...prev, rows: value[0] }))
-                  }
-                />
-              </div>
-
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="font-medium text-sm">
-                    {t("beds.columns")}: {gridSize.cols}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        setGridSize((prev) => ({
-                          ...prev,
-                          cols: Math.max(2, prev.cols - 1),
-                        }))
-                      }
-                      disabled={gridSize.cols <= 2}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6"
-                      onClick={() =>
-                        setGridSize((prev) => ({
-                          ...prev,
-                          cols: Math.min(16, prev.cols + 1),
-                        }))
-                      }
-                      disabled={gridSize.cols >= 16}
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-                <Slider
-                  value={[gridSize.cols]}
-                  min={2}
-                  max={16}
-                  step={1}
-                  onValueChange={(value) =>
-                    setGridSize((prev) => ({ ...prev, cols: value[0] }))
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-muted-foreground text-sm">
-                {t("beds.totalCells")}: {gridSize.rows * gridSize.cols}
-              </div>
-              <Button
-                onClick={() => handleGridResize(gridSize.rows, gridSize.cols)}
-              >
-                {t("core.applyChanges")}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <GridSettingsDialog
+        open={isGridDialogOpen}
+        onOpenChange={setIsGridDialogOpen}
+        gridSize={gridSize}
+        onGridSizeChange={handleGridSizeChange}
+        onApply={handleGridResize}
+      />
     </div>
   );
 };

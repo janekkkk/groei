@@ -5,9 +5,11 @@ export const merge = <T>(
 ): T[] => {
   const c = [...a]; // copy to avoid side effects
   // add all items from B to copy C if they're not already present
-  b.forEach((bItem) =>
-    c.some((cItem) => predicate(bItem, cItem)) ? null : c.push(bItem),
-  );
+  b.forEach((bItem) => {
+    if (!c.some((cItem) => predicate(bItem, cItem))) {
+      c.push(bItem);
+    }
+  });
   return c;
 };
 

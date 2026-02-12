@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.14/schema.json",
   "files": {
     "includes": [
       "**/*.ts",
@@ -8,13 +8,13 @@
       "**/*.jsx",
       "**/*.mjs",
       "**/*.cjs",
-      "!**/node_modules/**",
-      "!**/dist/**",
-      "!**/build/**",
-      "!**/coverage/**",
-      "!**/public/**",
-      "!**/shadcdn/**",
-      "!**/dev-dist/**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/build",
+      "!**/coverage",
+      "!**/public",
+      "!**/shadcdn",
+      "!**/dev-dist",
       "!**/routeTree.gen.ts",
       "!**/pnpm-lock.yaml",
       "!**/pnpm-workspace.yaml"
@@ -34,7 +34,13 @@
     "lineWidth": 80,
     "attributePosition": "auto"
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {

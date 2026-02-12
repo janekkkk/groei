@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection ES6UnusedImports
 
-import type { BedDTO, GridItemDTO } from "@groei/common/src/models/Bed.ts";
+import type { BedDTO } from "@groei/common/src/models/Bed.ts";
 import {
   Month,
   PlantHeight,
@@ -9,8 +9,6 @@ import {
 } from "@groei/common/src/models/Seed.ts";
 import type { User } from "@groei/common/src/models/User.ts";
 import { db } from "./index.ts";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { seedsTable, usersTable } from "./schema.ts";
 
 const main = async () => {
@@ -667,7 +665,7 @@ const main = async () => {
     gridHeight: 5,
   } as BedDTO;
 
-  const _gridItem: GridItemDTO = {
+  const _gridItem = {
     index: 1,
     seedId: februarySeeds[0].id,
     bedId: bed.id,

@@ -1,5 +1,10 @@
 {
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
-  "files": []
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/frontend"
+    }
+  ]
 }

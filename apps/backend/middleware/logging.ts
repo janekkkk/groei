@@ -17,7 +17,6 @@ interface ResponseLogEntry {
 interface ErrorLogEntry extends ResponseLogEntry {
   error: string;
   stack?: string;
-  success: false;
 }
 
 // Enhanced logging middleware for production debugging
@@ -58,6 +57,7 @@ export const bedLoggingMiddleware = async (
     console.error(
       `[${new Date().toISOString()}] ${method} ${url} - ERROR (${end - start}ms)`,
       {
+        status: 500,
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
         duration: end - start,
@@ -72,8 +72,8 @@ export const bedLoggingMiddleware = async (
 export const logDatabaseOperation = (
   operation: string,
   table: string,
-  data?: any,
-  result?: any,
+  data?: unknown,
+  result?: unknown,
 ) => {
   console.log(`[DB] ${operation} on ${table}`, {
     operation,
@@ -88,7 +88,7 @@ export const logDatabaseOperation = (
 export const logCriticalError = (
   operation: string,
   error: Error,
-  context?: Record<string, any>,
+  context?: Record<string, unknown>,
 ) => {
   console.error(`[CRITICAL] ${operation} failed`, {
     error: error.message,
@@ -103,10 +103,14 @@ export const logCriticalError = (
 };
 
 // Data integrity validator
-export const validateDataIntegrity = async (bedId: string, db: any) => {
+export const validateDataIntegrity = async (bedId: string, db: unknown) => {
   try {
-    const bed = await db.query.bedTable.findFirst({
-      where: (bedTable: any, { eq }: any) => eq(bedTable.id, bedId),
+    // biome-ignore lint/suspicious/noExplicitAny: Drizzle requires any for db operations
+    const bed = await (db as any).query.bedTable.findFirst({
+      // biome-ignore lint/suspicious/noExplicitAny: Drizzle callback requires any types
+      where: (bedTable: any, { eq }: any) => {
+        return eq(bedTable.id, bedId);
+      },
     });
 
     if (!bed) {
@@ -118,9 +122,12 @@ export const validateDataIntegrity = async (bedId: string, db: any) => {
       return false;
     }
 
-    const gridItems = await db.query.gridItemTable.findMany({
-      where: (gridItemTable: any, { eq }: any) =>
-        eq(gridItemTable.bedId, bedId),
+    // biome-ignore lint/suspicious/noExplicitAny: Drizzle requires any for db operations
+    const gridItems = await (db as any).query.gridItemTable.findMany({
+      // biome-ignore lint/suspicious/noExplicitAny: Drizzle callback requires any types
+      where: (gridItemTable: any, { eq }: any) => {
+        return eq(gridItemTable.bedId, bedId);
+      },
     });
 
     console.log(`[INTEGRITY] Bed ${bedId} has ${gridItems.length} grid items`);

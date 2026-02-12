@@ -43,7 +43,7 @@ export const SeedOverview = () => {
       <Table>
         <TableCaption>{t("seeds.title")}</TableCaption>
         <TableHeader>
-          <TableRow>
+          <TableRow disableHover>
             <TableHead className="w-[100px]">{t("seeds.name")}</TableHead>
             <TableHead>{t("seeds.variety")}</TableHead>
             <TableHead className="text-right">

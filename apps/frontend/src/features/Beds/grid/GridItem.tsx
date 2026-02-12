@@ -53,10 +53,10 @@ export const GridItem = ({ seed, index, handleSelectChange }: Props) => {
 
             {seed?.id && (
               <div className="flex w-full flex-col items-center">
-                <span className=" truncate text-sm text-white">
+                <span className="truncate text-sm text-white">
                   {seed?.name}
                 </span>
-                <span className=" w-9/12 truncate text-white text-xs">
+                <span className="w-9/12 truncate text-white text-xs">
                   {seed?.variety}
                 </span>
               </div>

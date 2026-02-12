@@ -22,6 +22,20 @@
       "when": 1749831505883,
       "tag": "0002_chilly_micromax",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1770808788118,
+      "tag": "0003_uneven_junta",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1770908643510,
+      "tag": "0004_nebulous_warpath",
+      "breakpoints": true
     }
   ]
 }

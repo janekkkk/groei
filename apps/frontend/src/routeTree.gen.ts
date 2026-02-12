@@ -8,137 +8,121 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as SeedsIndexRouteImport } from './routes/seeds/index'
+import { Route as BedsIndexRouteImport } from './routes/beds/index'
+import { Route as SeedsSeedIdRouteImport } from './routes/seeds/$seedId'
+import { Route as BedsBedIdRouteImport } from './routes/beds/$bedId'
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as IndexImport } from "./routes/index";
-import { Route as SeedsIndexImport } from "./routes/seeds/index";
-import { Route as BedsIndexImport } from "./routes/beds/index";
-import { Route as SeedsSeedIdImport } from "./routes/seeds/$seedId";
-import { Route as BedsBedIdImport } from "./routes/beds/$bedId";
-
-// Create/Update Routes
-
-const IndexRoute = IndexImport.update({
-  id: "/",
-  path: "/",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const SeedsIndexRoute = SeedsIndexImport.update({
-  id: "/seeds/",
-  path: "/seeds/",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const BedsIndexRoute = BedsIndexImport.update({
-  id: "/beds/",
-  path: "/beds/",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const SeedsSeedIdRoute = SeedsSeedIdImport.update({
-  id: "/seeds/$seedId",
-  path: "/seeds/$seedId",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const BedsBedIdRoute = BedsBedIdImport.update({
-  id: "/beds/$bedId",
-  path: "/beds/$bedId",
-  getParentRoute: () => rootRoute,
-} as any);
-
-// Populate the FileRoutesByPath interface
-
-declare module "@tanstack/react-router" {
-  interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/beds/$bedId": {
-      id: "/beds/$bedId";
-      path: "/beds/$bedId";
-      fullPath: "/beds/$bedId";
-      preLoaderRoute: typeof BedsBedIdImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/seeds/$seedId": {
-      id: "/seeds/$seedId";
-      path: "/seeds/$seedId";
-      fullPath: "/seeds/$seedId";
-      preLoaderRoute: typeof SeedsSeedIdImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/beds/": {
-      id: "/beds/";
-      path: "/beds";
-      fullPath: "/beds";
-      preLoaderRoute: typeof BedsIndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/seeds/": {
-      id: "/seeds/";
-      path: "/seeds";
-      fullPath: "/seeds";
-      preLoaderRoute: typeof SeedsIndexImport;
-      parentRoute: typeof rootRoute;
-    };
-  }
-}
-
-// Create and export the route tree
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeedsIndexRoute = SeedsIndexRouteImport.update({
+  id: '/seeds/',
+  path: '/seeds/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BedsIndexRoute = BedsIndexRouteImport.update({
+  id: '/beds/',
+  path: '/beds/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeedsSeedIdRoute = SeedsSeedIdRouteImport.update({
+  id: '/seeds/$seedId',
+  path: '/seeds/$seedId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BedsBedIdRoute = BedsBedIdRouteImport.update({
+  id: '/beds/$bedId',
+  path: '/beds/$bedId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/beds/$bedId": typeof BedsBedIdRoute;
-  "/seeds/$seedId": typeof SeedsSeedIdRoute;
-  "/beds": typeof BedsIndexRoute;
-  "/seeds": typeof SeedsIndexRoute;
+  '/': typeof IndexRoute
+  '/beds/$bedId': typeof BedsBedIdRoute
+  '/seeds/$seedId': typeof SeedsSeedIdRoute
+  '/beds/': typeof BedsIndexRoute
+  '/seeds/': typeof SeedsIndexRoute
 }
-
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/beds/$bedId": typeof BedsBedIdRoute;
-  "/seeds/$seedId": typeof SeedsSeedIdRoute;
-  "/beds": typeof BedsIndexRoute;
-  "/seeds": typeof SeedsIndexRoute;
+  '/': typeof IndexRoute
+  '/beds/$bedId': typeof BedsBedIdRoute
+  '/seeds/$seedId': typeof SeedsSeedIdRoute
+  '/beds': typeof BedsIndexRoute
+  '/seeds': typeof SeedsIndexRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/": typeof IndexRoute;
-  "/beds/$bedId": typeof BedsBedIdRoute;
-  "/seeds/$seedId": typeof SeedsSeedIdRoute;
-  "/beds/": typeof BedsIndexRoute;
-  "/seeds/": typeof SeedsIndexRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/beds/$bedId': typeof BedsBedIdRoute
+  '/seeds/$seedId': typeof SeedsSeedIdRoute
+  '/beds/': typeof BedsIndexRoute
+  '/seeds/': typeof SeedsIndexRoute
 }
-
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/beds/$bedId" | "/seeds/$seedId" | "/beds" | "/seeds";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/beds/$bedId" | "/seeds/$seedId" | "/beds" | "/seeds";
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/beds/$bedId' | '/seeds/$seedId' | '/beds/' | '/seeds/'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/beds/$bedId' | '/seeds/$seedId' | '/beds' | '/seeds'
   id:
-    | "__root__"
-    | "/"
-    | "/beds/$bedId"
-    | "/seeds/$seedId"
-    | "/beds/"
-    | "/seeds/";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/beds/$bedId'
+    | '/seeds/$seedId'
+    | '/beds/'
+    | '/seeds/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  BedsBedIdRoute: typeof BedsBedIdRoute
+  SeedsSeedIdRoute: typeof SeedsSeedIdRoute
+  BedsIndexRoute: typeof BedsIndexRoute
+  SeedsIndexRoute: typeof SeedsIndexRoute
 }
 
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  BedsBedIdRoute: typeof BedsBedIdRoute;
-  SeedsSeedIdRoute: typeof SeedsSeedIdRoute;
-  BedsIndexRoute: typeof BedsIndexRoute;
-  SeedsIndexRoute: typeof SeedsIndexRoute;
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seeds/': {
+      id: '/seeds/'
+      path: '/seeds'
+      fullPath: '/seeds/'
+      preLoaderRoute: typeof SeedsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/beds/': {
+      id: '/beds/'
+      path: '/beds'
+      fullPath: '/beds/'
+      preLoaderRoute: typeof BedsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seeds/$seedId': {
+      id: '/seeds/$seedId'
+      path: '/seeds/$seedId'
+      fullPath: '/seeds/$seedId'
+      preLoaderRoute: typeof SeedsSeedIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/beds/$bedId': {
+      id: '/beds/$bedId'
+      path: '/beds/$bedId'
+      fullPath: '/beds/$bedId'
+      preLoaderRoute: typeof BedsBedIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -147,40 +131,7 @@ const rootRouteChildren: RootRouteChildren = {
   SeedsSeedIdRoute: SeedsSeedIdRoute,
   BedsIndexRoute: BedsIndexRoute,
   SeedsIndexRoute: SeedsIndexRoute,
-};
-
-export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/beds/$bedId",
-        "/seeds/$seedId",
-        "/beds/",
-        "/seeds/"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/beds/$bedId": {
-      "filePath": "beds/$bedId.tsx"
-    },
-    "/seeds/$seedId": {
-      "filePath": "seeds/$seedId.tsx"
-    },
-    "/beds/": {
-      "filePath": "beds/index.tsx"
-    },
-    "/seeds/": {
-      "filePath": "seeds/index.tsx"
-    }
-  }
 }
-ROUTE_MANIFEST_END */
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()

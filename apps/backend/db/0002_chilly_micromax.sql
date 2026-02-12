@@ -1,1 +1,0 @@
-ALTER TABLE `grid_item_table` ADD `position` integer;

@@ -6,18 +6,14 @@ import {
 } from "@groei/common/src/models/Seed";
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
-import {
-  type ChangeEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSeedStore } from "@/features/Seeds/seeds.store";
 import {
   useCreateSeedMutation,
   useDeleteSeedMutation,
+  useSeedQuery,
+  useSeedsQuery,
   useUpdateSeedMutation,
 } from "@/features/Seeds/useSeedQuery";
 import { Route } from "@/routes/seeds/$seedId.tsx";
@@ -39,28 +35,31 @@ import type { SelectChange } from "@/shared/select.model";
 import { classNames } from "@/shared/utils";
 import { isNumeric } from "@/shared/utils/is-numeric.helper.ts";
 
-const getEmptySeed = (): Seed => ({
-  id: crypto.randomUUID(),
-  name: "",
-  variety: "",
-  sowFrom: undefined,
-  sowTill: undefined,
-  germinationType: GerminationType.DARK,
-  preSprout: false,
-  plantFrom: undefined,
-  plantTill: undefined,
-  harvestFrom: undefined,
-  harvestTill: undefined,
-  daysToMaturity: undefined,
-  plantHeight: undefined,
-  numberOfSeedsPerGridCell: 1,
-  notes: "",
-  url: "",
-  expirationDate: undefined, // new Date().toISOString().substring(0, 10)
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  deletedAt: undefined,
-});
+const getEmptySeed = (): Seed => {
+  const now = new Date().toISOString();
+  return {
+    id: crypto.randomUUID(),
+    name: "",
+    variety: "",
+    sowFrom: undefined,
+    sowTill: undefined,
+    germinationType: GerminationType.DARK,
+    preSprout: false,
+    plantFrom: undefined,
+    plantTill: undefined,
+    harvestFrom: undefined,
+    harvestTill: undefined,
+    daysToMaturity: undefined,
+    plantHeight: undefined,
+    numberOfSeedsPerGridCell: 1,
+    notes: "",
+    url: "",
+    expirationDate: undefined, // new Date().toISOString().substring(0, 10)
+    createdAt: now,
+    updatedAt: now,
+    deletedAt: undefined,
+  };
+};
 
 export const EditSeeds = () => {
   const seeds = useSeedStore((state) => state.seeds);
@@ -75,6 +74,12 @@ export const EditSeeds = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
 
+  // Fetch seed from server if not in create mode
+  const { data: fetchedSeed } = useSeedQuery(isCreate ? "" : seedId);
+
+  // Also ensure seeds list is loaded for fallback to store
+  useSeedsQuery();
+
   const handleInputChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
@@ -87,7 +92,11 @@ export const EditSeeds = () => {
     }
 
     if (seed)
-      setSeed({ ...seed, [name]: numberValue ?? value, updatedAt: new Date() });
+      setSeed({
+        ...seed,
+        [name]: numberValue ?? value,
+        updatedAt: new Date().toISOString(),
+      });
   };
 
   const handleCheckboxChange = (checked: CheckedState) => {
@@ -123,19 +132,53 @@ export const EditSeeds = () => {
     }
   };
 
-  const initExistingSeed = useCallback(() => {
-    const existingSeed = seeds.find((s) => s.id === seedId);
-    if (seedId && !isCreate && existingSeed) {
-      setSeed(existingSeed as unknown as Seed);
-    } else {
+  // Track which seedId we've initialized data for
+  const initializedSeedIdRef = useRef<string | null>(null);
+  const hasReceivedFetchedSeedRef = useRef(false);
+
+  // Reset on seedId change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: seedId is intentionally the only dependency
+  useEffect(() => {
+    initializedSeedIdRef.current = null;
+    hasReceivedFetchedSeedRef.current = false;
+  }, [seedId]);
+
+  // Load seed data once it arrives or from fallback
+  useEffect(() => {
+    // Skip if we've already loaded this seedId
+    if (
+      initializedSeedIdRef.current === seedId &&
+      initializedSeedIdRef.current !== null
+    ) {
+      return;
+    }
+
+    // Prefer fetched data from server (only use first time)
+    if (fetchedSeed && !hasReceivedFetchedSeedRef.current) {
+      setSeed(fetchedSeed);
+      initializedSeedIdRef.current = seedId;
+      hasReceivedFetchedSeedRef.current = true;
+      return;
+    }
+
+    // For create mode, load empty seed
+    if (isCreate && initializedSeedIdRef.current !== seedId) {
       setSeed(getEmptySeed());
       nameInputRef?.current?.focus();
+      initializedSeedIdRef.current = seedId;
+      return;
     }
-  }, [isCreate, seedId, seeds]);
 
-  useEffect(() => {
-    initExistingSeed();
-  }, [initExistingSeed]);
+    // For existing seeds, try fallback to store if fetch hasn't arrived yet
+    if (!isCreate && !fetchedSeed && initializedSeedIdRef.current !== seedId) {
+      const existingSeed = seeds.find((s) => s.id === seedId);
+      if (existingSeed) {
+        setSeed(existingSeed as unknown as Seed);
+        initializedSeedIdRef.current = seedId;
+      }
+      // If not in store and fetch not arrived, keep waiting for fetchedSeed
+    }
+  }, [seedId, isCreate, fetchedSeed, seeds]);
 
   return (
     <div>

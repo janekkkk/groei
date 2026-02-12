@@ -1,5 +1,9 @@
 export interface Seed {
   id: string;
+  name: string;
+  variety?: string;
+  numberOfSeedsPerGridCell: number;
+  germinationType: GerminationType;
   sowFrom?: Month;
   sowTill?: Month;
   plantFrom?: Month;
@@ -9,26 +13,16 @@ export interface Seed {
   expirationDate?: string;
   url?: string;
   plantHeight?: PlantHeight;
-  numberOfSeedsPerGridCell: number;
-  name: string;
-  variety?: string;
   daysToMaturity?: number;
-  notes?: string;
   preSprout?: boolean;
-  germinationType: GerminationType;
-  perennial?: boolean; // ToDo add to form
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export interface SeedDTO extends Seed {
+  perennial?: boolean;
+  notes?: string;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
 }
+
+export type SeedDTO = Seed;
 
 export enum GerminationType {
   COLD = "Cold",
