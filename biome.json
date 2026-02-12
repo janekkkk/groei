@@ -34,7 +34,13 @@
     "lineWidth": 80,
     "attributePosition": "auto"
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -50,7 +56,7 @@
         "useExhaustiveDependencies": "warn"
       },
       "nursery": {
-        "useSortedClasses": "warn"
+        "useSortedClasses": "error"
       },
       "performance": {
         "recommended": true

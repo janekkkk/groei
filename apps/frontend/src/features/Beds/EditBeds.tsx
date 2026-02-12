@@ -10,10 +10,9 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  useBedsQuery,
-  useCreateBedMutation,
-  useDeleteBedMutation,
   useBedQuery,
+  useBedsQuery,
+  useDeleteBedMutation,
   useUpdateBedMutation,
 } from "@/features/Beds/useBedQuery";
 import { Route } from "@/routes/beds/$bedId.tsx";
@@ -21,7 +20,6 @@ import { Button } from "@/shadcdn/components/ui/button";
 import { Input } from "@/shadcdn/components/ui/input";
 import { Label } from "@/shadcdn/components/ui/label";
 import { Textarea } from "@/shadcdn/components/ui/textarea";
-import { useToast } from "@/shadcdn/hooks/use-toast.ts";
 import { classNames } from "@/shared/utils";
 import { isNumeric } from "@/shared/utils/is-numeric.helper";
 import { useBedStore } from "./beds.store";
@@ -43,18 +41,17 @@ const getEmptyBed = (): Bed => {
 };
 
 export const EditBeds = () => {
-  const createBed = useCreateBedMutation();
   const updateBed = useUpdateBedMutation();
   const deleteBed = useDeleteBedMutation();
   const { beds } = useBedStore((state) => state);
   const [bed, setBed] = useState<Bed>(getEmptyBed());
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const { bedId } = Route.useParams();
   const isCreate = Number(bedId) === -1;
   const router = useRouter();
   const { t } = useTranslation();
-  const { toast } = useToast();
-  const [isSaving, setIsSaving] = useState(false);
+  const [_isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"saving" | "saved" | null>(null);
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const saveStatusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -127,6 +124,41 @@ export const EditBeds = () => {
     debouncedSave(updatedBed);
   };
 
+  // Handle date input separately to avoid closing the date picker
+  // Use ref to prevent re-renders while picker is open
+  const handleDateChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    // Don't update state, just let the input update naturally
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  // Prevent touch events from interfering with the date picker
+  const handleDateTouchStart = (e: React.TouchEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
+  const handleDateTouchMove = (e: React.TouchEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
+  const handleDateTouchEnd = (e: React.TouchEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
+  // Save date after picker closes
+  const handleDateBlur = () => {
+    if (dateInputRef.current) {
+      const value = dateInputRef.current.value;
+      const updatedBed = {
+        ...bed,
+        sowDate: value,
+        updatedAt: new Date().toISOString(),
+      };
+      setBed(updatedBed);
+      debouncedSave(updatedBed);
+    }
+  };
+
   const handleBedChange = (updatedBed: Bed) => {
     setBed(updatedBed);
     debouncedSave(updatedBed);
@@ -139,23 +171,6 @@ export const EditBeds = () => {
     }
   };
 
-  const handleSubmit = () => {
-    if (isCreate) {
-      toast({
-        title: `${t("beds.bed")} ${t("core.created")}`,
-      });
-      createBed.mutate(bed);
-      setBed(getEmptyBed());
-      nameInputRef?.current?.focus();
-      router.navigate({ to: "/beds" });
-    } else {
-      toast({
-        title: `${t("beds.bed")} ${t("core.updated")}`,
-      });
-      updateBed.mutate(bed);
-    }
-  };
-
   // Track which bedId we've initialized data for
   const initializedBedIdRef = useRef<string | null>(null);
   const hasReceivedFetchedBedRef = useRef(false);
@@ -164,7 +179,7 @@ export const EditBeds = () => {
   useEffect(() => {
     initializedBedIdRef.current = null;
     hasReceivedFetchedBedRef.current = false;
-  }, [bedId]);
+  }, []);
 
   // Load bed data once it arrives or from fallback
   useEffect(() => {
@@ -201,7 +216,7 @@ export const EditBeds = () => {
       }
       // If not in store and fetch not arrived, keep waiting for fetchedBed
     }
-  }, [bedId, isCreate, fetchedBed]);
+  }, [bedId, isCreate, fetchedBed, beds]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -228,13 +243,7 @@ export const EditBeds = () => {
         </h1>
       )}
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-        className="flex flex-col gap-2"
-      >
+      <form className="flex flex-col gap-2">
         <div>
           <Label htmlFor="name">{t("beds.name")}</Label>
           <Input
@@ -249,10 +258,15 @@ export const EditBeds = () => {
         <div>
           <Label htmlFor="sowDate">{t("beds.sowDate")}</Label>
           <Input
+            ref={dateInputRef}
             type="date"
             name="sowDate"
             value={bed.sowDate}
-            onChange={handleInputChange}
+            onChange={handleDateChange}
+            onBlur={handleDateBlur}
+            onTouchStart={handleDateTouchStart}
+            onTouchMove={handleDateTouchMove}
+            onTouchEnd={handleDateTouchEnd}
             required
           />
         </div>
@@ -327,9 +341,6 @@ export const EditBeds = () => {
               {t("core.cancel")}
             </Button>
           )}
-          <Button type="submit">
-            {isCreate ? t("core.create") : t("core.update")}
-          </Button>
         </div>
       </form>
 
@@ -337,7 +348,7 @@ export const EditBeds = () => {
       {saveStatus && (
         <div
           className={classNames(
-            "fixed bottom-4 right-4 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium",
+            "fixed right-4 bottom-4 flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-sm",
             {
               "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100":
                 saveStatus === "saving",

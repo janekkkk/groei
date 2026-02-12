@@ -1,4 +1,4 @@
-import type { Bed, BedDTO } from "@groei/common/src/models/Bed";
+import type { Bed } from "@groei/common/src/models/Bed";
 
 class BedService {
   private static readonly baseUrl = `${import.meta.env.VITE_API_URI}/beds`;
