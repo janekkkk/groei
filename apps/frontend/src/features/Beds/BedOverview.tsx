@@ -51,7 +51,7 @@ export const BedOverview = () => {
             // Show loading skeletons while fetching
             Array(3)
               .fill(0)
-              .map((_, index) => (
+              .map((_, _index) => (
                 <TableRow key={crypto.randomUUID()}>
                   <TableCell>
                     <Skeleton className="h-5 w-full" />

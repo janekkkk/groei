@@ -1,6 +1,7 @@
 import type { User } from "@groei/common/src/models/User";
 import { ChevronsUpDown, LogIn, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useMount } from "react-use";
 import {
   Avatar,
@@ -23,6 +24,7 @@ import {
 } from "@/shadcdn/components/ui/sidebar";
 
 export const Username = () => {
+  const { t } = useTranslation();
   const isLoggedIn = false;
   const { isMobile } = useSidebar();
   const [user, setUser] = useState<User>();
@@ -88,48 +90,26 @@ export const Username = () => {
                 </div>
               </div>
             </DropdownMenuLabel>
-            {/*<DropdownMenuSeparator />*/}
-            {/*<DropdownMenuGroup>*/}
-            {/*  <DropdownMenuItem>*/}
-            {/*    <Sparkles />*/}
-            {/*    Upgrade to Pro*/}
-            {/*  </DropdownMenuItem>*/}
-            {/*</DropdownMenuGroup>*/}
-            {/*<DropdownMenuSeparator />*/}
-            {/*<DropdownMenuGroup>*/}
-            {/*  <DropdownMenuItem>*/}
-            {/*    <BadgeCheck />*/}
-            {/*    Account*/}
-            {/*  </DropdownMenuItem>*/}
-            {/*  <DropdownMenuItem>*/}
-            {/*    <CreditCard />*/}
-            {/*    Billing*/}
-            {/*  </DropdownMenuItem>*/}
-            {/*  <DropdownMenuItem>*/}
-            {/*    <Bell />*/}
-            {/*    Notifications*/}
-            {/*  </DropdownMenuItem>*/}
-            {/*</DropdownMenuGroup>*/}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer">
               {isLoggedIn && (
                 <button
                   type="button"
                   onClick={logout}
-                  className="flex w-full items-center gap-2 "
+                  className="flex w-full items-center gap-2"
                 >
                   <LogOut />
-                  Log out
+                  {t("core.logout")}
                 </button>
               )}
               {!isLoggedIn && (
                 <button
                   type="button"
                   onClick={login}
-                  className="flex w-full items-center gap-2 "
+                  className="flex w-full items-center gap-2"
                 >
                   <LogIn />
-                  Log In
+                  {t("core.login")}
                 </button>
               )}
             </DropdownMenuItem>

@@ -25,7 +25,9 @@
     "removed": "verwijderd",
     "applyChanges": "wijzigingen toepassen",
     "saving": "wijzigingen opslaan...",
-    "saved": "wijzigingen opgeslagen"
+    "saved": "wijzigingen opgeslagen",
+    "login": "inloggen",
+    "logout": "uitloggen"
   },
   "months": {
     "january": "januari",

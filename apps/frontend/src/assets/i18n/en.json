@@ -25,7 +25,9 @@
     "removed": "removed",
     "applyChanges": "apply changes",
     "saving": "saving changes...",
-    "saved": "changes saved"
+    "saved": "changes saved",
+    "login": "log in",
+    "logout": "log out"
   },
   "months": {
     "january": "january",

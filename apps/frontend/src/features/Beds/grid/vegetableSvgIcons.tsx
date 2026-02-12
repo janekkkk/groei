@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/a11y/noSvgWithoutTitle: not necessary */
+/* biome-ignore-all lint/a11y/noSvgWithoutTitle: icon components with accessible parent context */
 import type { SVGProps } from "react";
 
 export const TomatoIcon = (props: SVGProps<SVGSVGElement>) => (

@@ -10,8 +10,8 @@ const router = new Hono();
 // Helper function to convert gridData JSON to GridItem array with seed objects
 async function parseGridData(
   gridData: string | null,
-  gridWidth?: number | null,
-  gridHeight?: number | null,
+  _gridWidth?: number | null,
+  _gridHeight?: number | null,
 ) {
   if (!gridData) {
     return [];

@@ -8,6 +8,6 @@ export default defineConfig({
   dialect: "sqlite",
   casing: "snake_case",
   dbCredentials: {
-    url: process.env.DB_FILE_NAME!,
+    url: process.env.DB_FILE_NAME || ":memory:",
   },
 });

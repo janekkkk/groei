@@ -62,8 +62,7 @@ export const markStoreSynced = async (storeName: string): Promise<void> => {
   const storedData = await get(storeName);
   if (!storedData) return;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data = storedData as any;
+  const data = storedData as StorageValue<Record<string, unknown>>;
   const syncInfo: SyncInfo = {
     lastSyncTimestamp: Date.now(),
     isPendingSync: false,

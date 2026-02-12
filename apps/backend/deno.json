@@ -1,3 +1,14 @@
 {
-
+  "imports": {
+    "@libsql/client": "npm:@libsql/client@^0.17.0",
+    "drizzle-orm": "npm:drizzle-orm@^0.45.1",
+    "drizzle-orm/libsql": "npm:drizzle-orm/libsql@^0.45.1",
+    "dotenv": "npm:dotenv@^17.2.4",
+    "hono": "npm:hono@^4.11.9",
+    "@groei/common": "./../../libs/common"
+  },
+  "tasks": {
+    "dev": "deno run --allow-net --allow-env --allow-read --allow-ffi --allow-sys --watch index.ts",
+    "start": "deno run -A index.ts"
+  }
 }
