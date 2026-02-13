@@ -3,6 +3,7 @@ import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import { type ChangeEventHandler, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  useCreateBedMutation,
   useDeleteBedMutation,
   useUpdateBedMutation,
 } from "@/features/Beds/useBedQuery";
@@ -20,6 +21,7 @@ import { useAutoSave } from "./useAutoSave";
 import { useBedData } from "./useBedData";
 
 export const EditBeds = () => {
+  const createBed = useCreateBedMutation();
   const updateBed = useUpdateBedMutation();
   const deleteBed = useDeleteBedMutation();
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -93,7 +95,7 @@ export const EditBeds = () => {
 
   const handleCreateBed = () => {
     if (bed.name.trim()) {
-      updateBed.mutate(bed, {
+      createBed.mutate(bed, {
         onSuccess: () => {
           router.history.back();
         },
