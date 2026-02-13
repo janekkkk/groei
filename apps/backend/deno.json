@@ -2,7 +2,7 @@
   "imports": {
     "@libsql/client": "npm:@libsql/client@^0.17.0",
     "drizzle-orm": "npm:drizzle-orm@^0.45.1",
-    "drizzle-orm/libsql": "npm:drizzle-orm/libsql@^0.45.1",
+    "drizzle-orm/libsql": "npm:drizzle-orm@^0.45.1/libsql",
     "dotenv": "npm:dotenv@^17.2.4",
     "hono": "npm:hono@^4.11.9",
     "@groei/common": "./../../libs/common"
