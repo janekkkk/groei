@@ -131,7 +131,7 @@ export const EditBeds = () => {
         <DateInput
           label={t("beds.sowDate")}
           name="sowDate"
-          value={bed.sowDate}
+          value={bed.sowDate ?? ""}
           onValueChange={handleDateChange}
           required
         />

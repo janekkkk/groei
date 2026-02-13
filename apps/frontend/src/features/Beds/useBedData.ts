@@ -42,14 +42,17 @@ export const useBedData = ({
   const initializedBedIdRef = useRef<string | null>(null);
   const hasReceivedFetchedBedRef = useRef(false);
 
-  // Reset on bedId change
-  useEffect(() => {
-    initializedBedIdRef.current = null;
-    hasReceivedFetchedBedRef.current = false;
-  }, [bedId]);
-
   // Load bed data once it arrives or from fallback
   useEffect(() => {
+    // Reset refs when bedId changes
+    if (
+      initializedBedIdRef.current !== null &&
+      initializedBedIdRef.current !== bedId
+    ) {
+      initializedBedIdRef.current = null;
+      hasReceivedFetchedBedRef.current = false;
+    }
+
     // Skip if we've already loaded this bedId
     if (
       initializedBedIdRef.current === bedId &&
