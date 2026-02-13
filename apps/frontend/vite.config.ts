@@ -16,12 +16,11 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       port: Number(process.env.VITE_PORT),
     },
     build: {
-      // Use simple file names without cache busting
       rollupOptions: {
         output: {
-          entryFileNames: `assets/[name].js`,
-          chunkFileNames: `assets/[name].js`,
-          assetFileNames: `assets/[name].[ext]`,
+          entryFileNames: `assets/[name].[hash].js`,
+          chunkFileNames: `assets/[name].[hash].js`,
+          assetFileNames: `assets/[name].[hash].[ext]`,
         },
       },
     },
