@@ -7,6 +7,7 @@ import { AppSidebar } from "@/core/sidebar/AppSidebar.tsx";
 import { ThemeProvider } from "@/core/theme/ThemeProvider.tsx";
 import { ThemeToggle } from "@/core/theme/ThemeToggle.tsx";
 import {
+  SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/shadcdn/components/ui/sidebar.tsx";
@@ -32,7 +33,7 @@ export const Main = () => {
       <ThemeProvider>
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full">
+          <SidebarInset className="w-full">
             <Toaster />
             <MainLayout>
               <SidebarTrigger className="absolute top-2 left-2" />
@@ -41,7 +42,7 @@ export const Main = () => {
                 <Outlet />
               </div>
             </MainLayout>
-          </main>
+          </SidebarInset>
         </SidebarProvider>
       </ThemeProvider>
 
