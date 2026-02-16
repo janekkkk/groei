@@ -70,10 +70,7 @@ export const BedOverview = () => {
           ) : (
             // Show empty state
             <TableRow>
-              <TableCell
-                colSpan={1}
-                className="py-6 text-center text-muted-foreground"
-              >
+              <TableCell colSpan={1} className="py-6 text-center">
                 {t("beds.noBeds")}
               </TableCell>
             </TableRow>
