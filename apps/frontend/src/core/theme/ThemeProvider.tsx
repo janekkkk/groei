@@ -34,15 +34,25 @@ export const ThemeProvider = ({
 
   useEffect(() => {
     const root = window.document.documentElement;
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const applyTheme = (nextTheme: Theme) => {
+      const resolvedTheme =
+        nextTheme === "system" ? (media.matches ? "dark" : "light") : nextTheme;
+
+      root.classList.toggle("dark", resolvedTheme === "dark");
+      root.style.colorScheme = resolvedTheme;
+    };
+
+    applyTheme(theme);
 
     if (theme === "system") {
-      // Let the browser use its native color-scheme detection
-      root.style.colorScheme = "";
-      return;
+      const onChange = () => applyTheme("system");
+      media.addEventListener("change", onChange);
+      return () => media.removeEventListener("change", onChange);
     }
 
-    // Set color-scheme for Tailwind v4's light-dark() function
-    root.style.colorScheme = theme;
+    return undefined;
   }, [theme]);
 
   const value = {

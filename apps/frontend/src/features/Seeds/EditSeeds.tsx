@@ -475,7 +475,7 @@ export const EditSeeds = () => {
           <Button
             type="button"
             onClick={handleDeleteSeed}
-            className={classNames({ hidden: isCreate })}
+            className={classNames(isCreate && "hidden")}
             variant="destructive"
           >
             {t("core.delete")}

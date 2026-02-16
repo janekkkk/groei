@@ -99,10 +99,7 @@ export const SeedOverview = () => {
           ) : (
             // Show empty state
             <TableRow>
-              <TableCell
-                colSpan={5}
-                className="py-6 text-center text-muted-foreground"
-              >
+              <TableCell colSpan={5} className="py-6 text-center">
                 {t("seeds.noSeeds")}
               </TableCell>
             </TableRow>

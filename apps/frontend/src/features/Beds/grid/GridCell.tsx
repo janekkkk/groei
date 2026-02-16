@@ -68,8 +68,8 @@ export const GridCell = ({
       className={cn(
         "relative h-10 w-10 border-2 border-gray-300 border-dashed sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16",
         "cursor-pointer rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500",
-        row !== 0 && "hover:border-green-400",
-        seed ? "border-solid" : row !== 0 && "hover:bg-green-50",
+        "hover:border-green-400",
+        seed ? "border-solid" : "hover:bg-green-50",
         isDragOverCell && "border-green-500 bg-green-100",
         isDraggedItem && "opacity-50",
       )}

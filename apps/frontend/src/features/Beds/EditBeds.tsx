@@ -192,7 +192,7 @@ export const EditBeds = () => {
           <Button
             type="button"
             onClick={handleDeleteBed}
-            className={classNames({ hidden: isCreate })}
+            className={classNames(isCreate && "hidden")}
             variant="destructive"
           >
             {t("core.delete")}
